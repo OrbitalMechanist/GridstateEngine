@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "Vertex.h"
 #include "UniformLayout.h"
+#include "Light.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -25,6 +26,9 @@
 #include <vector>
 #include <fstream>
 #include <istream>
+#include <array>
+
+#define NUM_LIGHTS 8
 
 class Renderer
 {
@@ -43,6 +47,8 @@ private:
 
 	UniformLayout uniforms;
 
+	std::array<Light, NUM_LIGHTS> lights;
+
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
 	void createCubeModel();
@@ -50,7 +56,7 @@ public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
 	void drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName, 
-		glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
+		const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale);
 
 	bool loadTexture(const std::string& path, const std::string& resultName);
 
@@ -58,15 +64,15 @@ public:
 
 	bool loadShaderProgram(const std::string& vertPath, const std::string& fragPath, const std::string& resultName);
 
-	void setBackgroundColor(glm::vec4 color);
+	void setBackgroundColor(const glm::vec4& color);
 
 	void clearFrame();
 
 	void updateWindowSize(int newX, int newY);
 
-	void setCameraRotation(glm::vec3 rot);
+	void setCameraRotation(const glm::vec3& rot);
 
-	void setCameraPosition(glm::vec3 pos);
+	void setCameraPosition(const glm::vec3& pos);
 
 	glm::vec3 getCameraPosition();
 
@@ -78,5 +84,10 @@ public:
 	bool removeTextureByName(const std::string& name);
 	bool removeModelByName(const std::string& name);
 	bool removeShaderProgramByName(const std::string& name);
+
+	bool setLightState(const std::string& usableShaderName, size_t lightIndex, GLuint type,
+		const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& color, GLfloat intensity);
+
+	void setAmbientLight(const std::string& usableShaderName, const glm::vec3& addition);
 };
 

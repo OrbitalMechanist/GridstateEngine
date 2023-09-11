@@ -58,6 +58,16 @@ int main() {
 		glm::vec3 camRot{0.0f, 0.0f, 0.0f};
 		glm::vec3 camPos{0.0f, 5.0f, 10.0f};
 
+		renderer.setLightState("basic", 0, 2, { 0.0f, 5.5f, -1.0f }, glm::normalize(glm::vec3(1.0f, 0.2f, 01.0f)),
+			{ 0.0f, 1.0f, 0.0f }, 1.0f);
+
+		renderer.setLightState("basic", 1, 2, { 0.0f, 0.0f, 2.0f }, glm::normalize(glm::vec3(1.0f, 0.2f, -1.0f)),
+			{ 1.0f, 1.0f, 0.35f }, 1.0f);
+
+		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-1.0f, 0.0f, 0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f);
+
+		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
+		
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
