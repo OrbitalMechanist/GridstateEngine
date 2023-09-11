@@ -1,4 +1,7 @@
 #include "Renderer.h"
+#include "SoundDevice.h"
+#include "SoundBuffer.h"
+#include "SoundSource.h"
 
 #include <chrono>
 
@@ -10,6 +13,17 @@ static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 int main() {
+
+	//Audio
+	SoundDevice* sounddevice = SoundDevice::get();
+
+	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
+	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
+
+	SoundSource Source;
+
+	Source.Play(gunA);
+	Source.Play(gunB);
 
 	try {
 		if (!glfwInit()) {
