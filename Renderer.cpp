@@ -178,12 +178,16 @@ bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string&
 	//but all uniforms have to get set at this point.
 	GL_Uniform tmp;
 	tmp = glGetUniformLocation(result, "mvp");
-	if (tmp != 0xFFFFFFFF) {
+	if (tmp != -1) {
 		uniforms.mvp = tmp;
 	}
 	tmp = glGetUniformLocation(result, "diffuseTex");
-	if (tmp != 0xFFFFFFFF) {
+	if (tmp != -1) {
 		uniforms.diffuseTex = tmp;
+	}
+	tmp = glGetUniformLocation(result, "normMat");
+	if (tmp != -1) {
+		uniforms.normMat = tmp;
 	}
 
 	return true;
@@ -273,7 +277,10 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 
 	glm::mat4 mvp = projection * view * model;
 
+	glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
+
 	glUniformMatrix4fv(uniforms.mvp, 1, false, glm::value_ptr(mvp));
+	glUniformMatrix4fv(uniforms.normMat, 1, false, glm::value_ptr(normalMatrix));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 

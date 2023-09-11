@@ -12,4 +12,4 @@ typedef GLuint GL_VertexArrayObject;
 typedef GLuint GL_VertexBufferObject;
 typedef GLuint GL_ElementBufferObject;
 typedef GLuint GL_Texture;
-typedef GLuint GL_Uniform;
+typedef GLint GL_Uniform;
