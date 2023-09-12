@@ -20,7 +20,7 @@ int main() {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource Source;
+	SoundSource Source(1.f, 1.f, {0,0,0}, {0,0,0}, false);
 
 	Source.Play(gunA);
 	Source.Play(gunB);
