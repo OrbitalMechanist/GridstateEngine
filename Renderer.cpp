@@ -178,18 +178,34 @@ bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string&
 	//but all uniforms have to get set at this point.
 	GL_Uniform tmp;
 	tmp = glGetUniformLocation(result, "mvp");
-	if (tmp != 0xFFFFFFFF) {
+	if (tmp != -1) {
 		uniforms.mvp = tmp;
 	}
 	tmp = glGetUniformLocation(result, "diffuseTex");
-	if (tmp != 0xFFFFFFFF) {
+	if (tmp != -1) {
 		uniforms.diffuseTex = tmp;
+	}
+	tmp = glGetUniformLocation(result, "normMat");
+	if (tmp != -1) {
+		uniforms.normMat = tmp;
+	}
+	tmp = glGetUniformLocation(result, "modelMat");
+	if (tmp != -1) {
+		uniforms.modelMat = tmp;
+	}
+	tmp = glGetUniformLocation(result, "lights[0].type");
+	if (tmp != -1) {
+		uniforms.lights = tmp;
+	}
+	tmp = glGetUniformLocation(result, "ambientLight");
+	if (tmp != -1) {
+		uniforms.ambientLight = tmp;
 	}
 
 	return true;
 }
 
-void Renderer::setBackgroundColor(glm::vec4 color) {
+void Renderer::setBackgroundColor(const glm::vec4& color) {
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
@@ -225,7 +241,7 @@ bool Renderer::loadTexture(const std::string& path, const std::string& resultNam
 }
 
 void Renderer::drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName,
-	glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) {
+	const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale) {
 	
 	bool modelPresent = models.contains(modelName);
 	bool texturePresent = textures.contains(textureName);
@@ -273,7 +289,11 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 
 	glm::mat4 mvp = projection * view * model;
 
+	glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
+
 	glUniformMatrix4fv(uniforms.mvp, 1, false, glm::value_ptr(mvp));
+	glUniformMatrix4fv(uniforms.normMat, 1, false, glm::value_ptr(normalMatrix));
+	glUniformMatrix4fv(uniforms.modelMat, 1, false, glm::value_ptr(model));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 
@@ -287,11 +307,11 @@ void Renderer::clearFrame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::setCameraRotation(glm::vec3 rot) {
+void Renderer::setCameraRotation(const glm::vec3& rot) {
 	cameraRot = rot;
 }
 
-void Renderer::setCameraPosition(glm::vec3 pos) {
+void Renderer::setCameraPosition(const glm::vec3& pos) {
 	cameraPos = pos;
 }
 
@@ -425,4 +445,57 @@ bool Renderer::removeModelByName(const std::string& name) {
 	glDeleteBuffers(1, &victimEBO);
 
 	return true;
+}
+
+
+bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIndex, GLuint type,
+	const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& color, GLfloat intensity,
+	GLfloat angle, GLfloat distanceLimit, GLfloat attenuationMax) {
+	if (lightIndex >= lights.size()) {
+		std::cerr << "Light to set is out of range; no effect from function." << std::endl;
+		return false;
+	} if (!shaderPrograms.contains(usableShaderName)) {
+		std::cerr << "Shader program \"" << usableShaderName <<
+			"\" referenced when setting lights does not exist; no effect from function." << std::endl;
+		return false;
+	}
+
+	lights[lightIndex].type = type;
+	lights[lightIndex].position = pos;
+	lights[lightIndex].direction = dir;
+	lights[lightIndex].color = color;
+	lights[lightIndex].intensity = intensity;
+	lights[lightIndex].angle = angle;
+	lights[lightIndex].distanceLimit = distanceLimit;
+	lights[lightIndex].attenuationMax = attenuationMax;
+
+	GL_Uniform element = uniforms.lights + lightIndex;
+
+	glUseProgram(shaderPrograms[usableShaderName]);
+
+	glUniform1i(element, lights[lightIndex].type);
+	glUniform3f(element + NUM_LIGHTS, lights[lightIndex].position.x,
+		lights[lightIndex].position.y, lights[lightIndex].position.z);
+	glUniform3f(element + 2 * NUM_LIGHTS, lights[lightIndex].direction.x,
+		lights[lightIndex].direction.y, lights[lightIndex].direction.z);
+	glUniform3f(element + 3 * NUM_LIGHTS, lights[lightIndex].color.r,
+		lights[lightIndex].color.g, lights[lightIndex].color.b);
+	glUniform1f(element + 4 * NUM_LIGHTS, lights[lightIndex].intensity);
+	glUniform1f(element + 5 * NUM_LIGHTS, lights[lightIndex].angle);
+	glUniform1f(element + 6 * NUM_LIGHTS, lights[lightIndex].distanceLimit);
+	glUniform1f(element + 7 * NUM_LIGHTS, lights[lightIndex].attenuationMax);
+
+	glUseProgram(0);
+
+	return true;
+}
+
+void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient) {
+	if (!shaderPrograms.contains(usableShaderName)) {
+		std::cerr << "Shader program \"" << usableShaderName <<
+			"\" referenced when ambient light does not exist; no effect from function." << std::endl;
+		return;
+	}
+	glUseProgram(shaderPrograms[usableShaderName]);
+	glUniform3f(uniforms.ambientLight, ambient.r, ambient.g, ambient.b);
 }
