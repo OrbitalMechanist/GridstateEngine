@@ -449,13 +449,15 @@ bool Renderer::removeModelByName(const std::string& name) {
 
 
 bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIndex, GLuint type,
-	const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& color, GLfloat intensity) {
+	const glm::vec3& pos, const glm::vec3& dir, const glm::vec3& color, GLfloat intensity,
+	GLfloat angle, GLfloat distanceLimit, GLfloat attenuationMax) {
 	if (lightIndex >= lights.size()) {
 		std::cerr << "Light to set is out of range; no effect from function." << std::endl;
 		return false;
 	} if (!shaderPrograms.contains(usableShaderName)) {
 		std::cerr << "Shader program \"" << usableShaderName <<
 			"\" referenced when setting lights does not exist; no effect from function." << std::endl;
+		return false;
 	}
 
 	lights[lightIndex].type = type;
@@ -463,6 +465,9 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	lights[lightIndex].direction = dir;
 	lights[lightIndex].color = color;
 	lights[lightIndex].intensity = intensity;
+	lights[lightIndex].angle = angle;
+	lights[lightIndex].distanceLimit = distanceLimit;
+	lights[lightIndex].attenuationMax = attenuationMax;
 
 	GL_Uniform element = uniforms.lights + lightIndex;
 
@@ -476,13 +481,21 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	glUniform3f(element + 3 * NUM_LIGHTS, lights[lightIndex].color.r,
 		lights[lightIndex].color.g, lights[lightIndex].color.b);
 	glUniform1f(element + 4 * NUM_LIGHTS, lights[lightIndex].intensity);
+	glUniform1f(element + 5 * NUM_LIGHTS, lights[lightIndex].angle);
+	glUniform1f(element + 6 * NUM_LIGHTS, lights[lightIndex].distanceLimit);
+	glUniform1f(element + 7 * NUM_LIGHTS, lights[lightIndex].attenuationMax);
 
 	glUseProgram(0);
 
 	return true;
 }
 
-void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::vec3& light) {
+void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient) {
+	if (!shaderPrograms.contains(usableShaderName)) {
+		std::cerr << "Shader program \"" << usableShaderName <<
+			"\" referenced when ambient light does not exist; no effect from function." << std::endl;
+		return;
+	}
 	glUseProgram(shaderPrograms[usableShaderName]);
-	glUniform3f(uniforms.ambientLight, light.r, light.g, light.b);
+	glUniform3f(uniforms.ambientLight, ambient.r, ambient.g, ambient.b);
 }

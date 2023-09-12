@@ -13,6 +13,13 @@ struct Light{
 	vec3 direction;
 	vec3 color;
 	float intensity;
+	//Spotlights only - arc of the light, in radians.
+	float angle;
+	//Distance at which spot and point lights no longer get calculated. Set to negative for unlimited range.
+	float distanceLimit;
+	//Distance at which spot and point lights' power reaches zero. Set to negative to disable attenuation.
+	float attenuationMax;
+
 };
 
 uniform sampler2D diffuseTex;
@@ -43,8 +50,32 @@ vec3 calcLightEffect(Light light){
 	} 
 	//Point
 	else if(light.type == 2){
-		vec3 toLight = normalize(light.position - v_worldPos);
-		result = diffuse(light.intensity, light.color, toLight);
+		vec3 toLight = light.position - v_worldPos;
+		float dist = length(toLight);
+		if((light.distanceLimit >= 0.0 && dist > light.distanceLimit) 
+			|| (light.attenuationMax > 0.0 && dist > light.attenuationMax)){
+			return result;
+		}
+		result = diffuse(light.intensity, light.color, normalize(toLight));
+		if(light.attenuationMax >= 0.0){
+			result *= 1.0f - dist/light.attenuationMax;
+		}
+	} 
+	//Spot
+	else if(light.type == 3){
+		vec3 toLight = light.position - v_worldPos;
+		float dist = length(toLight);
+		if((light.distanceLimit >= 0.0 && dist > light.distanceLimit)
+			|| (light.attenuationMax > 0.0 && dist > light.attenuationMax)){
+			return result;
+		}
+		if(acos(dot(normalize(toLight), normalize(-light.direction))) > light.angle){
+			return result;
+		}
+		result = diffuse(light.intensity, light.color, normalize(toLight));
+		if(light.attenuationMax > 0.0){
+			result *= 1.0f - dist/light.attenuationMax;
+		}
 	}
 	
 	return result;
