@@ -14,10 +14,10 @@ public:
 private:
 	ALuint p_Source;
 	ALuint p_Buffer = 0;
-	float *p_Pitch;
-	float *p_Gain;
-	float *p_Position[3];
-	float *p_Velocity[3];
-	bool *p_LoopSound;
+	float p_Pitch;
+	float p_Gain;
+	float p_Position[3];
+	float p_Velocity[3];
+	bool p_LoopSound;
 };
 
