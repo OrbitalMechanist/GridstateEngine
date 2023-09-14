@@ -1,4 +1,4 @@
-#include "SoundSource.h"
+#include "audio/SoundSource.h"
 #include <iostream>
 
 SoundSource::SoundSource(float p_Pitch, float p_Gain, glm::vec3 p_Position, glm::vec3 p_Velocity, bool p_LoopSound)

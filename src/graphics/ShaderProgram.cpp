@@ -1,4 +1,4 @@
-#include "ShaderProgram.h"
+#include "graphics/ShaderProgram.h"
 
 
 ShaderProgram::ShaderProgram(GL_ShaderProgram assoc) {

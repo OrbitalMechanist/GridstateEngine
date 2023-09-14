@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include "graphics/Mesh.h"
 
 Mesh::Mesh(GL_VertexArrayObject vaoToAssociate, GL_VertexBufferObject vboToAssociate,
 	GL_ElementBufferObject eboToAssociate, GLuint numIndices) {

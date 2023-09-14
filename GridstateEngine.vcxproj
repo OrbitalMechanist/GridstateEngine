@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;$(ProjectDir)/headers;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,7 +100,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;$(ProjectDir)/headers;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,7 +122,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;$(ProjectDir)/headers;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,7 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/libredist;$(ProjectDir)/headers;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,29 +159,29 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c" />
+    <ClCompile Include="src\graphics\glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="SoundBuffer.cpp" />
-    <ClCompile Include="SoundDevice.cpp" />
-    <ClCompile Include="SoundSource.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="src\graphics\Mesh.cpp" />
+    <ClCompile Include="src\graphics\Renderer.cpp" />
+    <ClCompile Include="src\audio\SoundBuffer.cpp" />
+    <ClCompile Include="src\audio\SoundDevice.cpp" />
+    <ClCompile Include="src\audio\SoundSource.cpp" />
+    <ClCompile Include="src\graphics\ShaderProgram.cpp" />
+    <ClCompile Include="src\graphics\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="GLTypes.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="LightLayout.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="SoundBuffer.h" />
-    <ClInclude Include="SoundDevice.h" />
-    <ClInclude Include="SoundSource.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="UniformLayout.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="headers\Constants.h" />
+    <ClInclude Include="headers\graphics\GLTypes.h" />
+    <ClInclude Include="headers\graphics\Light.h" />
+    <ClInclude Include="headers\graphics\LightLayout.h" />
+    <ClInclude Include="headers\graphics\Mesh.h" />
+    <ClInclude Include="headers\graphics\Renderer.h" />
+    <ClInclude Include="headers\audio\SoundBuffer.h" />
+    <ClInclude Include="headers\audio\SoundDevice.h" />
+    <ClInclude Include="headers\audio\SoundSource.h" />
+    <ClInclude Include="headers\graphics\ShaderProgram.h" />
+    <ClInclude Include="headers\graphics\UniformLayout.h" />
+    <ClInclude Include="headers\graphics\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

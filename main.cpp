@@ -2,10 +2,10 @@ extern "C"{
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
-#include "Renderer.h"
-#include "SoundDevice.h"
-#include "SoundBuffer.h"
-#include "SoundSource.h"
+#include "graphics/Renderer.h"
+#include "audio/SoundDevice.h"
+#include "audio/SoundBuffer.h"
+#include "audio/SoundSource.h"
 #include "Constants.h"
 
 #include <chrono>

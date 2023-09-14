@@ -1,4 +1,4 @@
-#include "SoundDevice.h"
+#include "audio/SoundDevice.h"
 #include <OpenAL\al.h>
 #include <stdio.h>
 

@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include "graphics/Renderer.h"
 
 Renderer::Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight) {
 	window = creatorWindow;
