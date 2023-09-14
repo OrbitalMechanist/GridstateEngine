@@ -1,12 +1,14 @@
+extern "C"{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
 #include "Renderer.h"
 #include "SoundDevice.h"
 #include "SoundBuffer.h"
 #include "SoundSource.h"
+#include "Constants.h"
 
 #include <chrono>
-
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
 
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -35,7 +37,7 @@ int main() {
 		glfwWindowHint(GLFW_VERSION_MINOR, 3);
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		GLFWwindow* window;
@@ -70,8 +72,22 @@ int main() {
 		renderer.setBackgroundColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
 		glm::vec3 camRot{0.0f, 0.0f, 0.0f};
-		glm::vec3 camPos{0.0f, 5.0f, 10.0f};
+		glm::vec3 camPos{0.0f, 0.0f, 10.0f};
 
+		renderer.setLightState("basic", 0, 2, { 0.0f, 6.0f, -1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 3, 3);
+
+		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
+			{ 1.0f, 1.0f, 0.65f }, 1.0f, glm::radians(45.0f), 10, 10);
+
+		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-1.0f, 0.0f, 0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+			0, -1, -1);
+
+		renderer.setLightState("basic", 3, 3, { 10.0f, 0.0f, 0.0f }, glm::vec3(0.0f, 1.0f, 0.0f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+			glm::radians(10.0f), 100, 11);
+
+		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
+		
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
@@ -86,16 +102,16 @@ int main() {
 				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 
 			renderer.drawByNames("cube", "stone", "basic",
-				{ 0.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f)}, {1.0f, 1.0f, 1.0f});
 
-			renderer.drawByNames("cube", "stone", "basic",
-				{ 0.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			renderer.drawByNames("cube", "stone", "secondary",
+				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 
 			renderer.drawByNames("cube", "stone", "basic",
 				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 
 			renderer.drawByNames("ak", "ak_texture", "basic",
-				{ 0.0f, 0.0f, 0.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f});
+				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f});
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {
@@ -103,6 +119,14 @@ int main() {
 						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 				}
 			}
+
+			for (int y = 0; y <= 12; y += 2) {
+				renderer.drawByNames("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
+					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f });
+			}
+
+			renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, -2.0f }, glm::vec3(sin(time), 0.0f, cos(time)),
+				{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(25.0f), -1, -1);
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 				camRot.x += glm::radians(1.0f);

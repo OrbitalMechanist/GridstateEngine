@@ -166,15 +166,20 @@
     <ClCompile Include="SoundBuffer.cpp" />
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="GLTypes.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LightLayout.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SoundBuffer.h" />
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="UniformLayout.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
