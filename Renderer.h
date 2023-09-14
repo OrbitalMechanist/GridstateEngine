@@ -1,16 +1,18 @@
 #pragma once
-
-#include "GLTypes.h"
-#include "Mesh.h"
-#include "Vertex.h"
-#include "UniformLayout.h"
-#include "Light.h"
+#include "Constants.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "ShaderProgram.h"
+#include "GLTypes.h"
+#include "Mesh.h"
+#include "Vertex.h"
+#include "UniformLayout.h"
+#include "Light.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -28,8 +30,6 @@
 #include <istream>
 #include <array>
 
-#define NUM_LIGHTS 8
-
 class Renderer
 {
 private:
@@ -43,15 +43,14 @@ private:
 
 	std::map<std::string, Mesh> models;
 	std::map<std::string, GL_Texture> textures;
-	std::map<std::string, GL_ShaderProgram> shaderPrograms;
-
-	UniformLayout uniforms;
+	std::map<std::string, ShaderProgram> shaderPrograms;
 
 	std::array<Light, NUM_LIGHTS> lights;
 
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
 	void createCubeModel();
+
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
