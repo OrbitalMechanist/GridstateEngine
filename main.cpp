@@ -1,9 +1,11 @@
+extern "C"{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
 #include "Renderer.h"
+#include "Constants.h"
 
 #include <chrono>
-
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
 
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -21,7 +23,7 @@ int main() {
 		glfwWindowHint(GLFW_VERSION_MINOR, 3);
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		GLFWwindow* window;

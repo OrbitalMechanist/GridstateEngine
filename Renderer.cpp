@@ -153,54 +153,27 @@ bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string&
 		return false;
 	}
 
-	GL_ShaderProgram result;
-	result = glCreateProgram();
-	glAttachShader(result, vert);
-	glAttachShader(result, frag);
-	glLinkProgram(result);
+	GL_ShaderProgram shaderProgram;
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vert);
+	glAttachShader(shaderProgram, frag);
+	glLinkProgram(shaderProgram);
 
 	int linkStatus;
-	glGetProgramiv(result, GL_LINK_STATUS, &linkStatus);
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkStatus);
 	if (!linkStatus) {
 		std::vector<char> infoLog(512);
-		glGetProgramInfoLog(result, 512, NULL, infoLog.data());
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog.data());
 		std::cerr << "Shader program link failure; Shader Program \""
 			<< resultName << "\" not created. Log:\n" << infoLog.data() << std::endl;
 		return false;
 	}
 
-	shaderPrograms[resultName] = result;
+	shaderPrograms[resultName] = ShaderProgram(shaderProgram);
+	shaderPrograms[resultName].queryUniformLocations();
 
 	glDeleteShader(vert);
 	glDeleteShader(frag);
-
-	//This checking is necessary because not all shaders might have the same uniforms
-	//but all uniforms have to get set at this point.
-	GL_Uniform tmp;
-	tmp = glGetUniformLocation(result, "mvp");
-	if (tmp != -1) {
-		uniforms.mvp = tmp;
-	}
-	tmp = glGetUniformLocation(result, "diffuseTex");
-	if (tmp != -1) {
-		uniforms.diffuseTex = tmp;
-	}
-	tmp = glGetUniformLocation(result, "normMat");
-	if (tmp != -1) {
-		uniforms.normMat = tmp;
-	}
-	tmp = glGetUniformLocation(result, "modelMat");
-	if (tmp != -1) {
-		uniforms.modelMat = tmp;
-	}
-	tmp = glGetUniformLocation(result, "lights[0].type");
-	if (tmp != -1) {
-		uniforms.lights = tmp;
-	}
-	tmp = glGetUniformLocation(result, "ambientLight");
-	if (tmp != -1) {
-		uniforms.ambientLight = tmp;
-	}
 
 	return true;
 }
@@ -259,7 +232,9 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 		return;
 	}
 
-	glUseProgram(shaderPrograms[shaderName]);
+	ShaderProgram& sp = shaderPrograms[shaderName];
+
+	glUseProgram(sp.getGLReference());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[textureName]);
 	glBindVertexArray(models[modelName].getVAO());
@@ -291,9 +266,9 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 
 	glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
 
-	glUniformMatrix4fv(uniforms.mvp, 1, false, glm::value_ptr(mvp));
-	glUniformMatrix4fv(uniforms.normMat, 1, false, glm::value_ptr(normalMatrix));
-	glUniformMatrix4fv(uniforms.modelMat, 1, false, glm::value_ptr(model));
+	glUniformMatrix4fv(sp.referenceUniforms().mvp, 1, false, glm::value_ptr(mvp));
+	glUniformMatrix4fv(sp.referenceUniforms().normMat, 1, false, glm::value_ptr(normalMatrix));
+	glUniformMatrix4fv(sp.referenceUniforms().modelMat, 1, false, glm::value_ptr(model));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 
@@ -425,7 +400,9 @@ bool Renderer::removeShaderProgramByName(const std::string& name) {
 		return false;
 	}
 
-	glDeleteProgram(shaderPrograms[name]);
+	glDeleteProgram(shaderPrograms[name].getGLReference());
+
+	shaderPrograms.erase(name);
 
 	return true;
 }
@@ -469,21 +446,21 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	lights[lightIndex].distanceLimit = distanceLimit;
 	lights[lightIndex].attenuationMax = attenuationMax;
 
-	GL_Uniform element = uniforms.lights + lightIndex;
+	const LightLayout& element = shaderPrograms[usableShaderName].referenceUniforms().lights[lightIndex];
 
-	glUseProgram(shaderPrograms[usableShaderName]);
+	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
 
-	glUniform1i(element, lights[lightIndex].type);
-	glUniform3f(element + NUM_LIGHTS, lights[lightIndex].position.x,
+	glUniform1i(element.type, lights[lightIndex].type);
+	glUniform3f(element.position, lights[lightIndex].position.x,
 		lights[lightIndex].position.y, lights[lightIndex].position.z);
-	glUniform3f(element + 2 * NUM_LIGHTS, lights[lightIndex].direction.x,
+	glUniform3f(element.direction, lights[lightIndex].direction.x,
 		lights[lightIndex].direction.y, lights[lightIndex].direction.z);
-	glUniform3f(element + 3 * NUM_LIGHTS, lights[lightIndex].color.r,
+	glUniform3f(element.color, lights[lightIndex].color.r,
 		lights[lightIndex].color.g, lights[lightIndex].color.b);
-	glUniform1f(element + 4 * NUM_LIGHTS, lights[lightIndex].intensity);
-	glUniform1f(element + 5 * NUM_LIGHTS, lights[lightIndex].angle);
-	glUniform1f(element + 6 * NUM_LIGHTS, lights[lightIndex].distanceLimit);
-	glUniform1f(element + 7 * NUM_LIGHTS, lights[lightIndex].attenuationMax);
+	glUniform1f(element.intensity, lights[lightIndex].intensity);
+	glUniform1f(element.angle, lights[lightIndex].angle);
+	glUniform1f(element.distanceLimit, lights[lightIndex].distanceLimit);
+	glUniform1f(element.attenuationMax, lights[lightIndex].attenuationMax);
 
 	glUseProgram(0);
 
@@ -496,6 +473,6 @@ void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::v
 			"\" referenced when ambient light does not exist; no effect from function." << std::endl;
 		return;
 	}
-	glUseProgram(shaderPrograms[usableShaderName]);
-	glUniform3f(uniforms.ambientLight, ambient.r, ambient.g, ambient.b);
+	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
+	glUniform3f(shaderPrograms[usableShaderName].referenceUniforms().ambientLight, ambient.r, ambient.g, ambient.b);
 }

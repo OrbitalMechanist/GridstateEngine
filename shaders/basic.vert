@@ -8,9 +8,9 @@ out vec2 v_texCoord;
 out vec3 v_norm;
 out vec3 v_worldPos;
 
-layout(location=0) uniform mat4 mvp;
-layout(location=1) uniform mat4 modelMat;
-layout(location=2) uniform mat4 normMat;
+uniform mat4 mvp;
+uniform mat4 modelMat;
+uniform mat4 normMat;
 
 void main(){
 	v_norm = normalize(mat3(normMat) * norm);

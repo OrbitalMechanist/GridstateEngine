@@ -1,6 +1,10 @@
 #pragma once
 
 #include "GLTypes.h"
+#include "LightLayout.h"
+#include "Constants.h"
+
+#include <array>
 
 //This corresponds to our standard shader uniforms.
 struct UniformLayout {
@@ -8,7 +12,7 @@ struct UniformLayout {
 	GL_Uniform diffuseTex;
 	GL_Uniform normMat;
 	GL_Uniform modelMat;
-	GL_Uniform lights;
+	std::array<LightLayout, NUM_LIGHTS> lights;
 	GL_Uniform ambientLight;
 
 	UniformLayout() {
@@ -16,7 +20,6 @@ struct UniformLayout {
 		diffuseTex = -1;
 		normMat = -1;
 		modelMat = -1;
-		lights = -1;
 		ambientLight = -1;
 	}
 };
