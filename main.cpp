@@ -15,6 +15,7 @@ static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 int main() {
+	int gunshotTimer = 0;
 
 	//Audio
 	SoundDevice* sounddevice = SoundDevice::get();
@@ -24,9 +25,6 @@ int main() {
 
 	SoundSource SourceA(1.f, 1.f, {0,0,0}, {0,0,0}, false);
 	SoundSource SourceB(1.f, 1.f, { 0,0,0 }, { 0,0,0 }, false);
-
-	SourceA.Play(gunA);
-	SourceB.Play(gunB);
 
 	try {
 		if (!glfwInit()) {
@@ -93,7 +91,25 @@ int main() {
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
+			
+			if (gunshotTimer > 0) {
+				gunshotTimer--;
+			}
+			else {
+				int j = rand() % 3;
+				if (j == 0) {
+					SourceA.Play(gunA);
+				}
+				if (j == 1) {
+					SourceA.Play(gunB);
+				}
+				if (j == 2) {
+					SourceA.Play(gunA);
+					SourceA.Play(gunB);
+				}
+				gunshotTimer = 600;
+			}
+			
 			renderer.clearFrame();
 
 			renderer.setCameraPosition(camPos);

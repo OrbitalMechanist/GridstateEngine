@@ -11,6 +11,10 @@ public:
 
 	void Play(const ALuint buffer_to_play);
 
+	void Stop();
+
+	void Pause();
+
 private:
 	ALuint p_Source;
 	ALuint p_Buffer = 0;

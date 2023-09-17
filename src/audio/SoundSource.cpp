@@ -32,3 +32,21 @@ void SoundSource::Play(const ALuint buffer_to_play)
 
 	alSourcePlay(p_Source);
 }
+
+void SoundSource::Pause()
+{
+	ALint state;
+	alGetSourcei(p_Source, AL_SOURCE_STATE, &state);
+	if (state == AL_PLAYING) {
+		alSourcePause(p_Source);
+	}
+}
+
+void SoundSource::Stop()
+{
+	ALint state;
+	alGetSourcei(p_Source, AL_SOURCE_STATE, &state);
+	if (state == AL_PLAYING) {
+		alSourceStop(p_Source);
+	}
+}
