@@ -22,10 +22,11 @@ int main() {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource Source(1.f, 1.f, {0,0,0}, {0,0,0}, false);
+	SoundSource SourceA(1.f, 1.f, {0,0,0}, {0,0,0}, false);
+	SoundSource SourceB(1.f, 1.f, { 0,0,0 }, { 0,0,0 }, false);
 
-	Source.Play(gunA);
-	Source.Play(gunB);
+	SourceA.Play(gunA);
+	SourceB.Play(gunB);
 
 	try {
 		if (!glfwInit()) {
