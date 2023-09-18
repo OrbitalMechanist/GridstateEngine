@@ -92,24 +92,6 @@ int main() {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 			
-			if (gunshotTimer > 0) {
-				gunshotTimer--;
-			}
-			else {
-				int j = rand() % 3;
-				if (j == 0) {
-					SourceA.Play(gunA);
-				}
-				if (j == 1) {
-					SourceA.Play(gunB);
-				}
-				if (j == 2) {
-					SourceA.Play(gunA);
-					SourceA.Play(gunB);
-				}
-				gunshotTimer = 600;
-			}
-			
 			renderer.clearFrame();
 
 			renderer.setCameraPosition(camPos);
@@ -195,6 +177,23 @@ int main() {
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
+
+			sounddevice->SetPosition(camPos);
+			sounddevice->SetOrientation(trueFwd, trueUp);
+
+			if (gunshotTimer > 0) {
+				gunshotTimer--;
+			}
+			else {
+				int j = rand() % 2;
+				if (j == 0) {
+					SourceA.Play(gunA);
+				}
+				if (j == 1) {
+					SourceA.Play(gunB);
+				}
+				gunshotTimer = 600;
+			}
 		}
 
 		glfwTerminate();

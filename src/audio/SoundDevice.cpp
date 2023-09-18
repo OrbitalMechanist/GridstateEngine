@@ -27,6 +27,7 @@ SoundDevice::SoundDevice()
 	if (!name || alcGetError(p_ALCDevice) != AL_NO_ERROR)
 		name = alcGetString(p_ALCDevice, ALC_DEVICE_SPECIFIER);
 	printf("Opened \"%s\"\n", name);
+	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 }
 
 SoundDevice::~SoundDevice()
@@ -40,4 +41,16 @@ SoundDevice::~SoundDevice()
 
 	if (!alcCloseDevice(p_ALCDevice))
 		throw("failed to close sound device");
+}
+
+void SoundDevice::SetPosition(glm::vec3 pos) {
+	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+}
+
+void SoundDevice::SetOrientation(glm::vec3 fwd, glm::vec3 top) {
+	float o[] = { 
+		fwd.x, fwd.y, fwd.z, 
+		top.x, top.y, top.z 
+	};
+	alListenerfv(AL_ORIENTATION, o);
 }
