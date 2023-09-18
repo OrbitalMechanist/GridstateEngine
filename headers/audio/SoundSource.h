@@ -15,6 +15,8 @@ public:
 
 	void Pause();
 
+	void SetPosition(glm::vec3 pos);
+
 private:
 	ALuint p_Source;
 	ALuint p_Buffer = 0;
