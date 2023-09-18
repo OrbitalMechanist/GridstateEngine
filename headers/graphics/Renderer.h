@@ -13,6 +13,7 @@
 #include "Vertex.h"
 #include "UniformLayout.h"
 #include "Light.h"
+#include "ShadowMap.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -46,6 +47,11 @@ private:
 	std::map<std::string, ShaderProgram> shaderPrograms;
 
 	std::array<Light, NUM_LIGHTS> lights;
+	std::array<ShadowMap, NUM_LIGHTS> shadowMaps;
+	ShaderProgram shadowShader;
+
+	const GLuint shadowMapXsize = 1024;
+	const GLuint shadowMapYsize = 1024;
 
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
@@ -118,5 +124,11 @@ public:
 	///  these specific uniforms needs to be bound to set them.</param>
 	/// <param name="ambient">Color to add when calculating the final result.</param>
 	void setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient);
+
+	ShadowMap createShadowMap();
+
+	//This is a terrible way to go about things, and exists only for testing reasons. Once very basic shadows work,
+	//it will be high time for a render queue.
+	void castShadow(const std::string& modelName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale);
 };
 

@@ -1,6 +1,5 @@
 #include "graphics/ShaderProgram.h"
 
-
 ShaderProgram::ShaderProgram(GL_ShaderProgram assoc) {
 	glReference = assoc;
 	uniforms = UniformLayout();
@@ -27,6 +26,10 @@ void ShaderProgram::queryUniformLocations() {
 	attemptLightLoading();
 	tmp = glGetUniformLocation(glReference, "ambientLight");
 	uniforms.ambientLight = tmp;
+	tmp = glGetUniformLocation(glReference, "shadowMaps[0]");
+	uniforms.shadowMapFirstElement = tmp;
+	tmp = glGetUniformLocation(glReference, "lightSpaceMatrices[0]");
+	uniforms.lightSpaceMatrixFirstElement = tmp;
 }
 
 const UniformLayout& ShaderProgram::referenceUniforms() {

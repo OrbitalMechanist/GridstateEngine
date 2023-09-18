@@ -24,8 +24,8 @@ int main() {
 
 	SoundSource Source(1.f, 1.f, {0,0,0}, {0,0,0}, false);
 
-	Source.Play(gunA);
-	Source.Play(gunB);
+	//Source.Play(gunA);
+	//Source.Play(gunB);
 
 	try {
 		if (!glfwInit()) {
@@ -80,7 +80,10 @@ int main() {
 		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
 			{ 1.0f, 1.0f, 0.65f }, 1.0f, glm::radians(45.0f), 10, 10);
 
-		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-1.0f, 0.0f, 0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+		renderer.setLightState("basic", 5, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 0.6f, 0.6f, 1.0f }, 1.0f,
+			0, -1, -1);
+
+		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f,-1.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
 			0, -1, -1);
 
 		renderer.setLightState("basic", 3, 3, { 10.0f, 0.0f, 0.0f }, glm::vec3(0.0f, 1.0f, 0.0f), { 1.0f, 1.0f, 1.0f }, 1.0f,
@@ -98,6 +101,29 @@ int main() {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
+			//Shadow
+			renderer.castShadow("cube", { 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+
+			renderer.castShadow("cube",	{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f });
+
+			renderer.castShadow("cube",	{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+
+			renderer.castShadow("cube", { -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+
+			renderer.castShadow("ak", { 0.0f, 0.0f, 1.53f }, 
+				{ 0.0f, glm::radians(90.0f), glm::radians(117.0f) }, { 1.0f, 1.0f, 1.0f });
+
+			for (int x = 0; x < 10; x++) {
+				for (int y = 0; y < 10; y++) {
+					renderer.castShadow("cube", { x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+				}
+			}
+
+			for (int y = 0; y <= 12; y += 2) {
+				renderer.castShadow("cube", { 10.0f, y + 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			}
+
+			//Visible
 			renderer.drawByNames("cube", "stone", "basic",
 				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 

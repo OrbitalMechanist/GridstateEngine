@@ -159,6 +159,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\ShadowMap.cpp" />
     <ClCompile Include="src\graphics\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="headers\graphics\ShaderProgram.h" />
     <ClInclude Include="headers\graphics\UniformLayout.h" />
     <ClInclude Include="headers\graphics\Vertex.h" />
+    <ClInclude Include="headers\graphics\ShadowMap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -190,6 +192,8 @@
     <None Include="shaders\basic.vert" />
     <None Include="shaders\secondary.frag" />
     <None Include="shaders\secondary.vert" />
+    <None Include="shaders\SYSTEM_shadow.frag" />
+    <None Include="shaders\SYSTEM_shadow.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

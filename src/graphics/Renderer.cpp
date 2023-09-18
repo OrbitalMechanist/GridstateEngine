@@ -14,6 +14,18 @@ Renderer::Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t win
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//TODO: This is scuffed and needs refactoring. Shader program loading needs to be split into
+	//a creator function and a map setter.
+	//Maybe make the ShaderProgram class responsible for its own loading, but I'd prefer this Renderer class
+	//be responsible for as much GL interaction as possible for ease of maintenance and explaining to others.
+	loadShaderProgram("shaders/SYSTEM_shadow.vert", "shaders/SYSTEM_shadow.frag", "SYSTEMSHADOW");
+	shadowShader = shaderPrograms["SYSTEMSHADOW"];
+	shaderPrograms.erase("SYSTEMSHADOW");
+
+	for (int i = 0; i < NUM_LIGHTS; i++) {
+		shadowMaps[i] = createShadowMap();
+	}
+
 	createCubeModel();
 }
 
@@ -237,7 +249,7 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 	glUseProgram(sp.getGLReference());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[textureName]);
-	glBindVertexArray(models[modelName].getVAO());
+	glUniform1i(sp.referenceUniforms().diffuseTex, 0);
 
 	glm::mat4 model = glm::mat4(1.0f);
 	
@@ -266,9 +278,21 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 
 	glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
 
+	std::vector<GLuint> textureSamplerTargets{NUM_LIGHTS};
+
+	for (GLuint i = 0; i < NUM_LIGHTS; i++) {
+		glActiveTexture(GL_TEXTURE1 + i);
+		glBindTexture(GL_TEXTURE_2D, shadowMaps[i].getMap());
+		glUniformMatrix4fv(sp.referenceUniforms().lightSpaceMatrixFirstElement + i, 1, GL_FALSE,
+			glm::value_ptr(shadowMaps[i].getLightSpaceMatrix()));
+		glUniform1i(sp.referenceUniforms().shadowMapFirstElement + i, 1 + i);
+	}
+
 	glUniformMatrix4fv(sp.referenceUniforms().mvp, 1, false, glm::value_ptr(mvp));
 	glUniformMatrix4fv(sp.referenceUniforms().normMat, 1, false, glm::value_ptr(normalMatrix));
 	glUniformMatrix4fv(sp.referenceUniforms().modelMat, 1, false, glm::value_ptr(model));
+
+	glBindVertexArray(models[modelName].getVAO());
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 
@@ -446,6 +470,15 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	lights[lightIndex].distanceLimit = distanceLimit;
 	lights[lightIndex].attenuationMax = attenuationMax;
 
+	glm::vec3 lightSourcePos = -1.0f * lights[lightIndex].direction;
+
+	glm::mat4 proj = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f); //calculation bounding box, constant for now
+	glm::mat4 view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+
+	glm::mat4 lsm = proj * view;
+
+	shadowMaps[lightIndex].updateLightSpaceMatrix(lsm);
+
 	const LightLayout& element = shaderPrograms[usableShaderName].referenceUniforms().lights[lightIndex];
 
 	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
@@ -475,4 +508,87 @@ void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::v
 	}
 	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
 	glUniform3f(shaderPrograms[usableShaderName].referenceUniforms().ambientLight, ambient.r, ambient.g, ambient.b);
+}
+
+ShadowMap Renderer::createShadowMap()
+{
+	GL_FrameBufferObject fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	GL_Texture shadowMap;
+	glGenTextures(1, &shadowMap);
+	glBindTexture(GL_TEXTURE_2D, shadowMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapXsize, shadowMapYsize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//glDrawBuffer(GL_NONE);
+	//glReadBuffer(GL_NONE);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		throw std::runtime_error("Failed shadow map creation at framebuffer.");
+		return ShadowMap();
+	}
+
+	//TODO: Find if it's necessary to unbind the framebuffer.
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return ShadowMap(fbo, shadowMap);
+}
+
+void Renderer::castShadow(const std::string& modelName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale)
+{
+	glUseProgram(shadowShader.getGLReference());
+	glDepthMask(GL_TRUE);
+
+	//glCullFace(GL_FRONT);
+
+	glViewport(0, 0, shadowMapXsize, shadowMapYsize);
+
+	glBindVertexArray(models[modelName].getVAO());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
+	for (size_t i = 0; i < NUM_LIGHTS; i++) {
+		if (lights[i].type == 1) {
+			glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[i].getFBO());		
+
+			glm::vec3 lightSourcePos = -1.0f * lights[i].direction;
+
+			glm::mat4 proj = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f); //calculation bounding box, constant for now
+			glm::mat4 view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+
+			glm::mat4 model = glm::mat4(1.0f);
+
+			model = glm::translate(model, pos);
+
+			model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
+			model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
+			model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
+
+			model = glm::scale(model, scale);
+
+			glm::mat4 mvp = proj * view * model;
+
+			glUniformMatrix4fv(shadowShader.referenceUniforms().mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+			glDrawElements(GL_TRIANGLES, models[modelName].getIndexCount(), GL_UNSIGNED_INT, 0);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+	}
+	glViewport(0, 0, windowXsize, windowYsize);
+
+	glCullFace(GL_BACK);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }

@@ -13,3 +13,4 @@ typedef GLuint GL_VertexBufferObject;
 typedef GLuint GL_ElementBufferObject;
 typedef GLuint GL_Texture;
 typedef GLint GL_Uniform;
+typedef GLuint GL_FrameBufferObject;
