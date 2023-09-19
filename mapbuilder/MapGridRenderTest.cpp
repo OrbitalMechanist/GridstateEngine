@@ -1,10 +1,6 @@
-extern "C"{
-	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
 #include "graphics/Renderer.h"
 #include "Constants.h"
-#include "mapbuilder/MapGrid.cpp"
+#include "MapGrid.cpp"
 
 #include <chrono>
 
@@ -19,7 +15,7 @@ static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 // Much of this code is what you'd originally see in main, just isolated to what's needed for this test
-int main() {
+int MapGridRenderTest() {
 	try {
 		if (!glfwInit()) {
 			throw std::runtime_error("Failed GLFW Init.");
@@ -68,7 +64,7 @@ int main() {
 		// initialize the MapGrid and fill it with things to draw later
 		int mapRows = 10;
 		int mapCols = 10;
-
+		
 		MapGrid testMap = MapGrid(mapRows, mapCols);
 
 		for (int i = 0; i < mapRows; ++i) {
