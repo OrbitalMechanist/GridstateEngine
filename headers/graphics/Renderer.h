@@ -57,6 +57,7 @@ private:
 
 	void createCubeModel();
 
+	ShadowMap createShadowMap();
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
@@ -124,8 +125,6 @@ public:
 	///  these specific uniforms needs to be bound to set them.</param>
 	/// <param name="ambient">Color to add when calculating the final result.</param>
 	void setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient);
-
-	ShadowMap createShadowMap();
 
 	//This is a terrible way to go about things, and exists only for testing reasons. Once very basic shadows work,
 	//it will be high time for a render queue.

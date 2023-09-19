@@ -470,10 +470,20 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	lights[lightIndex].distanceLimit = distanceLimit;
 	lights[lightIndex].attenuationMax = attenuationMax;
 
-	glm::vec3 lightSourcePos = -1.0f * lights[lightIndex].direction;
+	glm::mat4 proj;
+	glm::mat4 view;
 
-	glm::mat4 proj = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f); //calculation bounding box, constant for now
-	glm::mat4 view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+	if (lights[lightIndex].type == 1) {
+		glm::vec3 lightSourcePos = -1.0f * lights[lightIndex].direction;
+		proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); //calculation bounding box, constant for now
+		view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+	}
+	else {
+		proj = glm::perspective(lights[lightIndex].angle, 1.0f, 0.1f,
+			lights[lightIndex].distanceLimit > 0 ? lights[lightIndex].distanceLimit : 100);
+		view = glm::lookAt(lights[lightIndex].position,
+			lights[lightIndex].position + lights[lightIndex].direction, glm::vec3(0, 0, 1));
+	}
 
 	glm::mat4 lsm = proj * view;
 
@@ -558,13 +568,22 @@ void Renderer::castShadow(const std::string& modelName, const glm::vec3& pos, co
 	glBindVertexArray(models[modelName].getVAO());
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 	for (size_t i = 0; i < NUM_LIGHTS; i++) {
-		if (lights[i].type == 1) {
+		if (lights[i].type == 1 || lights[i].type == 3) {
 			glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[i].getFBO());		
 
-			glm::vec3 lightSourcePos = -1.0f * lights[i].direction;
+			glm::mat4 proj;
+			glm::mat4 view;
 
-			glm::mat4 proj = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f); //calculation bounding box, constant for now
-			glm::mat4 view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+			if (lights[i].type == 1) {
+				glm::vec3 lightSourcePos = -1.0f * lights[i].direction;
+				proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); //calculation bounding box, constant for now
+				view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+			}
+			else {
+				proj = glm::perspective(lights[i].angle, 1.0f, 0.1f, 
+					lights[i].distanceLimit > 0 ? lights[i].distanceLimit : 100);
+				view = glm::lookAt(lights[i].position, lights[i].position + lights[i].direction, glm::vec3(0, 0, 1));
+			}
 
 			glm::mat4 model = glm::mat4(1.0f);
 
