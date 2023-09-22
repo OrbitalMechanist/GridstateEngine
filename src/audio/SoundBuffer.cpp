@@ -35,7 +35,6 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	}
 
 	/* Get the sound format, and figure out the OpenAL format */
-	/*
 	format = AL_NONE;
 	if (sfinfo.channels == 1)
 		format = AL_FORMAT_MONO16;
@@ -57,8 +56,6 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 		sf_close(sndfile);
 		return 0;
 	}
-	*/
-	format = AL_FORMAT_MONO16;
 
 	/* Decode the whole audio file to a buffer. */
 	membuf = static_cast<short*>(malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short)));

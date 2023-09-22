@@ -23,8 +23,8 @@ int main() {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource SourceA(1.f, 1.f, {0,0,0}, {0,0,0}, false);
-	SoundSource SourceB(1.f, 1.f, { 0,0,0 }, { 0,0,0 }, false);
+	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
+	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
 
 	try {
 		if (!glfwInit()) {
