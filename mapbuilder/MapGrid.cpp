@@ -4,7 +4,7 @@
 
 /*
     This class defines the game's map, currently each cell only holds strings,
-    later cells will hold data objects which are the actual play pieces. (maybe multiple objects?)
+    later cells will hold references to game objects.
     Currently very placeholder.
 */
 class MapGrid {

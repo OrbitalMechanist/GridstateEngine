@@ -1,5 +1,6 @@
 #include "MapGrid.cpp"
-
+#include "xmlReader.cpp"
+#include "bmpReader.cpp"
 /*
 	PLACEHOLDER, this object handles populating MapGrid objects 
 	with game objects of many varying types.
