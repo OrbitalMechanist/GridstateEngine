@@ -28,8 +28,16 @@ void ShaderProgram::queryUniformLocations() {
 	uniforms.ambientLight = tmp;
 	tmp = glGetUniformLocation(glReference, "shadowMaps[0]");
 	uniforms.shadowMapFirstElement = tmp;
+	tmp = glGetUniformLocation(glReference, "shadowCubemaps[0]");
+	uniforms.shadowCubemapFirstElement = tmp;
 	tmp = glGetUniformLocation(glReference, "lightSpaceMatrices[0]");
 	uniforms.lightSpaceMatrixFirstElement = tmp;
+	tmp = glGetUniformLocation(glReference, "shadowFaces[0]");
+	uniforms.cubeShadowFacesFirstElement = tmp;
+	tmp = glGetUniformLocation(glReference, "cubeShadowLightPos");
+	uniforms.cubeShadowLightPos = tmp;
+	tmp = glGetUniformLocation(glReference, "cubeShadowDistanceLimit");
+	uniforms.cubeShadowDistanceLimit = tmp;
 }
 
 const UniformLayout& ShaderProgram::referenceUniforms() {

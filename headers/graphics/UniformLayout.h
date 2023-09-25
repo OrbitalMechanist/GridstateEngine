@@ -15,7 +15,11 @@ struct UniformLayout {
 	std::array<LightLayout, NUM_LIGHTS> lights;
 	GL_Uniform ambientLight;
 	GL_Uniform shadowMapFirstElement;
+	GL_Uniform shadowCubemapFirstElement;
 	GL_Uniform lightSpaceMatrixFirstElement;
+	GL_Uniform cubeShadowFacesFirstElement;
+	GL_Uniform cubeShadowLightPos;
+	GL_Uniform cubeShadowDistanceLimit;
 
 	UniformLayout() {
 		mvp = -1;
@@ -24,6 +28,10 @@ struct UniformLayout {
 		modelMat = -1;
 		ambientLight = -1;
 		shadowMapFirstElement = -1;
+		shadowCubemapFirstElement = -1;
 		lightSpaceMatrixFirstElement = -1;
+		cubeShadowFacesFirstElement = -1;
+		cubeShadowLightPos = -1;
+		cubeShadowDistanceLimit = -1;
 	}
 };

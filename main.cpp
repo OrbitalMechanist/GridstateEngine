@@ -63,9 +63,9 @@ int main() {
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/ak74.png", "ak_texture");
 
-		renderer.loadShaderProgram("shaders/basic.vert", "shaders/basic.frag", "basic");
+		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 
-		renderer.loadShaderProgram("shaders/secondary.vert", "shaders/secondary.frag", "secondary");
+		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 
@@ -76,8 +76,8 @@ int main() {
 		glm::vec3 camRot{0.0f, 0.0f, 0.0f};
 		glm::vec3 camPos{0.0f, 0.0f, 10.0f};
 
-		renderer.setLightState("basic", 0, 2, { 0.0f, 6.0f, -1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 3.0f, 3.0f);
+		renderer.setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 
 		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
 			{ 1.0f, 1.0f, 0.65f }, 1.0f, glm::radians(90.0f), 10.0f, 10.0f);
@@ -115,6 +115,9 @@ int main() {
 
 			renderer.castShadow("cube", { -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 
+			renderer.castShadow("cube", { 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f });
+			renderer.castShadow("cube", { 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+
 			renderer.castShadow("ak", { 0.0f, 0.0f, 1.53f }, 
 				{ 0.0f, glm::radians(90.0f), glm::radians(117.0f) }, { 1.0f, 1.0f, 1.0f });
 
@@ -140,6 +143,12 @@ int main() {
 
 			renderer.drawByNames("cube", "stone", "basic",
 				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+
+			renderer.drawByNames("cube", "stone", "basic",
+				{ 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f });
+
+			renderer.drawByNames("cube", "stone", "basic",
+				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 
 			renderer.drawByNames("ak", "ak_texture", "basic",
 				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f});

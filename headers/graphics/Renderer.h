@@ -14,6 +14,7 @@
 #include "UniformLayout.h"
 #include "Light.h"
 #include "ShadowMap.h"
+#include "ShadowCubeMap.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -48,7 +49,9 @@ private:
 
 	std::array<Light, NUM_LIGHTS> lights;
 	std::array<ShadowMap, NUM_LIGHTS> shadowMaps;
+	std::array<ShadowCubeMap, NUM_LIGHTS> shadowCubemaps;
 	ShaderProgram shadowShader;
+	ShaderProgram cubeShadowShader;
 
 	const GLuint shadowMapXsize = 1024;
 	const GLuint shadowMapYsize = 1024;
@@ -58,6 +61,9 @@ private:
 	void createCubeModel();
 
 	ShadowMap createShadowMap();
+
+	ShadowCubeMap createShadowCubeMap();
+
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
@@ -68,7 +74,8 @@ public:
 
 	bool loadModel(const std::string& path, const std::string& resultName);
 
-	bool loadShaderProgram(const std::string& vertPath, const std::string& fragPath, const std::string& resultName);
+	bool loadShaderProgram(const std::string& vertPath, const std::string& geometryPath,
+		const std::string& fragPath, const std::string& resultName);
 
 	void setBackgroundColor(const glm::vec4& color);
 
