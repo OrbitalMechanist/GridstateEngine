@@ -17,6 +17,8 @@ change that later though.
 - glm
 - assimp
 - stb_image
+- OpenAL
+- libsndfile
 
 ## Group Composition
 - Max

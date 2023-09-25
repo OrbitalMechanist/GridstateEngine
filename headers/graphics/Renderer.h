@@ -13,6 +13,8 @@
 #include "Vertex.h"
 #include "UniformLayout.h"
 #include "Light.h"
+#include "ShadowMap.h"
+#include "ShadowCubeMap.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -46,10 +48,21 @@ private:
 	std::map<std::string, ShaderProgram> shaderPrograms;
 
 	std::array<Light, NUM_LIGHTS> lights;
+	std::array<ShadowMap, NUM_LIGHTS> shadowMaps;
+	std::array<ShadowCubeMap, NUM_LIGHTS> shadowCubemaps;
+	ShaderProgram shadowShader;
+	ShaderProgram cubeShadowShader;
+
+	const GLuint shadowMapXsize = 1024;
+	const GLuint shadowMapYsize = 1024;
 
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
 	void createCubeModel();
+
+	ShadowMap createShadowMap();
+
+	ShadowCubeMap createShadowCubeMap();
 
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
@@ -61,7 +74,8 @@ public:
 
 	bool loadModel(const std::string& path, const std::string& resultName);
 
-	bool loadShaderProgram(const std::string& vertPath, const std::string& fragPath, const std::string& resultName);
+	bool loadShaderProgram(const std::string& vertPath, const std::string& geometryPath,
+		const std::string& fragPath, const std::string& resultName);
 
 	void setBackgroundColor(const glm::vec4& color);
 
@@ -118,5 +132,9 @@ public:
 	///  these specific uniforms needs to be bound to set them.</param>
 	/// <param name="ambient">Color to add when calculating the final result.</param>
 	void setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient);
+
+	//This is a terrible way to go about things, and exists only for testing reasons. Once very basic shadows work,
+	//it will be high time for a render queue.
+	void castShadow(const std::string& modelName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale);
 };
 

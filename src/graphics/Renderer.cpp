@@ -14,6 +14,24 @@ Renderer::Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t win
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//TODO: This is scuffed and needs refactoring. Shader program loading needs to be split into
+	//a creator function and a map setter.
+	//Maybe make the ShaderProgram class responsible for its own loading, but I'd prefer this Renderer class
+	//be responsible for as much GL interaction as possible for ease of maintenance and explaining to others.
+	loadShaderProgram("shaders/SYSTEM_shadow.vert", "", "shaders/SYSTEM_shadow.frag", "SYSTEMSHADOW");
+	shadowShader = shaderPrograms["SYSTEMSHADOW"];
+	shaderPrograms.erase("SYSTEMSHADOW");
+
+	loadShaderProgram("shaders/SYSTEM_shadow.vert", "shaders/SYSTEM_cubeShadow.geom",
+		"shaders/SYSTEM_cubeShadow.frag", "SYSTEMCUBESHADOW");
+	cubeShadowShader = shaderPrograms["SYSTEMCUBESHADOW"];
+	shaderPrograms.erase("SYSTEMCUBESHADOW");
+
+	for (int i = 0; i < NUM_LIGHTS; i++) {
+		shadowMaps[i] = createShadowMap();
+		shadowCubemaps[i] = createShadowCubeMap();
+	}
+
 	createCubeModel();
 }
 
@@ -137,7 +155,8 @@ GL_Shader Renderer::loadShader(const std::string& path, GLenum shaderStage) {
 	return result;
 }
 
-bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string& fragPath, const std::string& resultName) {
+bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string& geometryPath,
+	const std::string& fragPath, const std::string& resultName) {
 	if (shaderPrograms.contains(resultName)) {
 		std::cout << "Warning: shader program called \"" << resultName
 			<< "\" is already loaded and will be deleted and replaced." << std::endl;
@@ -153,10 +172,19 @@ bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string&
 		return false;
 	}
 
+
+	GL_Shader geo;
+	if (!geometryPath.empty()) {
+		geo = loadShader(geometryPath, GL_GEOMETRY_SHADER);
+	}
+
 	GL_ShaderProgram shaderProgram;
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vert);
 	glAttachShader(shaderProgram, frag);
+	if (!geometryPath.empty()) {
+		glAttachShader(shaderProgram, geo);
+	}
 	glLinkProgram(shaderProgram);
 
 	int linkStatus;
@@ -237,7 +265,7 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 	glUseProgram(sp.getGLReference());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[textureName]);
-	glBindVertexArray(models[modelName].getVAO());
+	glUniform1i(sp.referenceUniforms().diffuseTex, 0);
 
 	glm::mat4 model = glm::mat4(1.0f);
 	
@@ -266,9 +294,25 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 
 	glm::mat4 normalMatrix = glm::transpose(glm::inverse(model));
 
+	std::vector<GLuint> textureSamplerTargets{NUM_LIGHTS};
+
+	for (GLuint i = 0; i < NUM_LIGHTS; i++) {
+		glActiveTexture(GL_TEXTURE1 + i);
+		glBindTexture(GL_TEXTURE_2D, shadowMaps[i].getMap());
+		glUniformMatrix4fv(sp.referenceUniforms().lightSpaceMatrixFirstElement + i, 1, GL_FALSE,
+			glm::value_ptr(shadowMaps[i].getLightSpaceMatrix()));
+		glUniform1i(sp.referenceUniforms().shadowMapFirstElement + i, 1 + i);
+
+		glActiveTexture(GL_TEXTURE1 + NUM_LIGHTS + i);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubemaps[i].getCubemap());
+		glUniform1i(sp.referenceUniforms().shadowCubemapFirstElement + i, 1 + NUM_LIGHTS + i);
+	}
+
 	glUniformMatrix4fv(sp.referenceUniforms().mvp, 1, false, glm::value_ptr(mvp));
 	glUniformMatrix4fv(sp.referenceUniforms().normMat, 1, false, glm::value_ptr(normalMatrix));
 	glUniformMatrix4fv(sp.referenceUniforms().modelMat, 1, false, glm::value_ptr(model));
+
+	glBindVertexArray(models[modelName].getVAO());
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
 
@@ -446,6 +490,46 @@ bool Renderer::setLightState(const std::string& usableShaderName, size_t lightIn
 	lights[lightIndex].distanceLimit = distanceLimit;
 	lights[lightIndex].attenuationMax = attenuationMax;
 
+	glm::mat4 proj;
+	glm::mat4 view;
+
+	if (lights[lightIndex].type == 1) {
+		glm::vec3 lightSourcePos = -1.0f * lights[lightIndex].direction;
+		proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); //calculation bounding box, constant for now
+		view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+	}
+	else if(lights[lightIndex].type == 3) {
+		proj = glm::perspective(lights[lightIndex].angle, 1.0f, 0.1f,
+			lights[lightIndex].distanceLimit > 0 ? lights[lightIndex].distanceLimit : 100);
+		view = glm::lookAt(lights[lightIndex].position,
+			lights[lightIndex].position + lights[lightIndex].direction, glm::vec3(0, 0, 1));
+	}
+	else if (lights[lightIndex].type == 2) {
+		proj = glm::perspective(glm::radians(90.0f),
+			static_cast<float>(shadowMapXsize) / shadowMapYsize, 0.1f,
+			lights[lightIndex].distanceLimit > 0 ? lights[lightIndex].distanceLimit : 100);
+
+		//based on https://learnopengl.com/Advanced-Lighting/Shadows/Point-Shadows
+		shadowCubemaps[lightIndex].updateMatrices(
+			proj * glm::lookAt(lights[lightIndex].position, 
+				lights[lightIndex].position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
+			proj * glm::lookAt(lights[lightIndex].position,
+				lights[lightIndex].position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
+			proj * glm::lookAt(lights[lightIndex].position,
+				lights[lightIndex].position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+			proj * glm::lookAt(lights[lightIndex].position,
+				lights[lightIndex].position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)),
+			proj * glm::lookAt(lights[lightIndex].position,
+				lights[lightIndex].position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
+			proj * glm::lookAt(lights[lightIndex].position,
+				lights[lightIndex].position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f))
+		);
+	}
+
+	glm::mat4 lsm = proj * view;
+
+	shadowMaps[lightIndex].updateLightSpaceMatrix(lsm);
+
 	const LightLayout& element = shaderPrograms[usableShaderName].referenceUniforms().lights[lightIndex];
 
 	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
@@ -475,4 +559,171 @@ void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::v
 	}
 	glUseProgram(shaderPrograms[usableShaderName].getGLReference());
 	glUniform3f(shaderPrograms[usableShaderName].referenceUniforms().ambientLight, ambient.r, ambient.g, ambient.b);
+}
+
+ShadowMap Renderer::createShadowMap()
+{
+	GL_FrameBufferObject fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	GL_Texture shadowMap;
+	glGenTextures(1, &shadowMap);
+	glBindTexture(GL_TEXTURE_2D, shadowMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapXsize, shadowMapYsize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		throw std::runtime_error("Failed shadow map creation at framebuffer.");
+		return ShadowMap();
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return ShadowMap(fbo, shadowMap);
+}
+
+ShadowCubeMap Renderer::createShadowCubeMap()
+{
+	GL_FrameBufferObject fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	GL_Cubemap shadowCubemap;
+	glGenTextures(1, &shadowCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubemap);
+	for (GLuint i = 0; i < 6; i++) {
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
+			shadowMapXsize, shadowMapYsize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadowCubemap, 0);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		throw std::runtime_error("Failed shadow cubemap creation at framebuffer.");
+		return ShadowCubeMap();
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return ShadowCubeMap(fbo, shadowCubemap);
+}
+
+void Renderer::castShadow(const std::string& modelName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale)
+{
+	glDepthMask(GL_TRUE);
+
+	//this is widely considered a good idea but in my case it creates horrible peterpanning *without* quite fixing the acne.
+	//glCullFace(GL_FRONT);
+
+	glViewport(0, 0, shadowMapXsize, shadowMapYsize);
+
+	glBindVertexArray(models[modelName].getVAO());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
+	for (size_t i = 0; i < NUM_LIGHTS; i++) {
+		glm::mat4 mvp;
+
+		if (lights[i].type == 1 || lights[i].type == 3) {
+			glUseProgram(shadowShader.getGLReference());
+
+			glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[i].getFBO());		
+
+			glm::mat4 proj;
+			glm::mat4 view;
+
+			if (lights[i].type == 1) {
+				glm::vec3 lightSourcePos = -1.0f * lights[i].direction;
+				proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); //calculation bounding box, constant for now
+				view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+			}
+			else {
+				proj = glm::perspective(lights[i].angle, 1.0f, 0.1f, 
+					lights[i].distanceLimit > 0 ? lights[i].distanceLimit : 100);
+				view = glm::lookAt(lights[i].position, lights[i].position + lights[i].direction, glm::vec3(0, 0, 1));
+			}
+
+			glm::mat4 model = glm::mat4(1.0f);
+
+			model = glm::translate(model, pos);
+
+			model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
+			model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
+			model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
+
+			model = glm::scale(model, scale);
+
+			mvp = proj * view * model;
+		}
+		else if (lights[i].type == 2) { //Point lights with cubemap shadows			
+			glUseProgram(cubeShadowShader.getGLReference());
+
+			glBindFramebuffer(GL_FRAMEBUFFER, shadowCubemaps[i].getFBO());
+
+			glm::mat4 model = glm::mat4(1.0f);
+
+			model = glm::translate(model, pos);
+
+			model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
+			model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
+			model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
+
+			model = glm::scale(model, scale);
+
+			mvp = model;
+
+			auto matrices = shadowCubemaps[i].getFaceShadowMatrices();
+
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement,
+					1, GL_FALSE, glm::value_ptr(matrices[0]));
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 1,
+				1, GL_FALSE, glm::value_ptr(matrices[1]));
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 2,
+				1, GL_FALSE, glm::value_ptr(matrices[2]));
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 3,
+				1, GL_FALSE, glm::value_ptr(matrices[3]));
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 4,
+				1, GL_FALSE, glm::value_ptr(matrices[4]));
+			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 5,
+				1, GL_FALSE, glm::value_ptr(matrices[5]));
+
+			glUniform3fv(cubeShadowShader.referenceUniforms().cubeShadowLightPos, 1,
+				glm::value_ptr(lights[i].position));
+
+			glUniform1f(cubeShadowShader.referenceUniforms().cubeShadowDistanceLimit,
+				lights[i].distanceLimit > 0 ? lights[i].distanceLimit : 100);
+		}
+
+		glUniformMatrix4fv(shadowShader.referenceUniforms().mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+		glDrawElements(GL_TRIANGLES, models[modelName].getIndexCount(), GL_UNSIGNED_INT, 0);
+
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glViewport(0, 0, windowXsize, windowYsize);
+
+	glCullFace(GL_BACK);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
