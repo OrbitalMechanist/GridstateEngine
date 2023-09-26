@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "GameObjList.cpp"
 
 /*
     This class defines the game's map, currently each cell only holds strings,
@@ -12,6 +13,7 @@ class MapGrid {
 private:
     int rows;
     int cols;
+    // a vector of vectors simulates a grid, with a placeholder string in each entry
     std::vector<std::vector<std::string>> data;
 
     // check if a cell is actually part of the grid, just in case

@@ -159,9 +159,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="mapbuilder\GameObjList.cpp" />
     <ClCompile Include="mapbuilder\MapGrid.cpp" />
     <ClCompile Include="mapbuilder\MapGridBuilder.cpp" />
     <ClCompile Include="mapbuilder\MapGridRenderTest.cpp" />
+    <ClCompile Include="mapbuilder\filePairReader.cpp" />
     <ClCompile Include="src\graphics\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />

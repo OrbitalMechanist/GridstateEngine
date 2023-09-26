@@ -57,6 +57,12 @@
     <ClCompile Include="mapbuilder\MapGridRenderTest.cpp">
       <Filter>Source Files\Map Builder Files</Filter>
     </ClCompile>
+    <ClCompile Include="mapbuilder\filePairReader.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbuilder\GameObjList.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h">
