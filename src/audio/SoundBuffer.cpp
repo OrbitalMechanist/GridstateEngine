@@ -9,6 +9,7 @@ SoundBuffer* SoundBuffer::get()
 	return sndbuf;
 }
 
+// Get sound effect from sound file and add it to buffer
 ALuint SoundBuffer::addSoundEffect(const char* filename)
 {
 
@@ -95,6 +96,7 @@ ALuint SoundBuffer::addSoundEffect(const char* filename)
 	return buffer;
 }
 
+//Remove sound from buffer
 bool SoundBuffer::removeSoundEffect(const ALuint& buffer)
 {
 	auto it = p_SoundEffectBuffers.begin();
@@ -115,13 +117,14 @@ bool SoundBuffer::removeSoundEffect(const ALuint& buffer)
 	return false;  // couldn't find to remove
 }
 
-
+//Creates an empty sound buffer
 SoundBuffer::SoundBuffer()
 {
 	p_SoundEffectBuffers.clear();
 
 }
 
+//Gets called when SoundBuffer instance is destroyed, deletes buffers and clears buffer of sound effects
 SoundBuffer::~SoundBuffer()
 {
 	alDeleteBuffers(p_SoundEffectBuffers.size(), p_SoundEffectBuffers.data());

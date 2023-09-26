@@ -2,12 +2,14 @@
 #include <OpenAL\al.h>
 #include <stdio.h>
 
+//Get new sound device
 SoundDevice* SoundDevice::get()
 {
 	static SoundDevice* snd_device = new SoundDevice();
 	return snd_device;
 }
 
+//Gets the sound devices in which audio will be played through and sets properties for audio listener
 SoundDevice::SoundDevice()
 {
 	p_ALCDevice = alcOpenDevice(nullptr); // Gets device, nullptr -> get default device
@@ -26,10 +28,11 @@ SoundDevice::SoundDevice()
 		name = alcGetString(p_ALCDevice, ALC_ALL_DEVICES_SPECIFIER);
 	if (!name || alcGetError(p_ALCDevice) != AL_NO_ERROR)
 		name = alcGetString(p_ALCDevice, ALC_DEVICE_SPECIFIER);
-	printf("Opened \"%s\"\n", name);
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	//printf("Opened \"%s\"\n", name);
 }
 
+//Closes sound device when destroyed
 SoundDevice::~SoundDevice()
 {
 	if (!alcMakeContextCurrent(nullptr))
@@ -43,10 +46,12 @@ SoundDevice::~SoundDevice()
 		throw("failed to close sound device");
 }
 
+//Sets position of audio listener
 void SoundDevice::SetPosition(glm::vec3 pos) {
 	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 }
 
+//Sets orientation of audio listener
 void SoundDevice::SetOrientation(glm::vec3 fwd, glm::vec3 top) {
 	float o[] = { 
 		fwd.x, fwd.y, fwd.z, 
