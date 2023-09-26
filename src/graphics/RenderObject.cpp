@@ -1,6 +1,5 @@
 #include "../headers/graphics/RenderObject.h"
 
-//Probably best not to use this.
 RenderObject::RenderObject() {
 	RenderObject("", "", "");
 }

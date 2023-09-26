@@ -123,13 +123,14 @@ int main() {
 				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
 			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f }));
+				{ 0.5f * sin(time * 5.0f), 3.5f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 1.0f}));
 
 			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
 				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
 			renderer.addRenderObject(RenderObject("ak", "ak_texture", "basic",
-				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f}));
+				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
+				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {

@@ -20,6 +20,7 @@ public:
 	std::string textureName;
 	std::string shaderName;
 
+	//Probably best not to use this.
 	RenderObject();
 
 	RenderObject(std::string model, std::string texture, std::string shader);
