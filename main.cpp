@@ -97,85 +97,63 @@ int main() {
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 		
 		static auto startTime = std::chrono::high_resolution_clock::now();
+		static float prevTime = 0;
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+			float deltaTime = time - prevTime;
 
-			renderer.clearFrame();
+			//renderer.clearFrame();
 
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
-			//Shadow
-			renderer.castShadow("cube", { 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-
-			renderer.castShadow("cube",	{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f });
-
-			renderer.castShadow("cube",	{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-
-			renderer.castShadow("cube", { -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-
-			renderer.castShadow("cube", { 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f });
-			renderer.castShadow("cube", { 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-
-			renderer.castShadow("ak", { 0.0f, 0.0f, 1.53f }, 
-				{ 0.0f, glm::radians(90.0f), glm::radians(117.0f) }, { 1.0f, 1.0f, 1.0f });
-
-			for (int x = 0; x < 10; x++) {
-				for (int y = 0; y < 10; y++) {
-					renderer.castShadow("cube", { x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-				}
-			}
-
-			for (int y = 0; y <= 12; y += 2) {
-				renderer.castShadow("cube", { 10.0f, y + 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
-			}
-
+			
 			//Visible
-			renderer.drawByNames("cube", "stone", "basic",
-				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.drawByNames("cube", "stone", "basic",
-				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f)}, {1.0f, 1.0f, 1.0f});
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.drawByNames("cube", "stone", "secondary",
-				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			renderer.addRenderObject(RenderObject("cube", "stone", "secondary",
+				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.drawByNames("cube", "stone", "basic",
-				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.drawByNames("cube", "stone", "basic",
-				{ 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f });
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+				{ 0.0f, 3.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.5f, 0.5f, 1.0f }));
 
-			renderer.drawByNames("cube", "stone", "basic",
-				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.drawByNames("ak", "ak_texture", "basic",
-				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f});
+			renderer.addRenderObject(RenderObject("ak", "ak_texture", "basic",
+				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), glm::radians(117.0f)}, {1.0f, 1.0f, 1.0f}));
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {
-					renderer.drawByNames("cube", "surface", "basic",
-						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+					renderer.addRenderObject(RenderObject("cube", "surface", "basic",
+						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 				}
 			}
 
 			for (int y = 0; y <= 12; y += 2) {
-				renderer.drawByNames("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
-					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f });
+				renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
+					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-				camRot.x += glm::radians(1.0f);
+				camRot.x += 1.0f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-				camRot.x -= glm::radians(1.0f);
+				camRot.x -= 1.0f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-				camRot.z -= glm::radians(1.0f);
+				camRot.z -= 1.0f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-				camRot.z += glm::radians(1.0f);
+				camRot.z += 1.0f * deltaTime;
 			}
 
 			glm::mat4 movementRotation = glm::rotate(glm::mat4(1.0f), camRot.z, { 0.0f, 0.0f, 1.0f });
@@ -189,29 +167,34 @@ int main() {
 
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 0.05f;
+				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * -0.05f;
+				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * -2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * 0.05f;
+				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * 2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * -0.05f;
+				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * -2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * 0.05f;
+				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * 2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * -0.05f;
+				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * -2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-				camPos.z += 0.05f;
+				camPos.z += 2.5f * deltaTime;
 			}
 			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-				camPos.z += -0.05f;
+				camPos.z += -2.5f * deltaTime;
 			}
+
+
+			prevTime = time;
+
+			renderer.renderFromQueue(true);
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();

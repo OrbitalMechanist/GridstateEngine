@@ -561,6 +561,18 @@ void Renderer::setAmbientLight(const std::string& usableShaderName, const glm::v
 	glUniform3f(shaderPrograms[usableShaderName].referenceUniforms().ambientLight, ambient.r, ambient.g, ambient.b);
 }
 
+void Renderer::addRenderObject(RenderObject ro)
+{
+	renderQueue.push_back(ro);
+}
+
+void Renderer::renderFromQueue(bool clearBuffer)
+{
+	shadowRenderPass(clearBuffer);
+	mainRenderPass(clearBuffer);
+	renderQueue.clear();
+}
+
 ShadowMap Renderer::createShadowMap()
 {
 	GL_FrameBufferObject fbo;
@@ -628,96 +640,17 @@ ShadowCubeMap Renderer::createShadowCubeMap()
 	return ShadowCubeMap(fbo, shadowCubemap);
 }
 
-void Renderer::castShadow(const std::string& modelName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale)
-{
+void Renderer::setupShadowRender() {
 	glDepthMask(GL_TRUE);
 
-	//this is widely considered a good idea but in my case it creates horrible peterpanning *without* quite fixing the acne.
+	//this is widely considered a good idea but in my case it creates horrible 
+	// peterpanning *without* quite fixing the acne.
 	//glCullFace(GL_FRONT);
 
 	glViewport(0, 0, shadowMapXsize, shadowMapYsize);
+}
 
-	glBindVertexArray(models[modelName].getVAO());
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
-	for (size_t i = 0; i < NUM_LIGHTS; i++) {
-		glm::mat4 mvp;
-
-		if (lights[i].type == 1 || lights[i].type == 3) {
-			glUseProgram(shadowShader.getGLReference());
-
-			glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[i].getFBO());		
-
-			glm::mat4 proj;
-			glm::mat4 view;
-
-			if (lights[i].type == 1) {
-				glm::vec3 lightSourcePos = -1.0f * lights[i].direction;
-				proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); //calculation bounding box, constant for now
-				view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
-			}
-			else {
-				proj = glm::perspective(lights[i].angle, 1.0f, 0.1f, 
-					lights[i].distanceLimit > 0 ? lights[i].distanceLimit : 100);
-				view = glm::lookAt(lights[i].position, lights[i].position + lights[i].direction, glm::vec3(0, 0, 1));
-			}
-
-			glm::mat4 model = glm::mat4(1.0f);
-
-			model = glm::translate(model, pos);
-
-			model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
-			model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
-			model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
-
-			model = glm::scale(model, scale);
-
-			mvp = proj * view * model;
-		}
-		else if (lights[i].type == 2) { //Point lights with cubemap shadows			
-			glUseProgram(cubeShadowShader.getGLReference());
-
-			glBindFramebuffer(GL_FRAMEBUFFER, shadowCubemaps[i].getFBO());
-
-			glm::mat4 model = glm::mat4(1.0f);
-
-			model = glm::translate(model, pos);
-
-			model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
-			model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
-			model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
-
-			model = glm::scale(model, scale);
-
-			mvp = model;
-
-			auto matrices = shadowCubemaps[i].getFaceShadowMatrices();
-
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement,
-					1, GL_FALSE, glm::value_ptr(matrices[0]));
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 1,
-				1, GL_FALSE, glm::value_ptr(matrices[1]));
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 2,
-				1, GL_FALSE, glm::value_ptr(matrices[2]));
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 3,
-				1, GL_FALSE, glm::value_ptr(matrices[3]));
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 4,
-				1, GL_FALSE, glm::value_ptr(matrices[4]));
-			glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 5,
-				1, GL_FALSE, glm::value_ptr(matrices[5]));
-
-			glUniform3fv(cubeShadowShader.referenceUniforms().cubeShadowLightPos, 1,
-				glm::value_ptr(lights[i].position));
-
-			glUniform1f(cubeShadowShader.referenceUniforms().cubeShadowDistanceLimit,
-				lights[i].distanceLimit > 0 ? lights[i].distanceLimit : 100);
-		}
-
-		glUniformMatrix4fv(shadowShader.referenceUniforms().mvp, 1, GL_FALSE, glm::value_ptr(mvp));
-
-		glDrawElements(GL_TRIANGLES, models[modelName].getIndexCount(), GL_UNSIGNED_INT, 0);
-
-	}
-
+void Renderer::setupVisibleRender() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glViewport(0, 0, windowXsize, windowYsize);
@@ -726,4 +659,134 @@ void Renderer::castShadow(const std::string& modelName, const glm::vec3& pos, co
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void Renderer::castShadow(GLuint lightIndex, const std::string& modelName, const glm::vec3& pos,
+	const glm::vec3& rot, const glm::vec3& scale)
+{
+	glBindVertexArray(models[modelName].getVAO());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, models[modelName].getEBO());
+
+	glm::mat4 mvp;
+
+	if (lights[lightIndex].type == 1 || lights[lightIndex].type == 3) {
+		glm::mat4 proj;
+		glm::mat4 view;
+
+		if (lights[lightIndex].type == 1) {
+			glm::vec3 lightSourcePos = -1.0f * lights[lightIndex].direction;
+			//calculation bounding box, constant for now
+			proj = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, -15.0f, 15.0f); 
+			view = glm::lookAt(lightSourcePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+		}
+		else {
+			proj = glm::perspective(lights[lightIndex].angle, 1.0f, 0.1f, 
+				lights[lightIndex].distanceLimit > 0 ? lights[lightIndex].distanceLimit : 100);
+			view = glm::lookAt(lights[lightIndex].position, lights[lightIndex].position 
+				+ lights[lightIndex].direction, glm::vec3(0, 0, 1));
+		}
+
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = glm::translate(model, pos);
+
+		model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
+		model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
+		model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
+
+		model = glm::scale(model, scale);
+
+		mvp = proj * view * model;
+	}
+	else if (lights[lightIndex].type == 2) { //Point lights with cubemap shadows			
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = glm::translate(model, pos);
+
+		model = glm::rotate(model, rot.z, { 0.0f, 0.0f, 1.0f });
+		model = glm::rotate(model, rot.y, { 0.0f, 1.0f, 0.0f });
+		model = glm::rotate(model, rot.x, { 1.0f, 0.0f, 0.0f });
+
+		model = glm::scale(model, scale);
+
+		mvp = model;
+	}
+
+	glUniformMatrix4fv(shadowShader.referenceUniforms().mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+	glDrawElements(GL_TRIANGLES, models[modelName].getIndexCount(), GL_UNSIGNED_INT, 0);
+}
+
+void Renderer::prepareCubeShadowRenderForLight(GLuint lightIndex) {
+	glUseProgram(cubeShadowShader.getGLReference());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowCubemaps[lightIndex].getFBO());
+
+	auto matrices = shadowCubemaps[lightIndex].getFaceShadowMatrices();
+
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement,
+		1, GL_FALSE, glm::value_ptr(matrices[0]));
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 1,
+		1, GL_FALSE, glm::value_ptr(matrices[1]));
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 2,
+		1, GL_FALSE, glm::value_ptr(matrices[2]));
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 3,
+		1, GL_FALSE, glm::value_ptr(matrices[3]));
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 4,
+		1, GL_FALSE, glm::value_ptr(matrices[4]));
+	glUniformMatrix4fv(cubeShadowShader.referenceUniforms().cubeShadowFacesFirstElement + 5,
+		1, GL_FALSE, glm::value_ptr(matrices[5]));
+
+	glUniform3fv(cubeShadowShader.referenceUniforms().cubeShadowLightPos, 1,
+		glm::value_ptr(lights[lightIndex].position));
+
+	glUniform1f(cubeShadowShader.referenceUniforms().cubeShadowDistanceLimit,
+		lights[lightIndex].distanceLimit > 0 ? lights[lightIndex].distanceLimit : 100);
+}
+
+void Renderer::prepareFlatShadowRenderForLight(GLuint lightIndex)
+{
+	glUseProgram(shadowShader.getGLReference());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[lightIndex].getFBO());
+}
+
+void Renderer::shadowRenderPass(bool clearBuffer)
+{
+	setupShadowRender();
+	for (GLuint i = 0; i < NUM_LIGHTS; ++i) {
+		if (lights[i].type == 1 || lights[i].type == 3) {
+			prepareFlatShadowRenderForLight(i);
+		}
+		else if (lights[i].type == 2) {
+			prepareCubeShadowRenderForLight(i);
+		}
+		else {
+			continue; //if the light isn't of a type we can handle, skip this loop iteration
+		}
+
+		if (clearBuffer) {
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+
+		for (const RenderObject& ro : renderQueue) {
+			if (ro.shadowing) {
+				castShadow(i, ro.modelName, ro.position, ro.rotation, ro.scale);
+			}
+		}
+	}
+	setupVisibleRender();
+}
+
+void Renderer::mainRenderPass(bool clearBuffer)
+{
+	setupVisibleRender();
+	if (clearBuffer) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	for (auto ro : renderQueue) {
+		if (ro.visible) {
+			drawByNames(ro.modelName, ro.textureName, ro.shaderName, ro.position, ro.rotation, ro.scale);
+		}
+	}
 }

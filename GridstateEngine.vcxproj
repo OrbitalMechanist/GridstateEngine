@@ -159,6 +159,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
     <ClCompile Include="src\graphics\glad.c" />
@@ -186,6 +187,7 @@
     <ClInclude Include="headers\graphics\Vertex.h" />
     <ClInclude Include="headers\graphics\ShadowMap.h" />
     <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
+    <ClInclude Include="headers\graphics\RenderObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
