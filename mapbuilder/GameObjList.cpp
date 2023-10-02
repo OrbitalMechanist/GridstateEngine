@@ -46,4 +46,9 @@ public:
 			this->data[index].erase();
 		}
 	}
+
+	//return a list of game objects
+	std::vector<std::string> getGameObjList() {
+		return this->data;
+	}
 };
