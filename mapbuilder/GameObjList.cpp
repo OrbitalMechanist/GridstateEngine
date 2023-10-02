@@ -1,6 +1,6 @@
 #include <iostream>
 #include <list>
-#include <string>
+#include <vector>
 
 /*
 	This class is a list containing all GameObjects loaded in the current MapGrid
@@ -15,11 +15,35 @@
 class GameObjList {
 
 private:
-	std::list<std::string> data;
+	std::vector<std::string> data;
 
 public:
-	// Initialization function
-	GameObjList() {
-		// empty
+	// Initialization function, empty
+	GameObjList() {}
+
+	//placeholder adds a string to data
+	void addGameObj(std::string str) {
+		this->data.push_back(str);
+	}
+
+	//returns # of objects within this GameObjList (use in conjunction with below function to loop
+	// through the GameObjList outside of the class' scope.
+	int size() {
+		return data.size();
+	}
+
+	//grabs an object from data at a specific index (can be used to loop through the GameObjList)
+	//placeholder returns string
+	std::string getGameObj(int index) {
+		if (index < this->size()) {
+			return this->data[index];
+		}
+	}
+
+	//removes an object from data at a specific index, placeholder
+	void deleteGameObj(int index) {
+		if (index < this->size()) {
+			this->data[index].erase();
+		}
 	}
 };
