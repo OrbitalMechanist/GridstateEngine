@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <OpenAL\alext.h>
 
+//Gets instance of sound buffer.
 SoundBuffer* SoundBuffer::get()
 {
 	static SoundBuffer* sndbuf = new SoundBuffer();

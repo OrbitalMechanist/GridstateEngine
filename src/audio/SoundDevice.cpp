@@ -2,7 +2,7 @@
 #include <OpenAL\al.h>
 #include <stdio.h>
 
-//Get new sound device
+//Get instance of sound device.
 SoundDevice* SoundDevice::get()
 {
 	static SoundDevice* snd_device = new SoundDevice();
