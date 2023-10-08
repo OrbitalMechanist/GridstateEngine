@@ -14,6 +14,7 @@ public:
 
 	GameObj(std::pair<int, int> inputCoords, std::string inputName) : gameCoords(inputCoords), gameName(inputName) {}
 	void setSerializedName(std::string input) { this->serializedName = input; }
+
 private:
 	std::string serializedName;
 };

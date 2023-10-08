@@ -9,22 +9,20 @@
 
 	later the graphics engine will need to append the content of this list to a list of it's own
 	in order to render the game world.
-
-	like other placeholder implementation we're using strings until Game Objects are ready
 */
 
 class GameObjList {
 
 private:
-	std::vector<std::string> data;
+	std::vector<GameObj> data;
 
 public:
 	// Initialization function, empty
 	GameObjList() {}
 
-	//placeholder adds a string to data
-	void addGameObj(std::string str) {
-		this->data.push_back(str);
+	//placeholder adds a GameObj to data
+	void addGameObj(GameObj obj) {
+		this->data.push_back(obj);
 	}
 
 	//returns # of objects within this GameObjList (use in conjunction with below function to loop
@@ -34,22 +32,21 @@ public:
 	}
 
 	//grabs an object from data at a specific index (can be used to loop through the GameObjList)
-	//placeholder returns string
-	std::string getGameObj(int index) {
+	GameObj getGameObj(int index) {
 		if (index < this->size()) {
 			return this->data[index];
 		}
 	}
 
-	//removes an object from data at a specific index, placeholder
+	//removes an object from data at a specific index
 	void deleteGameObj(int index) {
 		if (index < this->size()) {
-			this->data[index].erase();
+			this->data.erase((data.begin() + index));
 		}
 	}
 
-	//return a list of game objects
-	std::vector<std::string> getGameObjList() {
+	//returns the list of game objects
+	std::vector<GameObj> getGameObjList() {
 		return this->data;
 	}
 };
