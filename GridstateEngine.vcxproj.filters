@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Map Builder Files">
       <UniqueIdentifier>{01692fb9-f86c-48c1-9b47-302abf7666c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game Master Files">
+      <UniqueIdentifier>{7054e0c4-795b-4d86-acdb-009bcffec92a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,8 +63,11 @@
     <ClCompile Include="mapbuilder\filePairReader.cpp">
       <Filter>Source Files\Map Builder Files</Filter>
     </ClCompile>
-    <ClCompile Include="mapbuilder\GameObjList.cpp">
-      <Filter>Source Files\Map Builder Files</Filter>
+    <ClCompile Include="gamemaster\GameObjList.cpp">
+      <Filter>Source Files\Game Master Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gamemaster\GameObj.cpp">
+      <Filter>Source Files\Game Master Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
