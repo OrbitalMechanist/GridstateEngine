@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "GameObjList.cpp"
 
 /*
     This class defines the game's map, currently each cell only holds strings,

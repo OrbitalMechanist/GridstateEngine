@@ -1,6 +1,5 @@
-#include "MapGrid.cpp"
-#include "GameObjList.cpp"
 #include "filePairReader.cpp"
+#include "../gamemaster/GameObjList.cpp"
 #include <utility>
 #include <vector>
 /*
