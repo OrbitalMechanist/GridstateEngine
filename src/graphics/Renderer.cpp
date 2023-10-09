@@ -334,6 +334,7 @@ void Renderer::setCameraPosition(const glm::vec3& pos) {
 	cameraPos = pos;
 }
 
+
 glm::vec3 Renderer::getCameraRotation() {
 	return cameraRot;
 }

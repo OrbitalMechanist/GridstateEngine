@@ -7,14 +7,23 @@ extern "C"{
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 #include "Constants.h"
-
+#include "iostream"
 #include <chrono>
+
+static void cursorPositionCallback(GLFWwindow* window, double xPos, double yPos);
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void mouseMovementCallback(GLFWwindow* window, double mouseX, double mouseY);
+double lastX, lastY;
+bool rightButtonDown = false;
+
 
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
 int main() {
+
+
 	//Timer for testing audio
 	int gunshotTimer = 0;
 
@@ -26,6 +35,7 @@ int main() {
 
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
+
 
 	try {
 		if (!glfwInit()) {
@@ -42,6 +52,15 @@ int main() {
 
 		GLFWwindow* window;
 		window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Window", 0, nullptr);
+
+
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetCursorPosCallback(window, cursorPositionCallback);
+		glfwSetMouseButtonCallback(window, mouseButtonCallback);
+
+		//Create cursor
+		GLFWcursor* cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+		
 
 		if (window == NULL) {
 			glfwTerminate();
@@ -165,8 +184,7 @@ int main() {
 			glm::vec4 trueFwd = movementRotation * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 			glm::vec4 trueRight = movementRotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			glm::vec4 trueUp = movementRotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-
-
+			
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 2.5f * deltaTime;
 			}
@@ -191,6 +209,20 @@ int main() {
 			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 				camPos.z += -2.5f * deltaTime;
 			}
+
+
+
+
+
+
+			//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			//if (glfwRawMouseMotionSupported())
+			//	glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+			//glfwSetCursor(window, cursor);
+
+			//if (glfwRawMouseMotionSupported())
+			//	glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 
 
 			prevTime = time;
@@ -229,3 +261,58 @@ int main() {
 
 	return EXIT_SUCCESS;
 }
+
+static void cursorPositionCallback(GLFWwindow *window, double xPos, double yPos) {
+	std::cout << xPos << " : " << yPos << std::endl;
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		std::cout << "LEFT button press" << std::endl;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		std::cout << "LEFT button release" << std::endl;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_RIGHT)
+	{
+		if (action == GLFW_PRESS)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			std::cout << "RIGHT button press" << std::endl;
+			rightButtonDown = true;
+			// Capture the initial mouse position when the right button is pressed
+			glfwGetCursorPos(window, &lastX, &lastY);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			rightButtonDown = false;
+			std::cout << "RIGHT button release" << std::endl;
+		}
+	}
+}
+
+//void mouseMovementCallback(GLFWwindow* window, double mouseX, double mouseY)
+//{
+//	if (rightButtonDown)
+//	{
+//		glm::vec3 cameraUpDirection = cameraUp;
+//		double xOffset = mouseX - lastX;
+//		double yOffset = mouseY - lastY;
+//
+//		float panSpeed = 0.005f;
+//
+//		// Calculate the pan direction
+//		glm::vec3 panDirection = glm::normalize(glm::cross(cameraFront, cameraUp));  // Horizontal panning
+//		cameraPos += panDirection * xOffset * panSpeed;
+//
+//		panDirection = cameraUp;  // Vertical panning
+//		cameraPos += panDirection * yOffset * panSpeed;
+//
+//		// Update the last mouse position
+//		lastMouseX = mouseX;
+//		lastMouseY = mouseY;
+//	}
+//}

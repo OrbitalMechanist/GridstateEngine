@@ -105,6 +105,7 @@ public:
 
 	void setCameraPosition(const glm::vec3& pos);
 
+
 	glm::vec3 getCameraPosition();
 
 	glm::vec3 getCameraRotation();
