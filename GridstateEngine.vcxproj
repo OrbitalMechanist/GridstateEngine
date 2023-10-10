@@ -159,6 +159,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\camera\Camera.cpp" />
+    <ClCompile Include="src\camera\shaderClass.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
@@ -173,6 +175,8 @@
     <ClCompile Include="src\graphics\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\camera\Camera.h" />
+    <ClInclude Include="headers\camera\shaderClass.h" />
     <ClInclude Include="headers\Constants.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />

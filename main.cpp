@@ -12,8 +12,19 @@ extern "C"{
 
 static void cursorPositionCallback(GLFWwindow* window, double xPos, double yPos);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-void mouseMovementCallback(GLFWwindow* window, double mouseX, double mouseY);
-double lastX, lastY;
+//void mouseMovementCallback(GLFWwindow* window, float mouseX, float mouseY);
+
+//double lastX, lastY;
+float yaw = -90.0f;   // Yaw is initialized to -90.0 degrees to set the initial direction as vec3(0, 0, -1)
+float pitch = 0.0f;
+float lastX = WINDOW_WIDTH / 2.0f;  // Assuming default window size is 800x600
+float lastY = WINDOW_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+double xPosition = 0;
+double yPosition = 0;
 bool rightButtonDown = false;
 
 
@@ -36,7 +47,7 @@ int main() {
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
 
-
+	
 	try {
 		if (!glfwInit()) {
 			throw std::runtime_error("Failed GLFW Init.");
@@ -74,6 +85,8 @@ int main() {
 		}
 
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+		Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+		Shader shaderProgram("shaders/basic.vert", "shaders/basic.frag");
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
 		Renderer renderer = Renderer(window, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -127,6 +140,8 @@ int main() {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
+			camera.Inputs(window);
+			camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "mvp");
 			
 			//Visible
 			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
@@ -163,18 +178,18 @@ int main() {
 					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
 			}
 
-			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-				camRot.x += 1.0f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-				camRot.x -= 1.0f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-				camRot.z -= 1.0f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-				camRot.z += 1.0f * deltaTime;
-			}
+			//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+			//	camRot.x += 1.0f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+			//	camRot.x -= 1.0f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+			//	camRot.z -= 1.0f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+			//	camRot.z += 1.0f * deltaTime;
+			//}
 
 			glm::mat4 movementRotation = glm::rotate(glm::mat4(1.0f), camRot.z, { 0.0f, 0.0f, 1.0f });
 			movementRotation = glm::rotate(movementRotation, camRot.x, { 1.0f, 0.0f, 0.0f });
@@ -185,30 +200,30 @@ int main() {
 			glm::vec4 trueRight = movementRotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			glm::vec4 trueUp = movementRotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 			
-			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * -2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * 2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-				camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * -2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * 2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-				camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * -2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-				camPos.z += 2.5f * deltaTime;
-			}
-			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-				camPos.z += -2.5f * deltaTime;
-			}
+			//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * -2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * 2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueRight.x, trueRight.y, trueRight.z) * -2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * 2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+			//	camPos += glm::vec3(trueUp.x, trueUp.y, trueUp.z) * -2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+			//	camPos.z += 2.5f * deltaTime;
+			//}
+			//if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+			//	camPos.z += -2.5f * deltaTime;
+			//}
 
 
 
@@ -250,7 +265,7 @@ int main() {
 				gunshotTimer = 600;
 			}
 		}
-
+		
 		glfwTerminate();
 		return 0;
 	}
@@ -263,6 +278,8 @@ int main() {
 }
 
 static void cursorPositionCallback(GLFWwindow *window, double xPos, double yPos) {
+	xPosition = xPos;
+	yPosition = yPos;
 	std::cout << xPos << " : " << yPos << std::endl;
 }
 
@@ -279,11 +296,45 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
 	{
 		if (action == GLFW_PRESS)
 		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+			glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+			glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+			glfwSetInputMode(window, GLFW_CURSOR, 0x00034003);
 			std::cout << "RIGHT button press" << std::endl;
 			rightButtonDown = true;
 			// Capture the initial mouse position when the right button is pressed
-			glfwGetCursorPos(window, &lastX, &lastY);
+			//glfwGetCursorPos(window, &lastX, &lastY);
+
+			lastX = xPosition;
+			lastY = yPosition;
+
+			float xOffset = xPosition - lastX;
+			float yOffset = lastY - yPosition;  // Reversed since y-coordinates go from bottom to top
+			lastX = xPosition;
+			lastY = yPosition;
+
+			float sensitivity = 0.1f;
+			xOffset *= sensitivity;
+			yOffset *= sensitivity;
+
+			yaw += xOffset;
+			pitch += yOffset;
+
+			// Make sure pitch is within bounds
+			if (pitch > 89.0f)
+				pitch = 89.0f;
+			if (pitch < -89.0f)
+				pitch = -89.0f;
+			
+			glm::vec3 front;
+			front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+			front.y = sin(glm::radians(pitch));
+			front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+			cameraFront = glm::normalize(front);
+			std::cout << cameraPos.x << std::endl;
+			std::cout << cameraFront.x << std::endl;
+			//glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
 		}
 		else if (action == GLFW_RELEASE)
 		{
@@ -291,6 +342,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
 			rightButtonDown = false;
 			std::cout << "RIGHT button release" << std::endl;
 		}
+		
 	}
 }
 

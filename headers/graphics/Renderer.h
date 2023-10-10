@@ -34,6 +34,8 @@
 #include <array>
 #include <list>
 
+#include <../headers/camera/Camera.h>
+
 class Renderer
 {
 private:
