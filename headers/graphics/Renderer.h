@@ -13,6 +13,9 @@
 #include "Vertex.h"
 #include "UniformLayout.h"
 #include "Light.h"
+#include "ShadowMap.h"
+#include "ShadowCubeMap.h"
+#include "RenderObject.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -29,10 +32,13 @@
 #include <fstream>
 #include <istream>
 #include <array>
+#include <list>
 
 class Renderer
 {
 private:
+	std::list<RenderObject> renderQueue;
+
 	glm::vec3 cameraPos;
 	glm::vec3 cameraRot;
 
@@ -46,11 +52,36 @@ private:
 	std::map<std::string, ShaderProgram> shaderPrograms;
 
 	std::array<Light, NUM_LIGHTS> lights;
+	std::array<ShadowMap, NUM_LIGHTS> shadowMaps;
+	std::array<ShadowCubeMap, NUM_LIGHTS> shadowCubemaps;
+	ShaderProgram shadowShader;
+	ShaderProgram cubeShadowShader;
+
+	const GLuint shadowMapXsize = 1024;
+	const GLuint shadowMapYsize = 1024;
 
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
 	void createCubeModel();
 
+	ShadowMap createShadowMap();
+
+	ShadowCubeMap createShadowCubeMap();
+
+	void setupShadowRender();
+	
+	void setupVisibleRender();
+
+	void prepareCubeShadowRenderForLight(GLuint lightIndex);
+
+	void prepareFlatShadowRenderForLight(GLuint lightIndex);
+
+	void castShadow(GLuint lightIndex, const std::string& modelName, const glm::vec3& pos,
+		const glm::vec3& rot, const glm::vec3& scale);
+
+	void shadowRenderPass(bool clearBuffer);
+
+	void mainRenderPass(bool clearBuffer);
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
@@ -61,7 +92,8 @@ public:
 
 	bool loadModel(const std::string& path, const std::string& resultName);
 
-	bool loadShaderProgram(const std::string& vertPath, const std::string& fragPath, const std::string& resultName);
+	bool loadShaderProgram(const std::string& vertPath, const std::string& geometryPath,
+		const std::string& fragPath, const std::string& resultName);
 
 	void setBackgroundColor(const glm::vec4& color);
 
@@ -118,5 +150,20 @@ public:
 	///  these specific uniforms needs to be bound to set them.</param>
 	/// <param name="ambient">Color to add when calculating the final result.</param>
 	void setAmbientLight(const std::string& usableShaderName, const glm::vec3& ambient);
+
+	/// <summary>
+	/// Adds a RenderObject to the render queue. It will be drawn at some point
+	/// in accordance with its member parameter variables, but the order is not guaranteed.
+	/// The methods by which it will be drawn are also not guaranteed.
+	/// </summary>
+	/// <param name="ro">RenderObject to add.</param>
+	void addRenderObject(RenderObject ro);
+
+	/// <summary>
+	/// Renders all objects in the render queue and wipes it clean.
+	/// </summary>
+	/// <param name="clearBuffer">Whether to clear the frame buffer. Should probably be true
+	///  but I'm leaving it optional just in case.</param>
+	void renderFromQueue(bool clearBuffer);
 };
 

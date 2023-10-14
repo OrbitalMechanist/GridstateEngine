@@ -159,6 +159,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\RenderObject.cpp" />
+    <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
+    <ClCompile Include="src\graphics\ShadowMap.cpp" />
     <ClCompile Include="gamemaster\GameObj.cpp" />
     <ClCompile Include="gamemaster\GameObjList.cpp" />
     <ClCompile Include="mapbuilder\MapGrid.cpp" />
@@ -188,6 +191,9 @@
     <ClInclude Include="headers\graphics\ShaderProgram.h" />
     <ClInclude Include="headers\graphics\UniformLayout.h" />
     <ClInclude Include="headers\graphics\Vertex.h" />
+    <ClInclude Include="headers\graphics\ShadowMap.h" />
+    <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
+    <ClInclude Include="headers\graphics\RenderObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -196,6 +202,10 @@
     <None Include="shaders\basic.vert" />
     <None Include="shaders\secondary.frag" />
     <None Include="shaders\secondary.vert" />
+    <None Include="shaders\SYSTEM_cubeShadow.frag" />
+    <None Include="shaders\SYSTEM_cubeShadow.geom" />
+    <None Include="shaders\SYSTEM_shadow.frag" />
+    <None Include="shaders\SYSTEM_shadow.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
