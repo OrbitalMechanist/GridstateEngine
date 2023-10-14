@@ -16,6 +16,12 @@
     <Filter Include="Shader Files">
       <UniqueIdentifier>{d0fa207d-212a-442d-8a16-50c80ed202e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Map Builder Files">
+      <UniqueIdentifier>{01692fb9-f86c-48c1-9b47-302abf7666c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Master Files">
+      <UniqueIdentifier>{7054e0c4-795b-4d86-acdb-009bcffec92a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,6 +30,7 @@
     <ClCompile Include="src\graphics\ShadowMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="src\graphics\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,9 +58,71 @@
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\SoundBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\SoundDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\SoundSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Vertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbuilder\MapGrid.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbuilder\MapGridBuilder.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbuilder\MapGridRenderTest.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapbuilder\filePairReader.cpp">
+      <Filter>Source Files\Map Builder Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gamemaster\GameObjList.cpp">
+      <Filter>Source Files\Game Master Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gamemaster\GameObj.cpp">
+      <Filter>Source Files\Game Master Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\GLTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\LightLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\audio\SoundBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\audio\SoundDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\audio\SoundSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\graphics\GLTypes.h">

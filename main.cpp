@@ -3,17 +3,22 @@ extern "C"{
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 #include "graphics/Renderer.h"
-#include "audio/SoundDevice.h"
-#include "audio/SoundBuffer.h"
-#include "audio/SoundSource.h"
 #include "Constants.h"
+#include "mapbuilder/MapGrid.cpp"
 
 #include <chrono>
+
+/*
+	This file is just for testing, to be removed once we have our graphical engine ready.
+	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
+	this file for when we've built testing infrastructure for the engine. - Joe
+*/
 
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
+// Much of this code is what you'd originally see in main, just isolated to what's needed for this test
 int main() {
 	//Timer for testing audio
 	int gunshotTimer = 0;
@@ -26,7 +31,7 @@ int main() {
 
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
-
+  
 	try {
 		if (!glfwInit()) {
 			throw std::runtime_error("Failed GLFW Init.");
@@ -61,7 +66,6 @@ int main() {
 
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
-		renderer.loadTexture("assets/textures/ak74.png", "ak_texture");
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 
@@ -71,10 +75,14 @@ int main() {
 
 		renderer.loadModel("assets/models/cone45.obj", "cone");
 
+		renderer.loadShaderProgram("shaders/basic.vert", "shaders/basic.frag", "basic");
+		renderer.loadShaderProgram("shaders/secondary.vert", "shaders/secondary.frag", "secondary");
 		renderer.setBackgroundColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
-		glm::vec3 camRot{0.0f, 0.0f, 0.0f};
-		glm::vec3 camPos{0.0f, 0.0f, 10.0f};
+		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
+
+		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
 		renderer.setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
@@ -94,8 +102,6 @@ int main() {
 		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
 			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
 
-		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
-		
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
 		while (!glfwWindowShouldClose(window)) {
@@ -108,7 +114,6 @@ int main() {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
-			
 			//Visible
 			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
 				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
