@@ -51,8 +51,8 @@ int MapGridRenderTest() {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 
-		renderer.loadShaderProgram("shaders/basic.vert", "shaders/basic.frag", "basic");
-		renderer.loadShaderProgram("shaders/secondary.vert", "shaders/secondary.frag", "secondary");
+		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
+		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
 
 		renderer.setBackgroundColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 

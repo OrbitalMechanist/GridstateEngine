@@ -1,3 +1,4 @@
+#pragma once
 #include "GameObj.cpp"
 #include <iostream>
 #include <list>
