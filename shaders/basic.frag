@@ -23,6 +23,7 @@ struct Light{
 };
 
 uniform sampler2D diffuseTex;
+uniform samplerCube depthMap;
 
 uniform vec3 ambientLight;
 
@@ -32,35 +33,54 @@ uniform sampler2D shadowMaps[NUM_LIGHTS];
 uniform samplerCube shadowCubemaps[NUM_LIGHTS];
 uniform mat4 lightSpaceMatrices[NUM_LIGHTS];
 
+struct Material{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+uniform Material material;
+
 vec3 diffuse(float intensity, vec3 lightColor, vec3 lightDir){
 	return max(dot(v_norm, lightDir), 0) * lightColor * intensity;
 }
 
 float calcShadowFactor(int lightIndex){
-	Light light = lights[lightIndex];
-	if(light.type == 1 || light.type == 3){
-		mat4 lightSpaceMatrix = lightSpaceMatrices[lightIndex];
+	 float shadow = 0.0;
+    Light light = lights[lightIndex];
 
-		vec3 toLight;
-		if(light.type == 3){
-			toLight = light.position - v_worldPos.xyz;
-		} else {
-			toLight = -light.direction;
-		}
+    if (light.type == 1 || light.type == 3) {
+        mat4 lightSpaceMatrix = lightSpaceMatrices[lightIndex];
 
-		float shadowBias = max(0.005 * (1.0 - dot(v_norm, toLight)), 0.001);
+        vec3 toLight;
+        if (light.type == 3) {
+            toLight = light.position - v_worldPos.xyz;
+        } else {
+            toLight = -light.direction;
+        }
 
-		vec4 lightSpacePos = lightSpaceMatrix * vec4(v_worldPos, 1.0);
-		vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
-		projCoords = projCoords * 0.5 + 0.5;
-	
-		float shadowDepth = texture(shadowMaps[lightIndex], projCoords.xy).r;
-		float thisFragmentRelativeDepth = projCoords.z;
-		
-		if(thisFragmentRelativeDepth - shadowBias > shadowDepth){
-			return 0;
-		}
-	}
+        float shadowBias = max(0.005 * (1.0 - dot(v_norm, toLight)), 0.01);
+
+        vec4 lightSpacePos = lightSpaceMatrix * vec4(v_worldPos, 1.0);
+        vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
+        projCoords = projCoords * 0.5 + 0.5;
+        float shadowDepth = texture(shadowMaps[lightIndex], projCoords.xy).r;
+
+         float thisFragmentRelativeDepth = projCoords.z;
+
+        vec2 texelSize = 1.0 / textureSize(shadowMaps[lightIndex], 0);
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                float pcfDepth = texture(shadowMaps[lightIndex], projCoords.xy + vec2(x, y) * texelSize).r;
+
+                shadow += thisFragmentRelativeDepth - shadowBias > pcfDepth ? 0.0 : 1.0;
+            }
+        }
+        shadow /= 9.0;
+
+        shadow = clamp(shadow, 0.0, 1.0);
+    }
+    
 	if (light.type == 2) {
 		vec3 toLight = light.position - v_worldPos.xyz;
 
@@ -82,8 +102,9 @@ float calcShadowFactor(int lightIndex){
 		if(thisFragmentRelativeDepth - shadowBias > shadowDepth){
 			return 0;
 		}
+		shadow = 1;
 	}
-	return 1;
+	return shadow;
 }
 
 vec3 calcLightEffect(int lightIndex){
