@@ -1,5 +1,4 @@
-#ifndef GAMEOBJ_H
-#define GAMEOBJ_H
+#pragma once
 
 #include <utility>
 #include <string>
@@ -16,5 +15,3 @@ public:
 private:
     std::string serializedName;
 };
-
-#endif //GAMEOBJ_H

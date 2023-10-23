@@ -1,5 +1,4 @@
-#ifndef GAMEOBJLIST_H
-#define GAMEOBJLIST_H
+#pragma once
 
 #include "GameObj.h"
 #include <vector>
@@ -22,5 +21,3 @@ public:
 private:
     void serializeList();
 };
-
-#endif //GAMEOBJLIST_H

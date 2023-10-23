@@ -1,5 +1,4 @@
-#ifndef MAPGRID_H
-#define MAPGRID_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -21,5 +20,3 @@ public:
 
     std::string getCellValue(int x, int y) const;
 };
-
-#endif
