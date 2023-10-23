@@ -14,7 +14,7 @@
 GameObjList::GameObjList() {}
 
 // Initialization function, when given a list of GameObjects
-GameObjList::GameObjList(std::vector<GameObj>) { serializeList(); }
+GameObjList::GameObjList(std::vector<GameObj> objects) : data(objects) { serializeList(); }
 
 //placeholder adds a GameObj to data
 void GameObjList::addGameObj(GameObj obj) {
@@ -26,13 +26,13 @@ void GameObjList::addGameObj(GameObj obj) {
 
 //returns # of objects within this GameObjList (use in conjunction with below function to loop
 // through the GameObjList outside of the class' scope.
-int GameObjList::size() const {
+int GameObjList::size() {
 	return data.size();
 }
 
 //grabs an object from data at a specific index (can be used to loop through the GameObjList)
 GameObj GameObjList::getGameObj(int index) const {
-	if (index < this->size()) {
+	if (index < this->data.size()) {
 		return this->data[index];
 	}
 }

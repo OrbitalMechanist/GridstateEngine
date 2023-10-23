@@ -179,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h" />
+    <ClInclude Include="headers\gamemaster\GameObj.h" />
+    <ClInclude Include="headers\gamemaster\GameObjList.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />
     <ClInclude Include="headers\graphics\LightLayout.h" />
@@ -193,6 +195,9 @@
     <ClInclude Include="headers\graphics\ShadowMap.h" />
     <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
     <ClInclude Include="headers\graphics\RenderObject.h" />
+    <ClInclude Include="headers\mapgridbuilder\filePairReader.h" />
+    <ClInclude Include="headers\mapgridbuilder\MapGrid.h" />
+    <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

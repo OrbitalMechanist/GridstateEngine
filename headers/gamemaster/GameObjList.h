@@ -1,6 +1,7 @@
 #ifndef GAMEOBJLIST_H
 #define GAMEOBJLIST_H
 
+#include "GameObj.h"
 #include <vector>
 #include <string>
 
@@ -13,7 +14,7 @@ public:
     GameObjList(std::vector<GameObj> objects);
 
     void addGameObj(GameObj obj);
-    int size() const;
+    int size();
     GameObj getGameObj(int index) const;
     void deleteGameObj(int index);
     std::vector<GameObj> getGameObjList() const;
@@ -22,4 +23,4 @@ private:
     void serializeList();
 };
 
-#endif // GAMEOBJLIST_H
+#endif //GAMEOBJLIST_H

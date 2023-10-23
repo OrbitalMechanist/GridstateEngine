@@ -17,4 +17,4 @@ private:
     std::string serializedName;
 };
 
-#endif // GAMEOBJ_H
+#endif //GAMEOBJ_H

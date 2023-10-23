@@ -97,6 +97,21 @@
     <ClInclude Include="headers\graphics\GLTypes.h">
       <Filter>headers\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\filePairReader.h">
+      <Filter>headers\mapgridbuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\MapGrid.h">
+      <Filter>headers\mapgridbuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h">
+      <Filter>headers\mapgridbuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\gamemaster\GameObj.h">
+      <Filter>headers\gamemaster</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\gamemaster\GameObjList.h">
+      <Filter>headers\gamemaster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
