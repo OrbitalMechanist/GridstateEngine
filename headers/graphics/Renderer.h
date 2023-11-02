@@ -60,6 +60,8 @@ private:
 	const GLuint shadowMapXsize = 1024;
 	const GLuint shadowMapYsize = 1024;
 
+	glm::vec4 backgroundColor;
+
 	GL_Shader loadShader(const std::string& path, GLenum shaderStage);
 
 	void createCubeModel();
@@ -99,7 +101,10 @@ public:
 
 	void clearFrame();
 
-	void updateWindowSize(int newX, int newY);
+	void prepareForOperation();
+
+	//This does not work quite yet.
+	void updateWindowSize(GLFWwindow* wnd, int newX, int newY);
 
 	void setCameraRotation(const glm::vec3& rot);
 

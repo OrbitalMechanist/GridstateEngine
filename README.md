@@ -19,6 +19,7 @@ change that later though.
 - stb_image
 - OpenAL
 - libsndfile
+- NoesisGUI
 
 ## Group Composition
 - Max
@@ -64,3 +65,6 @@ the renderer doing it every frame.
 
 Generally speaking, processing efficiency is prioritized over memory efficiency when it comes to graphics,
 especially since most work machines only have integrated graphics.
+
+### UI
+UI is handled by the NoesisGUI API running on a trial license.
