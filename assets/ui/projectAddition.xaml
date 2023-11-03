@@ -15,9 +15,6 @@
         <SolidColorBrush x:Key="Brush.Primary.Shade100" Color="#A0C7DF"/>
         <SolidColorBrush x:Key="Brush.Foreground" Color="Silver"/>
     </UserControl.Resources>
-    <UserControl.Foreground>
-        <StaticResource ResourceKey="Brush.Foreground"/>
-    </UserControl.Foreground>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

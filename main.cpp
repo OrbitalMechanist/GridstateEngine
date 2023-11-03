@@ -67,6 +67,8 @@ int NsMain(int argc, char** argv) {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+		glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);
+
 		GLFWwindow* window;
 		window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Window", 0, nullptr);
 
@@ -155,7 +157,7 @@ int NsMain(int argc, char** argv) {
 		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
 		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(true));
+		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
 
 
 		//End Noesis
