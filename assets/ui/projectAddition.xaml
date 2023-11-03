@@ -27,7 +27,7 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Row="1" Grid.Column="1">
-            <CheckBox Content="Interact" Foreground="{DynamicResource Brush.Primary}"/>
+            <CheckBox x:Name="textfield" Content="Interact" Foreground="{DynamicResource Brush.Primary}"/>
         </Viewbox>
         <Viewbox Grid.Row="2" Grid.Column="1">
             <TextBlock Text="Not the most appropriate font" Foreground="White" FontSize="24" HorizontalAlignment="Center"/>

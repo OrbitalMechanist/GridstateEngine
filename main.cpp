@@ -19,6 +19,7 @@ extern "C"{
 #include <NsCore/HighResTimer.h>
 #include <NsGui/IntegrationAPI.h>
 #include <NsGui/UserControl.h>
+#include <NsGui/CheckBox.h>
 #include <NsGui/IRenderer.h>
 #include <NsGui/IView.h>
 #include <NsGui/ResourceDictionary.h>
@@ -53,7 +54,7 @@ int NsMain(int argc, char** argv) {
 
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
-  
+
 	try {
 		if (!glfwInit()) {
 			throw std::runtime_error("Failed GLFW Init.");
@@ -168,6 +169,12 @@ int NsMain(int argc, char** argv) {
 		int prevWidth = WINDOW_WIDTH;
 		int	prevHeight = WINDOW_HEIGHT;
 
+		//This is how we get the XAML elements in the UI to change them, or get their state.
+		auto targetText = nsguiView->GetContent()->FindName<Noesis::CheckBox>("textfield");
+		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
+		//This is for finding out if it was released on this frame.
+		bool lmbDownPrevFrame = false;
+
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
@@ -276,7 +283,27 @@ int NsMain(int argc, char** argv) {
 				camPos.z += -2.5f * deltaTime;
 			}
 
+			//Send mouse events to NSGUI
+			double x, y;
+			glfwGetCursorPos(window, &x, &y);
+			nsguiView->MouseMove(x, y);
+			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+				if (!lmbDownPrevFrame) {
+					lmbDownPrevFrame = true;
+					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+				}
+			}
+			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
+				if (lmbDownPrevFrame) {
+					lmbDownPrevFrame = false;
+					nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
+				}
+			}
+
+
 			prevTime = time;
+
+			targetText->SetContent(std::to_string(camPos.z).c_str());
 
 			//NSGUI rendering stuff
 			bool nsguiTreeDirty = nsguiView->GetRenderer()->UpdateRenderTree();
@@ -287,12 +314,13 @@ int NsMain(int argc, char** argv) {
 			}
 
 			//NS docs say the 3D scene should happen after RenderOffscreen() occurs.
-			//RenderOffscreen changes the GL state. This restores it to what the Renderer likes.
+			//RenderOffscreen changes the GL state. Renderer.prepareForOperation() restores it to what the Renderer likes.
 			renderer.prepareForOperation();
 			renderer.renderFromQueue(true);
 
 			//Back to NSGUI.
-			//This needs to happen whether the UI actually changed or not because UI has to go on top of the scene.
+			//This needs to happen whether the UI actually changed or not because UI has to go on top of the scene in the 
+			//otput framebuffer.
 			nsguiView->GetRenderer()->Render();
 
 			glfwSwapBuffers(window);
