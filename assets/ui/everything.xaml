@@ -1,0 +1,35 @@
+﻿<Page x:Class="NSGUIworkspace.assets.ui.everything"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NSGUIworkspace.assets.ui"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="everything">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Viewbox>
+        <Grid Height="450" Width="800">
+            <UserControl Margin="10,10,0,0" HorizontalAlignment="Left" Width="200" Height="50" VerticalAlignment="Top">
+                <UserControl.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="Resources.xaml"/>
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </UserControl.Resources>
+                <Grid>
+                    <Button x:Name="btn" Content="yeah it's a button" HorizontalAlignment="Center" Height="50" VerticalAlignment="Bottom" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}"/>
+                    <Rectangle HorizontalAlignment="Left" Margin="10,0,0,0" Width="16" Fill="{DynamicResource Brush.Primary.Shade25}"/>
+                </Grid>
+            </UserControl>
+            <TextBlock x:Name="textTarget" FontFamily="../fonts/#superlume" Margin="0,0,10,13" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="idk it's not set yet"/></TextBlock>
+        </Grid>
+    </Viewbox>
+</Page>

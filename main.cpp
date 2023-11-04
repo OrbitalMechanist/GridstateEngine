@@ -20,6 +20,8 @@ extern "C"{
 #include <NsGui/IntegrationAPI.h>
 #include <NsGui/UserControl.h>
 #include <NsGui/CheckBox.h>
+#include <NsGui/TextBlock.h>
+#include <NsGui/Button.h>
 #include <NsGui/IRenderer.h>
 #include <NsGui/IView.h>
 #include <NsGui/ResourceDictionary.h>
@@ -152,16 +154,14 @@ int NsMain(int argc, char** argv) {
 
 		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
 
-		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("projectAddition.xaml");
+		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("everything.xaml");
 
 		Noesis::Ptr<Noesis::IView> nsguiView = Noesis::GUI::CreateView(uiElement);
 		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
 		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
-
-
-		//End Noesis
+		//End Noesis setup (actually ending noesis happens at the very end)
 
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
@@ -170,7 +170,32 @@ int NsMain(int argc, char** argv) {
 		int	prevHeight = WINDOW_HEIGHT;
 
 		//This is how we get the XAML elements in the UI to change them, or get their state.
-		auto targetText = nsguiView->GetContent()->FindName<Noesis::CheckBox>("textfield");
+		//Important note: FindName will probably still succeed and return the element even if
+		//you give it the wrong type, but the parameters you could get/set would not necessarily
+		//correspond to what the element actually has and thus not work as expected.
+		auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
+		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
+
+		bool lightOn = true;
+
+		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
+		//causes problems
+		targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
+			const Noesis::RoutedEventArgs& args) mutable {
+			if (lightOn) {
+				lightOn = false;
+				rendPtr->setLightState("basic", 0, 0, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+				targetText->SetText("off");
+			}
+			else {
+				lightOn = true;
+				rendPtr->setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+				targetText->SetText("on");
+			}
+		};
+
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -303,8 +328,6 @@ int NsMain(int argc, char** argv) {
 
 			prevTime = time;
 
-			targetText->SetContent(std::to_string(camPos.z).c_str());
-
 			//NSGUI rendering stuff
 			bool nsguiTreeDirty = nsguiView->GetRenderer()->UpdateRenderTree();
 			if (nsguiTreeDirty) {
@@ -318,9 +341,8 @@ int NsMain(int argc, char** argv) {
 			renderer.prepareForOperation();
 			renderer.renderFromQueue(true);
 
-			//Back to NSGUI.
-			//This needs to happen whether the UI actually changed or not because UI has to go on top of the scene in the 
-			//otput framebuffer.
+			//Back to NSGUI. This needs to happen whether the UI actually changed or not
+			//because UI has to go on top of the scene in the otput framebuffer.
 			nsguiView->GetRenderer()->Render();
 
 			glfwSwapBuffers(window);
@@ -345,6 +367,7 @@ int NsMain(int argc, char** argv) {
 			}
 		} //End of operation loop. Everything after this is cleanup.
 
+		//NSGUI stuff should be manually shut down before exiting the program.
 		nsguiView->GetRenderer()->Shutdown();
 		//All Noesis::Ptr objects must be reset to free them because they are, in fact, pointers.
 		nsguiView.Reset();

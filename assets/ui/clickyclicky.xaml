@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="NSGUIworkspace.assets.ui.clickyclicky"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSGUIworkspace.assets.ui"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Button Content="yeah it is a button" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}"/>
+        <Rectangle HorizontalAlignment="Left" Margin="10,0,0,0" Width="16" Fill="{DynamicResource Brush.Primary.Shade25}"/>
+    </Grid>
+</UserControl>
