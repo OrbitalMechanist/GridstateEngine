@@ -1,5 +1,5 @@
 #include "gamemaster/GameObjList.h"
-#include "GameObj.cpp"
+//#include "GameObj.cpp"
 #include <iostream>
 #include <list>
 
@@ -26,7 +26,7 @@ void GameObjList::addGameObj(GameObj obj) {
 
 //returns # of objects within this GameObjList (use in conjunction with below function to loop
 // through the GameObjList outside of the class' scope.
-int GameObjList::size() {
+size_t GameObjList::size() {
 	return data.size();
 }
 
