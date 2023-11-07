@@ -196,6 +196,20 @@ int NsMain(int argc, char** argv) {
 			}
 		};
 
+		// Load startMenu.xaml after clicking the button.
+		auto button = nsguiView->GetContent()->FindName<Noesis::Button>("btn2");
+		button->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
+			{
+				printf("Button was clicked\t");
+
+				Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("startMenu.xaml");
+
+				nsguiView = Noesis::GUI::CreateView(uiElement1);
+				nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+				nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+				nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
+			};
+
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;

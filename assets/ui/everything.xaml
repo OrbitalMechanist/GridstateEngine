@@ -16,7 +16,7 @@
     </Page.Resources>
     <Viewbox>
         <Grid Height="450" Width="800">
-            <UserControl Margin="10,10,0,0" HorizontalAlignment="Left" Width="200" Height="50" VerticalAlignment="Top">
+            <UserControl Margin="10,10,0,0" HorizontalAlignment="Left" Width="200" Height="100" VerticalAlignment="Top">
                 <UserControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
@@ -25,8 +25,9 @@
                     </ResourceDictionary>
                 </UserControl.Resources>
                 <Grid>
-                    <Button x:Name="btn" Content="yeah it's a button" HorizontalAlignment="Center" Height="50" VerticalAlignment="Bottom" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}"/>
+                    <Button x:Name="btn" Content="yeah it's a button" HorizontalAlignment="Center" Height="50" VerticalAlignment="Top" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}"/>
                     <Rectangle HorizontalAlignment="Left" Margin="10,0,0,0" Width="16" Fill="{DynamicResource Brush.Primary.Shade25}"/>
+                    <Button x:Name="btn2" Content="StartMenu" HorizontalAlignment="Center" Height="50" VerticalAlignment="Top" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="0,55,0,0"/>
                 </Grid>
             </UserControl>
             <TextBlock x:Name="textTarget" FontFamily="../fonts/#superlume" Margin="0,0,10,13" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="idk it's not set yet"/></TextBlock>

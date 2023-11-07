@@ -90,10 +90,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="assets\ui\startMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="assets\ui\test.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\mage1.jpg" />
+    <Resource Include="assets\images\mage2.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
