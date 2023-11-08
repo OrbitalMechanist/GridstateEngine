@@ -200,6 +200,11 @@ int NsMain(int argc, char** argv) {
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
 
+
+		Skeleton testSkell = Skeleton("assets/models/frog.glb");
+		
+		std::cout << testSkell << std::endl;
+
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();

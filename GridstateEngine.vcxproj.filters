@@ -55,6 +55,10 @@
     <ClCompile Include="gamemaster\GameObj.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\SkeletalAnimation.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h">
@@ -102,6 +106,10 @@
     <ClInclude Include="headers\audio\SoundDevice.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="headers\graphics\SkeletalAnimation.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\Skeleton.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

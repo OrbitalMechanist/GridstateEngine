@@ -159,6 +159,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\SkeletalAnimation.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="src\audio\SoundDevice.cpp" />
     <ClCompile Include="src\audio\SoundSource.cpp" />
     <ClCompile Include="src\graphics\ShaderProgram.cpp" />
+    <ClCompile Include="src\graphics\Skeleton.cpp" />
     <ClCompile Include="src\graphics\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,11 +191,13 @@
     <ClInclude Include="headers\audio\SoundDevice.h" />
     <ClInclude Include="headers\audio\SoundSource.h" />
     <ClInclude Include="headers\graphics\ShaderProgram.h" />
+    <ClInclude Include="headers\graphics\Skeleton.h" />
     <ClInclude Include="headers\graphics\UniformLayout.h" />
     <ClInclude Include="headers\graphics\Vertex.h" />
     <ClInclude Include="headers\graphics\ShadowMap.h" />
     <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
     <ClInclude Include="headers\graphics\RenderObject.h" />
+    <ClInclude Include="headers\graphics\SkeletalAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

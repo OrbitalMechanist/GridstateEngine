@@ -16,6 +16,7 @@
 #include "ShadowMap.h"
 #include "ShadowCubeMap.h"
 #include "RenderObject.h"
+#include "SkeletalAnimation.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
