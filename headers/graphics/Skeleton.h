@@ -14,6 +14,7 @@ class Skeleton {
 		std::string name;
 		size_t index;
 		size_t parent;
+		std::vector<size_t> children;
 		Bone();
 	};
 private:

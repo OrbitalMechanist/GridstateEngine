@@ -41,6 +41,7 @@ Skeleton::Skeleton(std::string path)
 			for (int k = 0; k < boneCount; k++) {
 				if (bones[k].name == kidName) {
 					bones[k].parent = i;
+					bones[i].children.push_back(k);
 					break;
 				}
 			}
@@ -81,6 +82,7 @@ Skeleton::Bone::Bone()
 	name = "";
 	index = 0;
 	parent = 0;
+	children = std::vector<size_t>();
 }
 
 std::ostream& operator<<(std::ostream& Str, Skeleton const& v)
@@ -88,7 +90,18 @@ std::ostream& operator<<(std::ostream& Str, Skeleton const& v)
 	Str << std::string("SKELETON with ") << v.bones.size() << std::string(" bones:");
 	for (auto& i : v.bones) {
 		Str << std::string("\nBone: Index ") << i.index << std::string(" named \"")
-			<< i.name << std::string("\", parent index ") << i.parent;
+			<< i.name << std::string("\", children:");
+		
+		if (i.children.size() == 0) {
+			Str << std::string("NONE");
+		}
+		else {
+			for (auto j : i.children) {
+				Str << std::string(" ") << j;
+			}
+		}
+
+		Str << std::string(", parent index ") << i.parent;
 		if (i.parent == i.index) {
 			Str << std::string(" (unparented, possible root)");
 		}
