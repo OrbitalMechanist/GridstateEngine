@@ -110,6 +110,7 @@
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="headers\graphics\Skeleton.h" />
+    <ClInclude Include="headers\graphics\Bone.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

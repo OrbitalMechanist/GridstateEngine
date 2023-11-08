@@ -97,6 +97,9 @@ int NsMain(int argc, char** argv) {
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/cone45.obj", "cone");
 
+		renderer.loadModel("assets/models/frog.glb", "frogGLB");
+		renderer.loadModel("assets/models/frog.fbx", "frogFBX");
+
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
 
@@ -252,6 +255,10 @@ int NsMain(int argc, char** argv) {
 			renderer.addRenderObject(RenderObject("ak", "ak_texture", "basic",
 				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
 				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
+
+			renderer.addRenderObject(RenderObject("frogGLB", "surface", "basic",
+				{ 0.0f, 0.0f, 1.53f }, { glm::radians(90.0f), 0.0f,0.0f}, {1.0f, 1.0f, 1.0f}));
+
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {

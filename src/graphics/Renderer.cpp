@@ -384,6 +384,9 @@ bool Renderer::loadModel(const std::string& path, const std::string& resultName)
 			v.pos = glm::vec3(srcVert.x, srcVert.y, srcVert.z);
 			v.norm = glm::vec3(srcNorm.x, srcNorm.y, srcNorm.z);
 
+			v.boneIndices = glm::uvec4(0, 0, 0, 0);
+			v.boneWeights = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+
 			if (mesh->mTextureCoords[0] != nullptr) {
 				auto srcTexCoord = mesh->mTextureCoords[0][j];
 				v.texCoord = glm::vec2(srcTexCoord.x, srcTexCoord.y);
@@ -393,6 +396,39 @@ bool Renderer::loadModel(const std::string& path, const std::string& resultName)
 			}
 
 			vertices.push_back(v);
+		}
+
+		if (mesh->HasBones()) {//Adds bones and weights, I *think* it works. It remains to be seen how bad
+			//cutting off anything past the first 4 weights will be, especially for the FBX format.
+			//GLTF (and its binary form GLB) only allow 4 bones per vertex anyways, so we should be able
+			//to use that with minimum ill effects.
+			for (int j = 0; j < mesh->mNumBones; j++) {
+				const auto& bone = mesh->mBones[j];
+				for (int k = 0; k < bone->mNumWeights; k++) {
+					Vertex& tgt = vertices[bone->mWeights[k].mVertexId + indexOffset];
+					if (tgt.boneIndices.x == 0) {
+						tgt.boneIndices.x = j;
+						tgt.boneWeights.x = bone->mWeights[k].mWeight;
+					}
+					else if (tgt.boneIndices.y == 0) {
+						tgt.boneIndices.y = j;
+						tgt.boneWeights.y = bone->mWeights[k].mWeight;
+					}
+					else if (tgt.boneIndices.z == 0) {
+						tgt.boneIndices.z = j;
+						tgt.boneWeights.z = bone->mWeights[k].mWeight;
+					}
+					else if (tgt.boneIndices.w == 0) {
+						tgt.boneIndices.w = j;
+						tgt.boneWeights.w = bone->mWeights[k].mWeight;
+					}
+					else {
+						std::cerr << "MESH LOADING CAUTION: " << "Mesh named \"" << resultName
+							<< "\" had an excess bone weight of " << bone->mWeights[k].mWeight
+							<< " at Vertex " << bone->mWeights[k].mVertexId + indexOffset << std::endl;
+					}
+				}
+			}
 		}
 
 		for (size_t k = 0; k < mesh->mNumFaces; k++) {

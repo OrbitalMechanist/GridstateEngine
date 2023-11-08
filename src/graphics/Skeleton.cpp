@@ -65,24 +65,17 @@ void Skeleton::setBone(std::string name, size_t index, size_t parentIndex)
 	bones[index].index = index; //derp
 	bones[index].name = name;
 	bones[index].parent = parentIndex;
+	bones[parentIndex].children.push_back(index);
 }
 
-Skeleton::Bone& Skeleton::getBoneByIndex(size_t index)
+Bone& Skeleton::getBoneByIndex(size_t index)
 {
 	return bones[index];
 }
 
-Skeleton::Bone& Skeleton::getBoneParentByIndex(size_t childIndex)
+Bone& Skeleton::getBoneParentByIndex(size_t childIndex)
 {
 	return bones[bones[childIndex].parent];
-}
-
-Skeleton::Bone::Bone()
-{
-	name = "";
-	index = 0;
-	parent = 0;
-	children = std::vector<size_t>();
 }
 
 std::ostream& operator<<(std::ostream& Str, Skeleton const& v)
