@@ -2,10 +2,11 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="startMenu">
-    <Grid Height="450" Width="800">
-        <Grid.Background>
-            <ImageBrush ImageSource="/assets/images/mage1.jpg"/>
-        </Grid.Background>
+	<Page.Background>
+		<ImageBrush ImageSource="../images/mage1.jpg"/>
+	</Page.Background>
+
+	<Grid Height="450" Width="800">
 
         <UserControl Margin="10,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="440">
             <Grid>

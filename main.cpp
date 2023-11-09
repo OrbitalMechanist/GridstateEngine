@@ -30,6 +30,7 @@ extern "C"{
 #include <NsApp/Display.h>
 #include <NsApp/LocalXamlProvider.h>
 #include <NsApp/LocalFontProvider.h>
+#include <NsApp/LocalTextureProvider.h>
 #include <NsApp/ThemeProviders.h>
 
 #include <NsRender/GLFactory.h>
@@ -149,8 +150,9 @@ int NsMain(int argc, char** argv) {
 
 		Noesis::Ptr<NoesisApp::LocalXamlProvider> xamlProvider = Noesis::MakePtr<NoesisApp::LocalXamlProvider>("./assets/ui");
 		Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider = Noesis::MakePtr<NoesisApp::LocalFontProvider>("./assets/fonts");
+		Noesis::Ptr<NoesisApp::LocalTextureProvider> textureProvider = Noesis::MakePtr<NoesisApp::LocalTextureProvider>("./assets/textures");
 
-		NoesisApp::SetThemeProviders(xamlProvider, fontProvider);
+		NoesisApp::SetThemeProviders(xamlProvider, fontProvider, textureProvider);
 
 		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
 
