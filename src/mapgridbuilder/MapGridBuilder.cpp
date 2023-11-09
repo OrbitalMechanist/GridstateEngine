@@ -1,5 +1,5 @@
-#include "filePairReader.cpp"
-#include "../gamemaster/GameObjList.cpp"
+#include "mapgridbuilder/filePairReader.h"
+#include "gamemaster/GameObjList.h"
 #include "mapgridbuilder/MapGridBuilder.h"
 /*
 	PLACEHOLDER, this object handles populating MapGrid objects 
@@ -11,10 +11,14 @@
 */
 
 //load levels according to a list of level names
-std::vector<std::tuple<MapGrid, GameObjList>> MapGridBuilder::loadLevels(std::list<std::string> levelList) {}
+void MapGridBuilder::loadLevels(std::list<std::string> levelList) {
+	//return the loaded levels in a vector of MapGrid and GameObjList pairs
+}
 
 //build a level according to given level name by calling functions from the FilePairReader
-std::tuple<MapGrid, GameObjList> buildLevel(std::string levelName) {}
+void buildLevel(std::string levelName) {
+	//return the pair of MapGrid and GameObjList for the level that was just built
+}
 
 //unload the active currentLevel and replace it with a tuple from our preparedLevels grabbed by name
 void loadlevel(std::string levelName) {}
