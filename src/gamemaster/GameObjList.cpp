@@ -1,4 +1,5 @@
 #include "gamemaster/GameObjList.h"
+//#include "gamemaster/GameObj.h"
 //#include "GameObj.cpp"
 #include <iostream>
 #include <list>

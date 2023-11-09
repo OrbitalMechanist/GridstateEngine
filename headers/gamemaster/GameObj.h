@@ -15,3 +15,4 @@ public:
 private:
     std::string serializedName;
 };
+
