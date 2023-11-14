@@ -104,6 +104,13 @@ int main() {
 
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
+
+		renderer.createMaterial("singleCube", glm::vec3(1, 0.0, 1), glm::vec3(0.1, 0, 0), 0);
+		renderer.createMaterial("akMaterial", glm::vec3(0.5f, 1.0f, 1.0f), glm::vec3(1, 1, 1), 30);
+		renderer.createMaterial("surfaceMaterial", glm::vec3(1, 0.5, 0.2), glm::vec3(0.1, 0, 0.8), 0);
+		renderer.createMaterial("separateStonesMaterial", glm::vec3(0, 0.5, 0), glm::vec3(0.1, 0, 0), 0);
+
+
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
@@ -114,38 +121,38 @@ int main() {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
+
 			//Visible
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+			renderer.addRenderObject(RenderObject("cube", "stone","singleCube", "basic",
 				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "secondary",
+			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "secondary",
 				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ 0.5f * sin(time * 5.0f), 3.5f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 1.0f}));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
+			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("ak", "ak_texture", "basic",
+			renderer.addRenderObject(RenderObject("ak", "ak_texture", "akMaterial", "basic",
 				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
 				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {
-					renderer.addRenderObject(RenderObject("cube", "surface", "basic",
+					renderer.addRenderObject(RenderObject("cube", "surface", "surfaceMaterial", "basic",
 						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 				}
 			}
-
 			for (int y = 0; y <= 12; y += 2) {
-				renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
+				renderer.addRenderObject(RenderObject("cube", "stone", "separateStonesMaterial", "basic", { 10.0f, y + 1.0f, 0.0f },
 					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
 			}
 

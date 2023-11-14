@@ -42,7 +42,7 @@ struct Material{
 uniform Material material;
 
 vec3 diffuse(float intensity, vec3 lightColor, vec3 lightDir){
-	return max(dot(v_norm, lightDir), 0) * lightColor * intensity;
+	return max(dot(v_norm, lightDir), 0) * lightColor * intensity * material.diffuse;
 }
 
 float calcShadowFactor(int lightIndex){
@@ -87,7 +87,7 @@ float calcShadowFactor(int lightIndex){
 		//sample the cubemap on a point along the line from the light to this fragment
 		vec3 pointInCube = -toLight; 
 
-		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.01);
+		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.08);
 	
 		float shadowDepth = texture(shadowCubemaps[lightIndex], pointInCube).r;
 		if(light.distanceLimit > 0){ 
@@ -127,6 +127,10 @@ Light light = lights[lightIndex];
 		}
 		vec3 toLight = normalize(-light.direction);
 		result = diffuse(light.intensity, light.color, toLight);
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result += specular;
 	} 
 	//Point
 	else if(light.type == 2){
@@ -140,6 +144,10 @@ Light light = lights[lightIndex];
 		if(light.attenuationMax >= 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result += specular;
 	} 
 	//Spot
 	else if(light.type == 3){
@@ -156,18 +164,20 @@ Light light = lights[lightIndex];
 		if(light.attenuationMax > 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result += specular;
 	}
 	
 	return result * shadowFactor;
 }
 
 void main(){
-
 	vec4 lightResult = vec4(ambientLight, 1);
 
 	for(int i = 0; i < NUM_LIGHTS; i++){
 		lightResult.xyz += calcLightEffect(i);
 	}
-
 	o_fragColor = texture(diffuseTex, v_texCoord) * lightResult;
 }

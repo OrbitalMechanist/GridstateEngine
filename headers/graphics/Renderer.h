@@ -37,6 +37,11 @@
 class Renderer
 {
 private:
+	struct Material {
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		float shininess;
+	};
 	std::list<RenderObject> renderQueue;
 
 	glm::vec3 cameraPos;
@@ -49,6 +54,7 @@ private:
 
 	std::map<std::string, Mesh> models;
 	std::map<std::string, GL_Texture> textures;
+	std::map<std::string, Material> materials;
 	std::map<std::string, ShaderProgram> shaderPrograms;
 
 	std::array<Light, NUM_LIGHTS> lights;
@@ -85,12 +91,14 @@ private:
 public:
 	Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t windowHeight);
 
-	void drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName, 
-		const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale);
+	void drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName, const 
+		std::string& materialName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale);
 
 	bool loadTexture(const std::string& path, const std::string& resultName);
 
 	bool loadModel(const std::string& path, const std::string& resultName);
+
+	void createMaterial(const std::string& materialName, glm::vec3 diffuse, glm::vec3 specular, float shininess );
 
 	bool loadShaderProgram(const std::string& vertPath, const std::string& geometryPath,
 		const std::string& fragPath, const std::string& resultName);

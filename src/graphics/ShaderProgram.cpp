@@ -26,6 +26,8 @@ void ShaderProgram::queryUniformLocations() {
 	attemptLightLoading();
 	tmp = glGetUniformLocation(glReference, "ambientLight");
 	uniforms.ambientLight = tmp;
+	tmp = glGetUniformLocation(glReference, "material.diffuse");
+	uniforms.material = tmp;
 	tmp = glGetUniformLocation(glReference, "shadowMaps[0]");
 	uniforms.shadowMapFirstElement = tmp;
 	tmp = glGetUniformLocation(glReference, "shadowCubemaps[0]");
