@@ -159,15 +159,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\gamemaster\GameObj.cpp" />
+    <ClCompile Include="src\gamemaster\GameObjList.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
-    <ClCompile Include="gamemaster\GameObj.cpp" />
-    <ClCompile Include="gamemaster\GameObjList.cpp" />
-    <ClCompile Include="mapbuilder\MapGrid.cpp" />
-    <ClCompile Include="mapbuilder\MapGridBuilder.cpp" />
-    <ClCompile Include="mapbuilder\MapGridRenderTest.cpp" />
-    <ClCompile Include="mapbuilder\filePairReader.cpp" />
     <ClCompile Include="src\graphics\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -177,9 +173,14 @@
     <ClCompile Include="src\audio\SoundSource.cpp" />
     <ClCompile Include="src\graphics\ShaderProgram.cpp" />
     <ClCompile Include="src\graphics\Vertex.cpp" />
+    <ClCompile Include="src\mapgridbuilder\filePairReader.cpp" />
+    <ClCompile Include="src\mapgridbuilder\MapGrid.cpp" />
+    <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h" />
+    <ClInclude Include="headers\gamemaster\GameObj.h" />
+    <ClInclude Include="headers\gamemaster\GameObjList.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />
     <ClInclude Include="headers\graphics\LightLayout.h" />
@@ -194,6 +195,9 @@
     <ClInclude Include="headers\graphics\ShadowMap.h" />
     <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
     <ClInclude Include="headers\graphics\RenderObject.h" />
+    <ClInclude Include="headers\mapgridbuilder\filePairReader.h" />
+    <ClInclude Include="headers\mapgridbuilder\MapGrid.h" />
+    <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

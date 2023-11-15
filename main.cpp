@@ -1,10 +1,10 @@
-extern "C"{
+extern "C" {
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 #include "graphics/Renderer.h"
 #include "Constants.h"
-#include "mapbuilder/MapGrid.cpp"
+//#include "mapbuilder/MapGrid.cpp"
 #include "audio/SoundDevice.h"
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
@@ -54,8 +54,8 @@ int NsMain(int argc, char** argv) {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
-	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
+	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
+	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 
 	try {
 		if (!glfwInit()) {
@@ -247,12 +247,14 @@ int NsMain(int argc, char** argv) {
 			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ 0.5f * sin(time * 5.0f), 3.5f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 1.0f}));
 
+
 			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
 				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
+      
 			renderer.addRenderObject(RenderObject("ak", "ak_texture", "akMaterial", "basic",
 				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
 				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
+
 
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {
