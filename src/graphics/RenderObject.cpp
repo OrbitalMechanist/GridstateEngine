@@ -4,7 +4,20 @@ RenderObject::RenderObject() {
 	RenderObject("", "", "");
 }
 
-RenderObject::RenderObject(std::string model, std::string texture, std::string shader, 
+RenderObject::RenderObject(std::string model, std::string texture, std::string material, std::string shader, 
+	glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, bool isVisble, bool castsShadow)
+{
+	modelName = model;
+	textureName = texture;
+	this->material = material;
+	shaderName = shader;
+	this->position = position;
+	this->rotation = rotation;
+	this->scale = scale;
+	visible = isVisble;
+	shadowing = castsShadow;
+}
+RenderObject::RenderObject(std::string model, std::string texture, std::string shader,
 	glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, bool isVisble, bool castsShadow)
 {
 	modelName = model;

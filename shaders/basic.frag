@@ -26,6 +26,7 @@ uniform sampler2D diffuseTex;
 uniform samplerCube depthMap;
 
 uniform vec3 ambientLight;
+uniform vec3 viewPos;
 
 #define NUM_LIGHTS 8
 uniform Light lights[NUM_LIGHTS];
@@ -34,15 +35,17 @@ uniform samplerCube shadowCubemaps[NUM_LIGHTS];
 uniform mat4 lightSpaceMatrices[NUM_LIGHTS];
 
 struct Material{
-	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
 };
+uniform vec3 diffuse;
+uniform vec3 specular;
+uniform float shininess;
 uniform Material material;
 
-vec3 diffuse(float intensity, vec3 lightColor, vec3 lightDir){
-	return max(dot(v_norm, lightDir), 0) * lightColor * intensity;
+vec3 diffuseScene(float intensity, vec3 lightColor, vec3 lightDir){
+	return max(dot(v_norm, lightDir), 0) * lightColor * intensity * material.diffuse;
 }
 
 float calcShadowFactor(int lightIndex){
@@ -51,7 +54,6 @@ float calcShadowFactor(int lightIndex){
 
     if (light.type == 1 || light.type == 3) {
         mat4 lightSpaceMatrix = lightSpaceMatrices[lightIndex];
-
         vec3 toLight;
         if (light.type == 3) {
             toLight = light.position - v_worldPos.xyz;
@@ -87,7 +89,7 @@ float calcShadowFactor(int lightIndex){
 		//sample the cubemap on a point along the line from the light to this fragment
 		vec3 pointInCube = -toLight; 
 
-		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.01);
+		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.08);
 	
 		float shadowDepth = texture(shadowCubemaps[lightIndex], pointInCube).r;
 		if(light.distanceLimit > 0){ 
@@ -126,7 +128,12 @@ Light light = lights[lightIndex];
 			return result;
 		}
 		vec3 toLight = normalize(-light.direction);
-		result = diffuse(light.intensity, light.color, toLight);
+		result = diffuseScene(light.intensity, light.color, toLight);
+		vec3 viewDir = normalize(viewPos - v_worldPos);
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result *= specular;
 	} 
 	//Point
 	else if(light.type == 2){
@@ -136,10 +143,15 @@ Light light = lights[lightIndex];
 			|| (light.attenuationMax > 0.0 && dist > light.attenuationMax)){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
 		if(light.attenuationMax >= 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 viewDir = normalize(viewPos - v_worldPos);
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result *= specular;
 	} 
 	//Spot
 	else if(light.type == 3){
@@ -152,22 +164,25 @@ Light light = lights[lightIndex];
 		if(acos(dot(normalize(toLight), normalize(-light.direction))) * 2 > light.angle){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
 		if(light.attenuationMax > 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 viewDir = normalize(viewPos - v_worldPos);
+		vec3 reflectDir = reflect(-toLight, v_norm);  
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+		vec3 specular = light.color * (spec * material.specular);
+		result *= specular;
 	}
 	
 	return result * shadowFactor;
 }
 
 void main(){
-
 	vec4 lightResult = vec4(ambientLight, 1);
 
 	for(int i = 0; i < NUM_LIGHTS; i++){
 		lightResult.xyz += calcLightEffect(i);
 	}
-
 	o_fragColor = texture(diffuseTex, v_texCoord) * lightResult;
 }

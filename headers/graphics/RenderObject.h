@@ -19,6 +19,7 @@ public:
 	std::string modelName;
 	std::string textureName;
 	std::string shaderName;
+	std::string material;
 
 	//Probably best not to use this.
 	RenderObject();
@@ -26,6 +27,10 @@ public:
 	RenderObject(std::string model, std::string texture, std::string shader);
 
 	RenderObject(std::string model, std::string texture, std::string shader,
+		glm::vec3 position, glm::vec3 rotation, glm::vec3 scale,
+		bool isVisble = true, bool castsShadow = true);
+
+	RenderObject(std::string model, std::string texture, std::string material, std::string shader,
 		glm::vec3 position, glm::vec3 rotation, glm::vec3 scale,
 		bool isVisble = true, bool castsShadow = true);
 };
