@@ -4,11 +4,7 @@ extern "C" {
 }
 #include "graphics/Renderer.h"
 #include "Constants.h"
-<<<<<<< HEAD
-#include "mapbuilder/MapGrid.cpp"
-=======
 //#include "mapbuilder/MapGrid.cpp"
->>>>>>> mapgrid
 #include "audio/SoundDevice.h"
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
@@ -58,13 +54,8 @@ int NsMain(int argc, char** argv) {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-<<<<<<< HEAD
-	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
-	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
-=======
 	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
->>>>>>> mapgrid
 
 	try {
 		if (!glfwInit()) {
@@ -109,11 +100,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
 
-<<<<<<< HEAD
 		renderer.setBackgroundColor({ 0.1f, 0.075f, 0.1f, 1.0f });
-=======
-		renderer.setBackgroundColor({ 0.1f, 0.1f, 0.1f, 1.0f });
->>>>>>> mapgrid
 
 		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
 		glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
