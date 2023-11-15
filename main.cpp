@@ -105,10 +105,10 @@ int main() {
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
 
-		renderer.createMaterial("singleCube", glm::vec3(1, 0.0, 1), glm::vec3(0.1, 0, 0), 0);
-		renderer.createMaterial("akMaterial", glm::vec3(0.5f, 1.0f, 1.0f), glm::vec3(1, 1, 1), 30);
-		renderer.createMaterial("surfaceMaterial", glm::vec3(1, 0.5, 0.2), glm::vec3(0.1, 0, 0.8), 0);
-		renderer.createMaterial("separateStonesMaterial", glm::vec3(0, 0.5, 0), glm::vec3(0.1, 0, 0), 0);
+		renderer.createMaterial("singleCube", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+		renderer.createMaterial("akMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+		renderer.createMaterial("separateStonesMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 
 
 		while (!glfwWindowShouldClose(window)) {

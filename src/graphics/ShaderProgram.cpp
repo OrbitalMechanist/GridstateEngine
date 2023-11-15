@@ -1,5 +1,5 @@
 #include "graphics/ShaderProgram.h"
-
+#include <iostream>
 ShaderProgram::ShaderProgram(GL_ShaderProgram assoc) {
 	glReference = assoc;
 	uniforms = UniformLayout();
@@ -26,8 +26,17 @@ void ShaderProgram::queryUniformLocations() {
 	attemptLightLoading();
 	tmp = glGetUniformLocation(glReference, "ambientLight");
 	uniforms.ambientLight = tmp;
+	tmp = glGetUniformLocation(glReference, "viewPos");
+	uniforms.viewPos = tmp;
 	tmp = glGetUniformLocation(glReference, "material.diffuse");
 	uniforms.material = tmp;
+	//std::cout << "Diffuse: " << tmp << std::endl;
+	/**tmp = glGetUniformLocation(glReference, "material.specular");
+	uniforms.material = tmp;
+	std::cout << "Specular: " << tmp << std::endl;
+	tmp = glGetUniformLocation(glReference, "material.shininess");
+	uniforms.material = tmp;
+	std::cout << "Shininess: " << tmp << std::endl;*/
 	tmp = glGetUniformLocation(glReference, "shadowMaps[0]");
 	uniforms.shadowMapFirstElement = tmp;
 	tmp = glGetUniformLocation(glReference, "shadowCubemaps[0]");

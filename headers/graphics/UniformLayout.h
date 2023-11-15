@@ -13,6 +13,7 @@ struct UniformLayout {
 	GL_Uniform diffuseTex;
 	GL_Uniform normMat;
 	GL_Uniform modelMat;
+	GL_Uniform viewPos;
 	std::array<LightLayout, NUM_LIGHTS> lights;
 	GL_Uniform ambientLight;
 	GL_Uniform shadowMapFirstElement;
@@ -29,6 +30,7 @@ struct UniformLayout {
 		normMat = -1;
 		modelMat = -1;
 		ambientLight = -1;
+		viewPos = -1;
 		shadowMapFirstElement = -1;
 		shadowCubemapFirstElement = -1;
 		lightSpaceMatrixFirstElement = -1;

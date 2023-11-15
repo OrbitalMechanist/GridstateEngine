@@ -26,6 +26,7 @@ uniform sampler2D diffuseTex;
 uniform samplerCube depthMap;
 
 uniform vec3 ambientLight;
+uniform vec3 viewPos;
 
 #define NUM_LIGHTS 8
 uniform Light lights[NUM_LIGHTS];
@@ -34,14 +35,16 @@ uniform samplerCube shadowCubemaps[NUM_LIGHTS];
 uniform mat4 lightSpaceMatrices[NUM_LIGHTS];
 
 struct Material{
-	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
 };
+uniform vec3 diffuse;
+uniform vec3 specular;
+uniform float shininess;
 uniform Material material;
 
-vec3 diffuse(float intensity, vec3 lightColor, vec3 lightDir){
+vec3 diffuseScene(float intensity, vec3 lightColor, vec3 lightDir){
 	return max(dot(v_norm, lightDir), 0) * lightColor * intensity * material.diffuse;
 }
 
@@ -51,7 +54,6 @@ float calcShadowFactor(int lightIndex){
 
     if (light.type == 1 || light.type == 3) {
         mat4 lightSpaceMatrix = lightSpaceMatrices[lightIndex];
-
         vec3 toLight;
         if (light.type == 3) {
             toLight = light.position - v_worldPos.xyz;
@@ -126,11 +128,12 @@ Light light = lights[lightIndex];
 			return result;
 		}
 		vec3 toLight = normalize(-light.direction);
-		result = diffuse(light.intensity, light.color, toLight);
+		result = diffuseScene(light.intensity, light.color, toLight);
+		vec3 viewDir = normalize(viewPos - v_worldPos);
 		vec3 reflectDir = reflect(-toLight, v_norm);  
-		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 		vec3 specular = light.color * (spec * material.specular);
-		result += specular;
+		result *= specular;
 	} 
 	//Point
 	else if(light.type == 2){
@@ -140,14 +143,15 @@ Light light = lights[lightIndex];
 			|| (light.attenuationMax > 0.0 && dist > light.attenuationMax)){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
 		if(light.attenuationMax >= 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 viewDir = normalize(viewPos - v_worldPos);
 		vec3 reflectDir = reflect(-toLight, v_norm);  
-		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 		vec3 specular = light.color * (spec * material.specular);
-		result += specular;
+		result *= specular;
 	} 
 	//Spot
 	else if(light.type == 3){
@@ -160,14 +164,15 @@ Light light = lights[lightIndex];
 		if(acos(dot(normalize(toLight), normalize(-light.direction))) * 2 > light.angle){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
 		if(light.attenuationMax > 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
+		vec3 viewDir = normalize(viewPos - v_worldPos);
 		vec3 reflectDir = reflect(-toLight, v_norm);  
-		float spec = pow(max(dot(toLight, reflectDir), 0.0), material.shininess);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 		vec3 specular = light.color * (spec * material.specular);
-		result += specular;
+		result *= specular;
 	}
 	
 	return result * shadowFactor;

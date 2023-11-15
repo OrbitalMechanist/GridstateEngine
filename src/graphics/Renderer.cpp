@@ -270,11 +270,12 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[textureName]);
 	glUniform1i(sp.referenceUniforms().diffuseTex, 0);
-	glUniform3f(sp.referenceUniforms().material + 1, materials[materialName].diffuse.r, 
+	glUniform3f(sp.referenceUniforms().material + 0, materials[materialName].diffuse.r, 
 		materials[materialName].diffuse.g, materials[materialName].diffuse.b);
-	glUniform3f(sp.referenceUniforms().material + 2, materials[materialName].specular.r,
+	glUniform3f(sp.referenceUniforms().material + 1, materials[materialName].specular.r,
 		materials[materialName].specular.g, materials[materialName].specular.b);
-	glUniform1f(sp.referenceUniforms().material + 3, materials[materialName].shininess);
+	glUniform1f(sp.referenceUniforms().material + 2, materials[materialName].shininess);
+	glUniform3f(sp.referenceUniforms().viewPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	glm::mat4 model = glm::mat4(1.0f);
 	
@@ -441,7 +442,6 @@ void Renderer::createMaterial(const std::string& materialName, const glm::vec3 d
 	newMaterial.specular = specular;
 	newMaterial.shininess = shininess;
 	materials[materialName]= newMaterial;
-	std::cout << "MATERIAL CREATED" << std::endl;
 }
 
 bool Renderer::removeTextureByName(const std::string& name) {
