@@ -9,10 +9,7 @@ Renderer::Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t win
 		throw std::runtime_error("Unable to initialize renderer due to null window.");
 	}
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	prepareForOperation();
 
 	//TODO: This is scuffed and needs refactoring. Shader program loading needs to be split into
 	//a creator function and a map setter.
@@ -35,7 +32,7 @@ Renderer::Renderer(GLFWwindow* creatorWindow, uint32_t windowWidth, uint32_t win
 	createCubeModel();
 }
 
-void Renderer::updateWindowSize(int newX, int newY) {
+void Renderer::updateWindowSize(GLFWwindow* wnd, int newX, int newY) {
 	windowXsize = newX;
 	windowYsize = newY;
 }
@@ -207,6 +204,7 @@ bool Renderer::loadShaderProgram(const std::string& vertPath, const std::string&
 }
 
 void Renderer::setBackgroundColor(const glm::vec4& color) {
+	backgroundColor = color;
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
@@ -336,6 +334,14 @@ void Renderer::clearFrame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Renderer::prepareForOperation()
+{
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, backgroundColor.w);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Renderer::setCameraRotation(const glm::vec3& rot) {
 	cameraRot = rot;
 }
@@ -355,7 +361,7 @@ glm::vec3 Renderer::getCameraPosition() {
 bool Renderer::loadModel(const std::string& path, const std::string& resultName) {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate |
-		aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes | aiProcess_FlipUVs); //may need to flip UVs
+		aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes | aiProcess_FlipUVs);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
