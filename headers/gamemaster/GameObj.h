@@ -1,8 +1,10 @@
 #pragma once
 
 #include <utility>
+#include <memory>
 #include <string>
 #include <glm/glm.hpp>
+#include "Component.h"
 
 struct Transform {
 	glm::vec3 position;
@@ -22,6 +24,15 @@ public:
 
     void setSerializedName(std::string input);
 
+	Component* addComponent(Component* c);
+
+	void update(float deltaTime);
+
+	Component* getComponent(Component* c);
+
+	void removeComponent(Component* c);
+
 private:
     std::string serializedName;
+	std::vector<Component*> components;
 };
