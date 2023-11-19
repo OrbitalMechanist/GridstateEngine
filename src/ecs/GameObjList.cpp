@@ -1,6 +1,4 @@
-#include "gamemaster/GameObjList.h"
-//#include "gamemaster/GameObj.h"
-//#include "GameObj.cpp"
+#include "ecs/GameObjList.h"
 #include <iostream>
 #include <list>
 

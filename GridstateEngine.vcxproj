@@ -159,9 +159,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\gamemaster\Component.cpp" />
-    <ClCompile Include="src\gamemaster\GameObj.cpp" />
-    <ClCompile Include="src\gamemaster\GameObjList.cpp" />
+    <ClCompile Include="src\ecs\Component.cpp" />
+    <ClCompile Include="src\ecs\GameObj.cpp" />
+    <ClCompile Include="src\ecs\GameObjList.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
@@ -180,9 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h" />
-    <ClInclude Include="headers\gamemaster\Component.h" />
-    <ClInclude Include="headers\gamemaster\GameObj.h" />
-    <ClInclude Include="headers\gamemaster\GameObjList.h" />
+    <ClInclude Include="headers\ecs\Component.h" />
+    <ClInclude Include="headers\ecs\GameObj.h" />
+    <ClInclude Include="headers\ecs\GameObjList.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />
     <ClInclude Include="headers\graphics\LightLayout.h" />
