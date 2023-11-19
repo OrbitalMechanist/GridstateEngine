@@ -1,4 +1,4 @@
-extern "C"{
+﻿extern "C"{
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
@@ -205,11 +205,29 @@ int NsMain(int argc, char** argv) {
 				printf("Button was clicked\t");
 
 				Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("startMenu.xaml");
+				//Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
 
 				nsguiView = Noesis::GUI::CreateView(uiElement1);
 				nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
 				nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 				nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
+
+				Noesis::Button* starBtn;
+				
+				// Load battleSceneUI.xaml after clicking the button.
+				if (nsguiView->GetContent()->FindName<Noesis::Button>("starBtn")) {
+					starBtn = nsguiView->GetContent()->FindName<Noesis::Button>("starBtn");
+					starBtn->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
+						{
+							printf("Button 3\t");
+							Noesis::Ptr<Noesis::UserControl> uiElement2 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
+
+							nsguiView = Noesis::GUI::CreateView(uiElement2);
+							nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+							nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+							nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
+						};
+				}
 			};
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.

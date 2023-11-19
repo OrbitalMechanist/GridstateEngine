@@ -74,6 +74,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="assets\ui\battleSceneUI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="assets\ui\clickyclicky.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -10,7 +10,7 @@
 
         <UserControl Margin="10,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="440">
             <Grid>
-                <Button x:Name="btn" Content="START" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Margin="0,97,0,0" Background="#FF913939" Foreground="#FF040404" FontSize="36" FontWeight="Bold"/>
+                <Button x:Name="starBtn" Content="START" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Margin="0,97,0,0" Background="#FF913939" Foreground="#FF040404" FontSize="36" FontWeight="Bold"/>
             </Grid>
         </UserControl>
         <TextBlock x:Name="gameTitle" FontFamily="../fonts/#superlume" Margin="0,153,0,237" TextWrapping="Wrap" FontSize="24" HorizontalAlignment="Center" TextAlignment="Right" InputScope="FileName" Foreground="Black"><Run Text="Petasum Conus" FontSize="48" Foreground="#FFEFACAC"/></TextBlock>

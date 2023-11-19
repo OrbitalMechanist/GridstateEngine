@@ -1,0 +1,47 @@
+﻿<Page x:Class="NSGUIworkspace.assets.ui.battleSceneUI"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="startMenu">
+    <!--<Page.Background>
+        <ImageBrush ImageSource="../images/mage1.jpg"/>
+    </Page.Background>-->
+
+    <Grid Height="450" Width="800">
+
+        <Grid Margin="37,308,634,29">
+            <Ellipse Width="100" Height="100" Fill="#FF963131" StrokeThickness="2" Opacity="0.7"/>
+            <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse.Fill>
+                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                        <!--The color of the central bright part-->
+                        <GradientStop Offset="0" Color="Red" />
+                        <!--The color of the outer dark part-->
+                        <GradientStop Offset="1" Color="#FF1A1515" />
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+                
+                <Ellipse.Clip>
+                    <RectangleGeometry x:Name="hpBar" Rect="0,50,100,100"/>
+                </Ellipse.Clip>
+            </Ellipse>
+        </Grid>
+
+        <Grid Margin="620,308,21,29">
+            <Ellipse Width="100" Height="100" Fill="#FF316D96"  StrokeThickness="2" Opacity="0.7"/>
+            <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse.Fill>
+                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                        <!--The color of the central bright part-->
+                        <GradientStop Offset="0" Color="#FF0089FF" />
+                        <!--The color of the outer dark part-->
+                        <GradientStop Offset="1" Color="#FF1A1515" />
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+
+                <Ellipse.Clip>
+                    <RectangleGeometry x:Name="mageBar" Rect="0,10,100,100"/>
+                </Ellipse.Clip>
+            </Ellipse>
+        </Grid>
+    </Grid>
+</Page>
