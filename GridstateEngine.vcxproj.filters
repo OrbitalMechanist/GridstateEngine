@@ -11,12 +11,6 @@
     <ClCompile Include="src\audio\SoundSource.cpp">
       <Filter>src\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\gamemaster\GameObjList.cpp">
-      <Filter>src\gamemaster</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gamemaster\GameObj.cpp">
-      <Filter>src\gamemaster</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\glad.c">
       <Filter>src\graphics</Filter>
     </ClCompile>
@@ -50,6 +44,15 @@
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp">
       <Filter>src\mapgridbuilder</Filter>
     </ClCompile>
+    <ClCompile Include="src\ecs\Component.cpp">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\GameObj.cpp">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\GameObjList.cpp">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\audio\SoundDevice.h">
@@ -60,12 +63,6 @@
     </ClInclude>
     <ClInclude Include="headers\audio\SoundBuffer.h">
       <Filter>headers\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\gamemaster\GameObj.h">
-      <Filter>headers\gamemaster</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\gamemaster\GameObjList.h">
-      <Filter>headers\gamemaster</Filter>
     </ClInclude>
     <ClInclude Include="headers\graphics\Vertex.h">
       <Filter>headers\graphics</Filter>
@@ -112,6 +109,15 @@
     <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h">
       <Filter>headers\mapgridbuilder</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ecs\Component.h">
+      <Filter>headers\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\GameObj.h">
+      <Filter>headers\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\GameObjList.h">
+      <Filter>headers\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -151,9 +157,6 @@
     <Filter Include="headers\audio">
       <UniqueIdentifier>{0b9cdcd0-d62a-4f67-abcb-64d75bba712e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="headers\gamemaster">
-      <UniqueIdentifier>{7e5f32c8-04a1-4d70-906c-0b70f7506e33}</UniqueIdentifier>
-    </Filter>
     <Filter Include="headers\graphics">
       <UniqueIdentifier>{972db825-a0ac-47da-ac64-6b8bb1f864ea}</UniqueIdentifier>
     </Filter>
@@ -166,9 +169,6 @@
     <Filter Include="src\audio">
       <UniqueIdentifier>{fe218578-20a0-4a79-a702-933e5cf1b948}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gamemaster">
-      <UniqueIdentifier>{e819c241-f005-435d-ab6e-9220bbd66d1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\graphics">
       <UniqueIdentifier>{37b4463c-ad5a-4b60-af9f-2c2be6d18214}</UniqueIdentifier>
     </Filter>
@@ -177,6 +177,12 @@
     </Filter>
     <Filter Include="shaders">
       <UniqueIdentifier>{a1a419e2-3f3a-4ad1-b4c1-2fb65dbdfb0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\ecs">
+      <UniqueIdentifier>{7e5f32c8-04a1-4d70-906c-0b70f7506e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ecs">
+      <UniqueIdentifier>{e819c241-f005-435d-ab6e-9220bbd66d1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

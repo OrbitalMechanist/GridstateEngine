@@ -1,5 +1,5 @@
 #include "mapgridbuilder/filePairReader.h"
-#include "gamemaster/GameObjList.h"
+#include "ecs/GameObjList.h"
 #include "mapgridbuilder/MapGridBuilder.h"
 /*
 	PLACEHOLDER, this object handles populating MapGrid objects 

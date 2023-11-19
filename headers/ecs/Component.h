@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "GameObj.h"
+#include "ecs/GameObj.h"
 
 class Component {
 protected:

@@ -1,4 +1,4 @@
-#include "gamemaster/Component.h"
+#include "ecs/Component.h"
 
 Component::~Component() {}
 
