@@ -50,6 +50,9 @@
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp">
       <Filter>src\mapgridbuilder</Filter>
     </ClCompile>
+    <ClCompile Include="src\gamemaster\Component.cpp">
+      <Filter>src\gamemaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\audio\SoundDevice.h">
@@ -111,6 +114,9 @@
     </ClInclude>
     <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h">
       <Filter>headers\mapgridbuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\gamemaster\Component.h">
+      <Filter>headers\gamemaster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

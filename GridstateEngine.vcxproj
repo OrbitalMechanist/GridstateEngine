@@ -159,6 +159,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\gamemaster\Component.cpp" />
     <ClCompile Include="src\gamemaster\GameObj.cpp" />
     <ClCompile Include="src\gamemaster\GameObjList.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h" />
+    <ClInclude Include="headers\gamemaster\Component.h" />
     <ClInclude Include="headers\gamemaster\GameObj.h" />
     <ClInclude Include="headers\gamemaster\GameObjList.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
