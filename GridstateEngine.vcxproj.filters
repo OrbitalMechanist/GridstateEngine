@@ -53,6 +53,12 @@
     <ClCompile Include="src\ecs\GameObjList.cpp">
       <Filter>src\ecs</Filter>
     </ClCompile>
+    <ClCompile Include="src\ecs\gamecomponents\GameCoords.cpp">
+      <Filter>src\ecs\gamecomponents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\gamecomponents\RealTransform.cpp">
+      <Filter>src\ecs\gamecomponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\audio\SoundDevice.h">
@@ -117,6 +123,12 @@
     </ClInclude>
     <ClInclude Include="headers\ecs\GameObjList.h">
       <Filter>headers\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\gamecomponents\GameCoords.h">
+      <Filter>headers\ecs\gamecomponents</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\gamecomponents\RealTransform.h">
+      <Filter>headers\ecs\gamecomponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +195,12 @@
     </Filter>
     <Filter Include="src\ecs">
       <UniqueIdentifier>{e819c241-f005-435d-ab6e-9220bbd66d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\ecs\gamecomponents">
+      <UniqueIdentifier>{d5de58b4-4c94-49b8-84fe-ced91fc248e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ecs\gamecomponents">
+      <UniqueIdentifier>{0de32856-e8f5-4ec6-9cd3-ae2d7f68d8d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

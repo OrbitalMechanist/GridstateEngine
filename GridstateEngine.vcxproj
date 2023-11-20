@@ -160,6 +160,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ecs\Component.cpp" />
+    <ClCompile Include="src\ecs\gamecomponents\GameCoords.cpp" />
+    <ClCompile Include="src\ecs\gamecomponents\RealTransform.cpp" />
     <ClCompile Include="src\ecs\GameObj.cpp" />
     <ClCompile Include="src\ecs\GameObjList.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
@@ -181,6 +183,8 @@
   <ItemGroup>
     <ClInclude Include="headers\Constants.h" />
     <ClInclude Include="headers\ecs\Component.h" />
+    <ClInclude Include="headers\ecs\gamecomponents\GameCoords.h" />
+    <ClInclude Include="headers\ecs\gamecomponents\RealTransform.h" />
     <ClInclude Include="headers\ecs\GameObj.h" />
     <ClInclude Include="headers\ecs\GameObjList.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
