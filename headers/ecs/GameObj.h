@@ -6,6 +6,7 @@
 #include "ecs/CommonECS.h"
 
 class Component;
+enum class ComponentType;
 
 class GameObj {
 public:
@@ -25,6 +26,7 @@ public:
 
 	void update(float deltaTime);
 
+	Component* getComponent(ComponentType type);
 	Component* getComponent(Component* c);
 
 	void removeComponent(Component* c);

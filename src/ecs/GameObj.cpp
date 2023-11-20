@@ -57,6 +57,16 @@ Component* GameObj::getComponent(Component* c)
 	return nullptr;
 }
 
+Component* GameObj::getComponent(ComponentType type)
+{
+	for (Component* component : components) {
+		if (component->type == type) {
+			return component;
+		}
+	}
+	return nullptr;
+}
+
 void GameObj::removeComponent(Component* c)
 {
 	std::vector<Component*>::iterator it = components.begin();
