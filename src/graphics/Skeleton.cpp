@@ -68,12 +68,12 @@ void Skeleton::setBone(std::string name, size_t index, size_t parentIndex)
 	bones[parentIndex].children.push_back(index);
 }
 
-Bone& Skeleton::getBoneByIndex(size_t index)
+const Bone& Skeleton::getBoneByIndex(size_t index)
 {
 	return bones[index];
 }
 
-Bone& Skeleton::getBoneParentByIndex(size_t childIndex)
+const Bone& Skeleton::getBoneParentByIndex(size_t childIndex)
 {
 	return bones[bones[childIndex].parent];
 }

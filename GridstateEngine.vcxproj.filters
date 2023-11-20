@@ -58,7 +58,9 @@
     <ClCompile Include="src\graphics\SkeletalAnimation.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\Skeleton.cpp" />
+    <ClCompile Include="src\graphics\Skeleton.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Constants.h">
@@ -109,8 +111,12 @@
     <ClInclude Include="headers\graphics\SkeletalAnimation.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\graphics\Skeleton.h" />
-    <ClInclude Include="headers\graphics\Bone.h" />
+    <ClInclude Include="headers\graphics\Skeleton.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\Bone.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -156,9 +162,6 @@
     <Filter Include="Source Files\MapGrid">
       <UniqueIdentifier>{3de7784a-c5f6-4743-b0cf-42895b61d963}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GameObject">
-      <UniqueIdentifier>{0422504c-4f58-490b-a4ca-9605c598cd2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{be83ed5e-0e7e-4ac9-b150-ba28af223182}</UniqueIdentifier>
     </Filter>
@@ -176,6 +179,9 @@
     </Filter>
     <Filter Include="Resource Files\Shaders\System Shaders">
       <UniqueIdentifier>{28c74d13-79fe-4f80-9d3a-be9ef2bf1746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject">
+      <UniqueIdentifier>{0422504c-4f58-490b-a4ca-9605c598cd2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

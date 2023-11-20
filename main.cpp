@@ -206,7 +206,7 @@ int NsMain(int argc, char** argv) {
 
 		Skeleton testSkell = Skeleton("assets/models/frog.glb");
 		
-		std::cout << testSkell << std::endl;
+		//std::cout << testSkell << std::endl;
 
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
@@ -256,7 +256,7 @@ int NsMain(int argc, char** argv) {
 				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
 				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
 
-			renderer.addRenderObject(RenderObject("frogGLB", "surface", "basic",
+			renderer.addRenderObject(RenderObject("frogGLB", "surface", "secondary",
 				{ 0.0f, 0.0f, 1.53f }, { glm::radians(90.0f), 0.0f,0.0f}, {1.0f, 1.0f, 1.0f}));
 
 
@@ -289,7 +289,7 @@ int NsMain(int argc, char** argv) {
 			movementRotation = glm::rotate(movementRotation, camRot.x, { 1.0f, 0.0f, 0.0f });
 			movementRotation = glm::rotate(movementRotation, camRot.y, { 0.0f, 1.0f, 0.0f });
 
-			//The camera point down by default, so the initial forward is -Z
+			//The camera points down by default, so the initial forward is -Z
 			glm::vec4 trueFwd = movementRotation * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 			glm::vec4 trueRight = movementRotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			glm::vec4 trueUp = movementRotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);

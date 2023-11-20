@@ -21,8 +21,8 @@ public:
 	Skeleton(size_t boneCount);
 	//This serves for setting up the skeleton from an outside loader, or creating one by hand (don't do it).
 	void setBone(std::string name, size_t index, size_t parentIndex);
-	Bone& getBoneByIndex(size_t index);
-	Bone& getBoneParentByIndex(size_t childIndex);
+	const Bone& getBoneByIndex(size_t index);
+	const Bone& getBoneParentByIndex(size_t childIndex);
 
 	friend std::ostream& operator<<(std::ostream& Str, Skeleton const& v);
 };
