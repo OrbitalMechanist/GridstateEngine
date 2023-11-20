@@ -2,11 +2,10 @@
 
 /*
 This is the super class for all GameObjects, it stores game-related values universal to all GameObjects,
-such as: game-related co-ordinates for use of the MapGrid and later converted to Real-space co-ordinates
-for use by the renderer, its in-game name, and a SerializedName given to it by the GameObjList that contains it.
+such as: its name, its serialized name for the GameObjList, and its components
 */
 
-GameObj::GameObj(std::pair<int, int> inputCoords, std::string inputName) : gameCoords(inputCoords), gameName(inputName) {}
+GameObj::GameObj(std::string inputName, std::vector<Component*> inputComponents) : gameName(inputName), components(inputComponents) {}
 void GameObj::setSerializedName(std::string input) { this->serializedName = input; }
 
 Component* GameObj::addComponent(Component* c)
@@ -19,6 +18,17 @@ Component* GameObj::addComponent(Component* c)
 		components.push_back(std::move(c));
 		return components.back();
 	}
+}
+
+std::vector<Component*> GameObj::addComponents(std::vector<Component*> input) {
+	std::vector<Component*> addedComponentsList;
+	
+	for (int i = 0; i < input.size(); i++) {
+		this->addComponent(input[i]);
+		addedComponentsList.push_back(input[i]);
+	}
+
+	return addedComponentsList;
 }
 
 void GameObj::update(float deltaTime)
