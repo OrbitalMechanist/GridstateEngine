@@ -93,9 +93,10 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
+		renderer.loadTexture("assets/textures/white.png", "white");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
-		renderer.loadModel("assets/models/cone45.obj", "cone");
+		renderer.loadModel("assets/models/sphere.glb", "sphere");
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -107,6 +108,7 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
+		
 		renderer.setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 
@@ -124,7 +126,10 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
 			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
+		
 
+		//renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+		//	0, -1, -1);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -166,10 +171,10 @@ int NsMain(int argc, char** argv) {
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
 
-		renderer.createMaterial("singleCube", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
-		renderer.createMaterial("akMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
-		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
-		renderer.createMaterial("separateStonesMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+		renderer.createMaterial("singleCube", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 64.0f);
+		renderer.createMaterial("akMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
+		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f);
+		renderer.createMaterial("separateStonesMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
 
 
 		int prevWidth = WINDOW_WIDTH;
@@ -235,7 +240,7 @@ int NsMain(int argc, char** argv) {
 			renderer.addRenderObject(RenderObject("cube", "stone","singleCube", "basic",
 				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 
-			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
+			renderer.addRenderObject(RenderObject("cube", "white", "singleCube", "basic",
 				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f }));
 
 			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "secondary",

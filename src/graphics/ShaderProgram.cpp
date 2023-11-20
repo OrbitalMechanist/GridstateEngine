@@ -49,6 +49,16 @@ void ShaderProgram::queryUniformLocations() {
 	uniforms.cubeShadowLightPos = tmp;
 	tmp = glGetUniformLocation(glReference, "cubeShadowDistanceLimit");
 	uniforms.cubeShadowDistanceLimit = tmp;
+
+	/*
+	std::cout << "mvp: " << uniforms.mvp << " difTex: " << uniforms.diffuseTex
+		<< " normMat: " << uniforms.normMat << " modMat: " << uniforms.modelMat
+		<< " ambient: " << uniforms.ambientLight << " view: " << uniforms.viewPos
+		<< " mat: " << uniforms.material << " shadows: " << uniforms.shadowMapFirstElement
+		<< " cube: " << uniforms.shadowCubemapFirstElement << " lsm: " << uniforms.lightSpaceMatrixFirstElement
+		<< " shadowFaces: " << uniforms.cubeShadowFacesFirstElement
+		<< " cslp: " << uniforms.cubeShadowLightPos << " csdl: " << uniforms.cubeShadowDistanceLimit << std::endl;
+	*/
 }
 
 const UniformLayout& ShaderProgram::referenceUniforms() {
