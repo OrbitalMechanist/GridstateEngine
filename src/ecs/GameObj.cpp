@@ -6,6 +6,7 @@ such as: its name, its serialized name for the GameObjList, and its components
 */
 
 GameObj::GameObj(std::string inputName, std::vector<Component*> inputComponents) : gameName(inputName), components(inputComponents) {}
+GameObj::GameObj() {}
 void GameObj::setSerializedName(std::string input) { this->serializedName = input; }
 
 Component* GameObj::addComponent(Component* c)
