@@ -130,6 +130,9 @@
     <ClInclude Include="headers\ecs\gamecomponents\RealTransform.h">
       <Filter>headers\ecs\gamecomponents</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ecs\CommonECS.h">
+      <Filter>headers\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

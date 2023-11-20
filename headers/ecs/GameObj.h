@@ -3,7 +3,9 @@
 #include <utility>
 #include <memory>
 #include <string>
-#include "ecs/Component.h"
+#include "ecs/CommonECS.h"
+
+class Component;
 
 class GameObj {
 public:
