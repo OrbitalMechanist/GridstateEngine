@@ -184,7 +184,6 @@
     <ClInclude Include="headers\Constants.h" />
     <ClInclude Include="headers\ecs\CommonECS.h" />
     <ClInclude Include="headers\ecs\Component.h" />
-    <ClInclude Include="headers\ecs\ComponentTypes.h" />
     <ClInclude Include="headers\ecs\gamecomponents\GameCoords.h" />
     <ClInclude Include="headers\ecs\gamecomponents\RealTransform.h" />
     <ClInclude Include="headers\ecs\GameObj.h" />

@@ -5,18 +5,14 @@ This is the super class for all GameObjects, it stores game-related values unive
 such as: its name, its serialized name for the GameObjList, and its components
 */
 
-GameObj::GameObj(std::string inputName, std::vector<Component*> inputComponents) : gameName(inputName), components(inputComponents) {}
+GameObj::GameObj(std::string inputName, std::vector<Component*> inputComponents) : gameName(inputName) {}
 GameObj::GameObj() {}
 GameObj::~GameObj() {
-	for (Component* component : components) {
-		delete component;
-	}
-
 	components.clear();
 }
 
 void GameObj::setSerializedName(std::string input) { this->serializedName = input; }
-
+/*
 Component* GameObj::addComponent(Component* c)
 {
 	if (getComponent(c))
@@ -27,54 +23,41 @@ Component* GameObj::addComponent(Component* c)
 		components.push_back(std::move(c));
 		return components.back();
 	}
-}
+} 
 
 std::vector<Component*> GameObj::addComponents(std::vector<Component*> input) {
 	std::vector<Component*> addedComponentsList;
-	
+
 	for (unsigned int i = 0; i < input.size(); i++) {
 		this->addComponent(input[i]);
 		addedComponentsList.push_back(input[i]);
 	}
 
 	return addedComponentsList;
-}
+}*/
 
-void GameObj::update(float deltaTime)
-{ 
-	for (Component* component : components) {
-		component->update(deltaTime);
+Component* GameObj::addComponent(std::shared_ptr<Component> c) {
+	if (c->otherComponentInteractionCheck(components)) {
+		return nullptr;
+	}
+	else {
+		components.push_back(std::move(c));
+		return components.back().get();
 	}
 }
 
-Component* GameObj::getComponent(Component* c)
-{
-	for (Component* component : components) {
-		if (component == c) {
-			return component;
-		}
+void GameObj::update(float deltaTime) {
+	for (int i = 0; i < components.size(); ++i) {
+		components[i]->update(deltaTime);
 	}
-	return nullptr;
 }
 
-Component* GameObj::getComponent(ComponentType type)
-{
-	for (Component* component : components) {
-		if (component->type == type) {
-			return component;
-		}
-	}
-	return nullptr;
-}
-
-void GameObj::removeComponent(Component* c)
-{
-	std::vector<Component*>::iterator it = components.begin();
-	while (it != components.end()) {
-		if (*it == c) {
-			components.erase(it);
+void GameObj::removeComponent(Component* victim) {
+	for (auto i = components.begin(); i < components.end(); ++i) {
+		if ((*i).get() == victim) {
+			components.erase(i);
 			components.shrink_to_fit();
+			return;
 		}
-		++it;
 	}
 }

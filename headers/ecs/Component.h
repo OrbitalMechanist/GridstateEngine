@@ -3,17 +3,14 @@
 #include "ecs/CommonECS.h"
 
 class GameObject;
-enum class ComponentType;
 
 class Component {
 protected:
     GameObject& parent;
 
 public:
-    Component(GameObject& p, ComponentType t) : parent(p), type(t) {};
-    ComponentType type;
+    Component(GameObject& p) : parent(p) {};
     virtual ~Component() = 0;
     virtual void update(float deltaTime) = 0;
-private:
-
+    virtual bool otherComponentInteractionCheck(const std::vector<std::shared_ptr<Component>>& existing) = 0;
 };
