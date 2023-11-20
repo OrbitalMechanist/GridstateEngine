@@ -34,6 +34,10 @@ GameObj GameObjList::getGameObj(int index) const {
 	if (index < this->data.size()) {
 		return this->data[index];
 	}
+	else {
+		//placeholder return null game obj
+		return GameObj();
+	}
 }
 
 //grabs an object from data by its serializedName

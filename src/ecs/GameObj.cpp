@@ -23,7 +23,7 @@ Component* GameObj::addComponent(Component* c)
 std::vector<Component*> GameObj::addComponents(std::vector<Component*> input) {
 	std::vector<Component*> addedComponentsList;
 	
-	for (int i = 0; i < input.size(); i++) {
+	for (unsigned int i = 0; i < input.size(); i++) {
 		this->addComponent(input[i]);
 		addedComponentsList.push_back(input[i]);
 	}
@@ -41,7 +41,7 @@ void GameObj::update(float deltaTime)
 Component* GameObj::getComponent(Component* c)
 {
 	for (Component* component : components) {
-		if (component == c); {
+		if (component == c) {
 			return component;
 		}
 	}

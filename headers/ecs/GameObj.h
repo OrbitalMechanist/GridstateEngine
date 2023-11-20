@@ -11,6 +11,8 @@ public:
 
     GameObj(std::string inputName, std::vector<Component*> inputComponents);
 
+	GameObj();
+
     void setSerializedName(std::string input);
 
 	Component* addComponent(Component* c);
