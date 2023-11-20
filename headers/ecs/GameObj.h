@@ -13,6 +13,8 @@ public:
 
 	GameObj();
 
+	~GameObj();
+
     void setSerializedName(std::string input);
 
 	Component* addComponent(Component* c);

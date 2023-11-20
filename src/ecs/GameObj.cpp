@@ -7,6 +7,14 @@ such as: its name, its serialized name for the GameObjList, and its components
 
 GameObj::GameObj(std::string inputName, std::vector<Component*> inputComponents) : gameName(inputName), components(inputComponents) {}
 GameObj::GameObj() {}
+GameObj::~GameObj() {
+	for (Component* component : components) {
+		delete component;
+	}
+
+	components.clear();
+}
+
 void GameObj::setSerializedName(std::string input) { this->serializedName = input; }
 
 Component* GameObj::addComponent(Component* c)
