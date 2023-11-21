@@ -106,5 +106,23 @@
     <Resource Include="assets\images\mage1.jpg" />
     <Resource Include="assets\images\mage2.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\skillBar1.png" />
+    <Resource Include="assets\images\skillBar2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\skillBar3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\skillBar4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\skill1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\images\skill2.png" />
+    <Resource Include="assets\images\skill3.png" />
+    <Resource Include="assets\images\skill4.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
