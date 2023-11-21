@@ -159,6 +159,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ai\AISystem.cpp" />
+    <ClCompile Include="src\ai\AISystemDemoTest.cpp" />
+    <ClCompile Include="src\ai\Pathfinding.cpp" />
+    <ClCompile Include="src\Entities\EntityManager.cpp" />
     <ClCompile Include="src\graphics\RenderObject.cpp" />
     <ClCompile Include="src\graphics\ShadowCubeMap.cpp" />
     <ClCompile Include="src\graphics\ShadowMap.cpp" />
@@ -177,9 +181,16 @@
     <ClCompile Include="src\audio\SoundSource.cpp" />
     <ClCompile Include="src\graphics\ShaderProgram.cpp" />
     <ClCompile Include="src\graphics\Vertex.cpp" />
+    <ClCompile Include="src\systems\AISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\ai\AIState.h" />
+    <ClInclude Include="headers\ai\AISystem.h" />
+    <ClInclude Include="headers\ai\AISystemDemoTest.h" />
+    <ClInclude Include="headers\ai\Pathfinding.h" />
     <ClInclude Include="headers\Constants.h" />
+    <ClInclude Include="headers\entity\Entity.h" />
+    <ClInclude Include="headers\entity\EntityManager.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />
     <ClInclude Include="headers\graphics\LightLayout.h" />
@@ -194,6 +205,7 @@
     <ClInclude Include="headers\graphics\ShadowMap.h" />
     <ClInclude Include="headers\graphics\ShadowCubeMap.h" />
     <ClInclude Include="headers\graphics\RenderObject.h" />
+    <ClInclude Include="headers\systems\AISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

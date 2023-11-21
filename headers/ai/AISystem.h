@@ -7,8 +7,8 @@ class AISystem {
 public:
    void update(EntityManager& entityManager, float dt); // dt is the delta time
 private:
-   void handleIdleState(Entity& entity, float dt);
-   void handlePathfindingState(Entity& entity, float dt);
-   void handleAttackState(Entity& entity, float dt);
-   void handleTakeCoverState(Entity& entity, float dt);
+   void handleIdleState(Entity& entity, EntityManager& manager, float dt);
+   void handlePathfindingState(Entity& entity, EntityManager& manager, float dt);
+   void handleAttackState(Entity& entity, EntityManager& manager, float dt);
+   void handleTakeCoverState(Entity& entity, EntityManager& manager, float dt);
 };
