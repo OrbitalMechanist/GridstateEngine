@@ -3,64 +3,61 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="startMenu">
 
-    <Grid>
+    <Viewbox>
         <Grid>
-            <Rectangle Width="400" Height="100" Margin="186,328,185,9" RadiusX="100" RadiusY="80">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="../images/skillBar4.png" Stretch="None"/>
-                </Rectangle.Fill>
-            </Rectangle>
+            <Grid>
+                <Rectangle Width="400" Height="100" Margin="186,328,185,9" RadiusX="100" RadiusY="80">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="../images/skillBar4.png" Stretch="None"/>
+                    </Rectangle.Fill>
+                </Rectangle>
 
-            <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
-                <Image Source="../images/skill1.png" Width="80" Height="80"/>
-            </Button>
-            <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="341,325,330,10">
-                <Image Source="../images/skill3.png" Width="100" Height="100"/>
-            </Button>
-            <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="443,320,232,11">
-                <Image Source="../images/skill4.png" Width="100" Height="100"/>
-            </Button>
+                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
+                    <Image Source="../images/skill1.png" Width="80" Height="80"/>
+                </Button>
+                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="341,325,330,10">
+                    <Image Source="../images/skill3.png" Width="100" Height="100"/>
+                </Button>
+                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="443,320,232,11">
+                    <Image Source="../images/skill4.png" Width="100" Height="100"/>
+                </Button>
+            </Grid>
+
+            <Grid Margin="85,328,586,9" RenderTransformOrigin="1.608,0.481">
+                <Ellipse Width="100" Height="100" Fill="#FF963131" StrokeThickness="2" Opacity="0.7"/>
+                <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                            <!--The color of the central bright part-->
+                            <GradientStop Offset="0" Color="Red" />
+                            <!--The color of the outer dark part-->
+                            <GradientStop Offset="1" Color="#FF1A1515" />
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+
+                    <Ellipse.Clip>
+                        <RectangleGeometry x:Name="hpBar" Rect="0,50,100,100"/>
+                    </Ellipse.Clip>
+                </Ellipse>
+            </Grid>
+
+            <Grid Margin="572,328,69,9">
+                <Ellipse Width="100" Height="100" Fill="#FF316D96"  StrokeThickness="2" Opacity="0.7"/>
+                <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                            <!--The color of the central bright part-->
+                            <GradientStop Offset="0" Color="#FF0089FF" />
+                            <!--The color of the outer dark part-->
+                            <GradientStop Offset="1" Color="#FF1A1515" />
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+
+                    <Ellipse.Clip>
+                        <RectangleGeometry x:Name="mageBar" Rect="0,10,100,100"/>
+                    </Ellipse.Clip>
+                </Ellipse>
+            </Grid>
         </Grid>
-
-
-
-
-
-
-        <Grid Margin="85,328,586,9" RenderTransformOrigin="1.608,0.481">
-            <Ellipse Width="100" Height="100" Fill="#FF963131" StrokeThickness="2" Opacity="0.7"/>
-            <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Ellipse.Fill>
-                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                        <!--The color of the central bright part-->
-                        <GradientStop Offset="0" Color="Red" />
-                        <!--The color of the outer dark part-->
-                        <GradientStop Offset="1" Color="#FF1A1515" />
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-
-                <Ellipse.Clip>
-                    <RectangleGeometry x:Name="hpBar" Rect="0,50,100,100"/>
-                </Ellipse.Clip>
-            </Ellipse>
-        </Grid>
-
-        <Grid Margin="572,328,69,9">
-            <Ellipse Width="100" Height="100" Fill="#FF316D96"  StrokeThickness="2" Opacity="0.7"/>
-            <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Ellipse.Fill>
-                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                        <!--The color of the central bright part-->
-                        <GradientStop Offset="0" Color="#FF0089FF" />
-                        <!--The color of the outer dark part-->
-                        <GradientStop Offset="1" Color="#FF1A1515" />
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-
-                <Ellipse.Clip>
-                    <RectangleGeometry x:Name="mageBar" Rect="0,10,100,100"/>
-                </Ellipse.Clip>
-            </Ellipse>
-        </Grid>
-    </Grid>
+    </Viewbox>
 </Page>
