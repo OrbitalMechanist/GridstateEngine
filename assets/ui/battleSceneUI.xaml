@@ -58,6 +58,25 @@
                     </Ellipse.Clip>
                 </Ellipse>
             </Grid>
+
+            <Grid>
+                <TextBlock x:Name="gameTitle" FontFamily="../fonts/#superlume" Margin="0,10,0,380" TextWrapping="Wrap" FontSize="24"  HorizontalAlignment="Center" TextAlignment="Center" InputScope="FileName" Foreground="Black"><Run Text="Enemy Name"  Foreground="#FFEFACAC"/></TextBlock>
+                <Rectangle Width="200" Height="30"  Fill="#FFFF5D5D" Opacity="0.3" Margin="288,60,287,368" />
+                <Rectangle Width="200" Height="30" Margin="288,60,287,368">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0" Color="Black" />
+                            <GradientStop Offset="0.3" Color="Red" />
+                            <GradientStop Offset="0.5" Color="#FFFA6868" />
+                            <GradientStop Offset="0.8" Color="Red" />
+                            <GradientStop Offset="1" Color="Black" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                    <Rectangle.Clip>
+                        <RectangleGeometry Rect="180,0,200,30" />
+                    </Rectangle.Clip>
+                </Rectangle>
+            </Grid>
         </Grid>
     </Viewbox>
 </Page>
