@@ -113,7 +113,7 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
-		renderer.setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+		renderer.setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 
 		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
@@ -159,6 +159,64 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.addComponent<TransformComponent>(entity2, trans);
 		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
+
+		//World setup
+		for (int x = -5; x <= 5; x++) {
+			for (int y = -5; y <= 5; y++) {
+				Entity fresh = entityManager.createEntity();
+				trans.pos = { x, y };
+				stat.modelName = "cube";
+				stat.textureName = "surface";
+				stat.shaderName = "basic";
+				entityManager.addComponent<TransformComponent>(fresh, trans);
+				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
+			}
+		}
+
+		/*
+		for (int y = 0; y <= 12; y += 2) {
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
+				{ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
+		}
+		*/
+
+		Entity diag1 = entityManager.createEntity();
+		trans.pos = { 5, 5 };
+		stat.posOffset = { 0.0f, 0.0f, 1.0f };
+		stat.textureName = "stone";
+		entityManager.addComponent<TransformComponent>(diag1, trans);
+		entityManager.addComponent<StaticMeshComponent>(diag1, stat);
+
+		Entity ctr = entityManager.createEntity();
+		trans.pos = { 0, 0 };
+		stat.rotOffset = { 0.0f, 0.0f, glm::radians(45.0f) };
+		entityManager.addComponent<TransformComponent>(ctr, trans);
+		entityManager.addComponent<StaticMeshComponent>(ctr, stat);
+
+		Entity diag2 = entityManager.createEntity();
+		trans.pos = { -5, -5 };
+		stat.rotOffset = { 0.0f, 0.0f, 0.0f };
+		entityManager.addComponent<TransformComponent>(diag2, trans);
+		entityManager.addComponent<StaticMeshComponent>(diag2, stat);
+
+		Entity mob = entityManager.createEntity();
+		trans.pos = { 0, 4 };
+		entityManager.addComponent<TransformComponent>(mob, trans);
+		entityManager.addComponent<StaticMeshComponent>(mob, stat);
+
+		Entity block = entityManager.createEntity();
+		trans.pos = { 1, 5 };
+		entityManager.addComponent<TransformComponent>(block, trans);
+		entityManager.addComponent<StaticMeshComponent>(block, stat);
+
+		Entity ak = entityManager.createEntity();
+		trans.pos = { 0, 0 };
+		stat.posOffset.z += 0.6f;
+		stat.rotOffset.y = glm::radians(90.0f);
+		stat.modelName = "ak";
+		stat.textureName = "ak_texture";
+		entityManager.addComponent<TransformComponent>(ak, trans);
+		entityManager.addComponent<StaticMeshComponent>(ak, stat);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -221,22 +279,22 @@ int NsMain(int argc, char** argv) {
 			const Noesis::RoutedEventArgs& args) mutable {
 			if (lightOn) {
 				lightOn = false;
-				rendPtr->setLightState("basic", 0, 0, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+				rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 				targetText->SetText("off");
 			}
 			else {
 				lightOn = true;
-				rendPtr->setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+				rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 				targetText->SetText("on");
 			}
 		};
 		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
 		//you can have multiple callbacks.
-		targetBtn->Click() += [emPtr, newEntity, entity2, lightOn](Noesis::BaseComponent* sender,
+		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
-				((EntityManager*)emPtr)->getComponent<TransformComponent>(entity2).pos.x -= 1;
+				((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
 				if (lightOn) {
 					lightOn = false;
 					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
@@ -247,7 +305,6 @@ int NsMain(int argc, char** argv) {
 				}
 
 		};
-
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
@@ -277,46 +334,9 @@ int NsMain(int argc, char** argv) {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
+			entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
+
 			universe.update(deltaTime);
-
-			trans.pos.y = 6;
-			trans.pos.x = 2;
-
-			//RenderObjects are essentially one-time orders, so they are added every frame.
-			//This will be done automatically by the Universe when I make it.
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "secondary",
-				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ 0.5f * sin(time * 5.0f), 3.5f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 1.0f}));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic",
-				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("ak", "ak_texture", "basic",
-				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
-				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
-
-			for (int x = 0; x < 10; x++) {
-				for (int y = 0; y < 10; y++) {
-					renderer.addRenderObject(RenderObject("cube", "surface", "basic",
-						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-				}
-			}
-
-			for (int y = 0; y <= 12; y += 2) {
-				renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
-					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
-			}
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 				camRot.x += 1.0f * deltaTime;
