@@ -18,6 +18,8 @@
 #include "../components/AIComponent.h"
 #include "../components/GridPositionComponent.h"
 #include "../components/MapComponent.h"
+#include "../components/StaticMeshComponent.h"
+#include "../components/TransformComponent.h"
 
 
 constexpr size_t MaxEntities = 10000; 

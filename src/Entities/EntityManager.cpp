@@ -80,6 +80,9 @@ template std::vector<Entity> EntityManager::getEntitiesWithComponent<AIComponent
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<GridPositionComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<MapComponent>();
 
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<TransformComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<StaticMeshComponent>();
+
 // add a new component type
 template<typename T>
 void EntityManager::registerComponentType() {
@@ -90,6 +93,9 @@ template void EntityManager::registerComponentType<AIComponent>();
 template void EntityManager::registerComponentType<MapComponent>();
 template void EntityManager::registerComponentType<GridPositionComponent>();
 
+template void EntityManager::registerComponentType<StaticMeshComponent>();
+template void EntityManager::registerComponentType<TransformComponent>();
+
 // getComponent:
 template<typename T>
 T& EntityManager::getComponent(Entity entity) {
@@ -99,6 +105,9 @@ T& EntityManager::getComponent(Entity entity) {
 template AIComponent& EntityManager::getComponent<AIComponent>(Entity entity); // explcit for AIComponent
 template GridPositionComponent& EntityManager::getComponent<GridPositionComponent>(Entity entity);
 template MapComponent& EntityManager::getComponent<MapComponent>(Entity entity);
+
+template StaticMeshComponent& EntityManager::getComponent<StaticMeshComponent>(Entity entity);
+template TransformComponent& EntityManager::getComponent<TransformComponent>(Entity entity);
 
 
 template<typename T>
@@ -129,4 +138,7 @@ void EntityManager::addComponent(Entity entity, T component) {
 template void EntityManager::addComponent<AIComponent>(Entity entity, AIComponent aicomponent);
 template void EntityManager::addComponent<MapComponent>(Entity entity, MapComponent mapcomponent);
 template void EntityManager::addComponent<GridPositionComponent>(Entity entity, GridPositionComponent gridPositioncomponent);
+
+template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
+template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);
 
