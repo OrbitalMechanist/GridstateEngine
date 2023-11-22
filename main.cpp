@@ -9,6 +9,12 @@ extern "C" {
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
+#include "entity/EntityManager.h"
+
+#include "ai/AISystem.h"
+
+#include "Universe.h"
+
 #include <chrono>
 #include <functional>
 
@@ -35,6 +41,8 @@ extern "C" {
 #include <NsRender/GLFactory.h>
 #include <NsRender/GLRenderDeviceApi.h>
 
+// AI inlucde 
+#include "../headers/ai/AISystemDemoTest.h"
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -56,6 +64,14 @@ int NsMain(int argc, char** argv) {
 
 	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
+
+	// AI setup
+	EntityManager entityManager;
+	AISystem aiSystem;
+	entityManager.registerComponentType<AIComponent>();
+	Entity newEntity = entityManager.createEntity();
+	AISystemDemoTest aiDemo(entityManager);
+	
 
 	try {
 		if (!glfwInit()) {
@@ -108,8 +124,7 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
-		
-		renderer.setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+		renderer.setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 
 		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
@@ -127,9 +142,94 @@ int NsMain(int argc, char** argv) {
 		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
 			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
 		
-
 		//renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
 		//	0, -1, -1);
+		//gameobject testing stuff
+
+		EntityManager entityManager;
+
+		Universe universe = Universe({ 0, 0, 0 }, { 1.0f, 1.0f }, renderer, entityManager);
+
+		entityManager.registerComponentType<TransformComponent>();
+		entityManager.registerComponentType<StaticMeshComponent>();
+
+		Entity newEntity = entityManager.createEntity();
+		Entity entity2 = entityManager.createEntity();
+
+		TransformComponent trans;
+		trans.pos = { 1, 5 };
+
+		StaticMeshComponent stat;
+		stat.modelName = "ak";
+		stat.textureName = "stone";
+		stat.shaderName = "basic";
+
+		entityManager.addComponent<TransformComponent>(newEntity, trans);
+		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+
+		stat.modelName = "cube";
+		trans.pos = { 2, 7 };
+
+		entityManager.addComponent<TransformComponent>(entity2, trans);
+		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
+
+		//World setup
+		for (int x = -5; x <= 5; x++) {
+			for (int y = -5; y <= 5; y++) {
+				Entity fresh = entityManager.createEntity();
+				trans.pos = { x, y };
+				stat.modelName = "cube";
+				stat.textureName = "surface";
+				stat.shaderName = "basic";
+				entityManager.addComponent<TransformComponent>(fresh, trans);
+				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
+			}
+		}
+
+		/*
+		for (int y = 0; y <= 12; y += 2) {
+			renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
+				{ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
+		}
+		*/
+
+		Entity diag1 = entityManager.createEntity();
+		trans.pos = { 5, 5 };
+		stat.posOffset = { 0.0f, 0.0f, 1.0f };
+		stat.textureName = "stone";
+		entityManager.addComponent<TransformComponent>(diag1, trans);
+		entityManager.addComponent<StaticMeshComponent>(diag1, stat);
+
+		Entity ctr = entityManager.createEntity();
+		trans.pos = { 0, 0 };
+		stat.rotOffset = { 0.0f, 0.0f, glm::radians(45.0f) };
+		entityManager.addComponent<TransformComponent>(ctr, trans);
+		entityManager.addComponent<StaticMeshComponent>(ctr, stat);
+
+		Entity diag2 = entityManager.createEntity();
+		trans.pos = { -5, -5 };
+		stat.rotOffset = { 0.0f, 0.0f, 0.0f };
+		entityManager.addComponent<TransformComponent>(diag2, trans);
+		entityManager.addComponent<StaticMeshComponent>(diag2, stat);
+
+		Entity mob = entityManager.createEntity();
+		trans.pos = { 0, 4 };
+		entityManager.addComponent<TransformComponent>(mob, trans);
+		entityManager.addComponent<StaticMeshComponent>(mob, stat);
+
+		Entity block = entityManager.createEntity();
+		trans.pos = { 1, 5 };
+		entityManager.addComponent<TransformComponent>(block, trans);
+		entityManager.addComponent<StaticMeshComponent>(block, stat);
+
+		Entity ak = entityManager.createEntity();
+		trans.pos = { 0, 0 };
+		stat.posOffset.z += 0.6f;
+		stat.rotOffset.y = glm::radians(90.0f);
+		stat.modelName = "ak";
+		stat.textureName = "ak_texture";
+		entityManager.addComponent<TransformComponent>(ak, trans);
+		entityManager.addComponent<StaticMeshComponent>(ak, stat);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -191,20 +291,38 @@ int NsMain(int argc, char** argv) {
 
 		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
 		//causes problems
+		void* emPtr = &entityManager;
+		Entity* entPtr = &entity2;
+
 		targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
 			const Noesis::RoutedEventArgs& args) mutable {
 			if (lightOn) {
 				lightOn = false;
-				rendPtr->setLightState("basic", 0, 0, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+				rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 				targetText->SetText("off");
 			}
 			else {
 				lightOn = true;
-				rendPtr->setLightState("basic", 0, 2, { 0.0f, 4.5f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+				rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
 					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
 				targetText->SetText("on");
 			}
+		};
+		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
+		//you can have multiple callbacks.
+		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
+				if (lightOn) {
+					lightOn = false;
+					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
+				}
+				else {
+					lightOn = true;
+					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
+				}
+
 		};
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
@@ -234,7 +352,6 @@ int NsMain(int argc, char** argv) {
 
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
-
 
 			//Visible
 			renderer.addRenderObject(RenderObject("cube", "stone","singleCube", "basic",
@@ -271,6 +388,10 @@ int NsMain(int argc, char** argv) {
 				renderer.addRenderObject(RenderObject("cube", "stone", "separateStonesMaterial", "basic", { 10.0f, y + 1.0f, 0.0f },
 					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
 			}
+
+			entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
+
+			universe.update(deltaTime);
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 				camRot.x += 1.0f * deltaTime;
@@ -377,6 +498,12 @@ int NsMain(int argc, char** argv) {
 				}
 				gunshotTimer = 600;
 			}
+
+			// AI test
+			aiSystem.update(entityManager, entityManager.getDeltaTime());
+			
+
+
 		} //End of operation loop. Everything after this is cleanup.
 
 		//NSGUI stuff should be manually shut down before exiting the program.

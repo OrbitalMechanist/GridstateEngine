@@ -59,6 +59,27 @@
     <ClCompile Include="src\ecs\gamecomponents\RealTransform.cpp">
       <Filter>src\ecs\gamecomponents</Filter>
     </ClCompile>
+    <ClCompile Include="src\ai\AISystem.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ai\AISystemDemoTest.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ai\Pathfinding.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\EntityManager.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\AISystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Universe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\components\StaticMeshComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\audio\SoundDevice.h">
@@ -133,6 +154,63 @@
     <ClInclude Include="headers\ecs\CommonECS.h">
       <Filter>headers\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ai\AIState.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ai\AISystem.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ai\AISystemDemoTest.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ai\Pathfinding.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\entity\Entity.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\entity\EntityManager.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\AISystem.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Universe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\ActionPointsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\AIComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\AttackComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\CoverComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\DefenseComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\GridPositionComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\HealthComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\MapComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\MoveComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\PlayerComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\components\TransformComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -164,6 +242,63 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="assets\ui\test.xaml" />
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{c29d165b-8dbe-4d85-8b66-38f1f9113a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{6629a117-41da-40d2-bb66-64d8f2e5b645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{cdeba063-d3c1-4203-a9ad-5de2e9cdcd55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{2385dbc2-64e2-4e9d-9075-ef117f4a30fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MapGrid">
+      <UniqueIdentifier>{3de7784a-c5f6-4743-b0cf-42895b61d963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject">
+      <UniqueIdentifier>{0422504c-4f58-490b-a4ca-9605c598cd2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{be83ed5e-0e7e-4ac9-b150-ba28af223182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{6c895776-63a5-463c-a6cb-378e76e941da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{42a4fa87-784f-43f3-8bcb-fcb8ee17a545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{17203f12-655f-497d-bcd7-229da2722fa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\UI">
+      <UniqueIdentifier>{fd8c082c-2bf2-47d9-b56b-2cea32348696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\System Shaders">
+      <UniqueIdentifier>{28c74d13-79fe-4f80-9d3a-be9ef2bf1746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{c4d33fc3-c203-4989-8c36-2df12e271272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{538d61db-4f47-4452-805d-3881dab8f93d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{ecc51231-c3e3-473f-90eb-267df369c669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{bd527cb7-5f14-43e6-816e-351bb5f385ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{37bdd22d-1ecd-4364-9091-52cee6b2b62a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{cf5d0055-d4a9-4400-a158-8cc65fe4afd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{6ad41995-fc1a-4e7a-b08a-fc6af6b27c58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="headers">
