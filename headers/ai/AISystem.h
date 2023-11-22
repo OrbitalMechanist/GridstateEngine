@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../entity/EntityManager.h" // placeholder - need a EntityManager and Entiy to handle different states
+#include "ecs/entity/EntityManager.h" // placeholder - need a EntityManager and Entiy to handle different states
 
 
 class AISystem {

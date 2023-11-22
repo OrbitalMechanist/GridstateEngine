@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../entity/EntityManager.h"
-#include "../ai/AISystem.h"
+#include "ecs/entity/EntityManager.h"
+#include "ai/AISystem.h"
 
 
 class AISystemDemoTest {

@@ -18,8 +18,8 @@ void Universe::update(float deltaTime)
 
 		StaticMeshComponent& mesh = em.getComponent<StaticMeshComponent>(i);
 
-		renderer.addRenderObject(RenderObject(mesh.modelName, mesh.textureName, mesh.shaderName,
-			mesh.posOffset + gameObjWorldPos, mesh.rotOffset, mesh.scale, true, true));
+		renderer.addRenderObject(RenderObject(mesh.modelName, mesh.textureName, mesh.materialName,
+			mesh.shaderName, mesh.posOffset + gameObjWorldPos, mesh.rotOffset, mesh.scale, true, true));
 	}
 }
 

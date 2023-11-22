@@ -1,4 +1,4 @@
-﻿#include "../headers/entity/EntityManager.h"
+﻿#include "ecs/entity/EntityManager.h"
 
 // Get timeDiff
 float EntityManager::getDeltaTime() {

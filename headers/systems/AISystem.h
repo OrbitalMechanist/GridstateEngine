@@ -4,8 +4,8 @@
 #ifndef AISYSTEM_H
 #define AISYSTEM_H
 
-#include "../entity/EntityManager.h"
-#include "../ai/Pathfinding.h"
+#include "ecs/entity/EntityManager.h"
+#include "ai/Pathfinding.h"
 class AISystem {
 public:
     // Update function to be called every game loop iteration.

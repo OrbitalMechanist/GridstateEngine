@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs/GameObj.h"
+#include "GameObj.h"
 #include <vector>
 #include <string>
 

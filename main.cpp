@@ -1,4 +1,4 @@
-extern "C" {
+extern "C"{
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
@@ -9,7 +9,7 @@ extern "C" {
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
-#include "entity/EntityManager.h"
+#include "ecs/entity/EntityManager.h"
 
 #include "ai/AISystem.h"
 
@@ -62,8 +62,8 @@ int NsMain(int argc, char** argv) {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
-	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
+	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
+	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
 
 	// AI setup
 	EntityManager entityManager;
@@ -109,10 +109,9 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
-		renderer.loadTexture("assets/textures/white.png", "white");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
-		renderer.loadModel("assets/models/sphere.glb", "sphere");
+		renderer.loadModel("assets/models/cone45.obj", "cone");
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -141,9 +140,7 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
 			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
-		
-		//renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
-		//	0, -1, -1);
+
 		//gameobject testing stuff
 
 		EntityManager entityManager;
@@ -159,10 +156,13 @@ int NsMain(int argc, char** argv) {
 		TransformComponent trans;
 		trans.pos = { 1, 5 };
 
+		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+
 		StaticMeshComponent stat;
 		stat.modelName = "ak";
 		stat.textureName = "stone";
 		stat.shaderName = "basic";
+		stat.materialName = "surfaceMaterial";
 
 		entityManager.addComponent<TransformComponent>(newEntity, trans);
 		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
@@ -271,12 +271,6 @@ int NsMain(int argc, char** argv) {
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
 
-		renderer.createMaterial("singleCube", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 64.0f);
-		renderer.createMaterial("akMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
-		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f);
-		renderer.createMaterial("separateStonesMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
-
-
 		int prevWidth = WINDOW_WIDTH;
 		int	prevHeight = WINDOW_HEIGHT;
 
@@ -352,42 +346,6 @@ int NsMain(int argc, char** argv) {
 
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
-
-			//Visible
-			renderer.addRenderObject(RenderObject("cube", "stone","singleCube", "basic",
-				{ 5.0f, 5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "white", "singleCube", "basic",
-				{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, glm::radians(45.0f) }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "secondary",
-				{ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
-				{ -5.0f, -5.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
-				{ 0.5f * sin(time * 5.0f), 3.5f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 1.0f}));
-
-
-			renderer.addRenderObject(RenderObject("cube", "stone", "singleCube", "basic",
-				{ 1.0f, 4.5f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-      
-			renderer.addRenderObject(RenderObject("ak", "ak_texture", "akMaterial", "basic",
-				{ 0.0f, 0.0f, 1.53f }, { 0.0f, glm::radians(90.0f), 
-				glm::radians(117.0f + time * 90.0f)}, {1.0f, 1.0f, 1.0f}));
-
-
-			for (int x = 0; x < 10; x++) {
-				for (int y = 0; y < 10; y++) {
-					renderer.addRenderObject(RenderObject("cube", "surface", "surfaceMaterial", "basic",
-						{ x - 4.5f, y - 4.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-				}
-			}
-			for (int y = 0; y <= 12; y += 2) {
-				renderer.addRenderObject(RenderObject("cube", "stone", "separateStonesMaterial", "basic", { 10.0f, y + 1.0f, 0.0f },
-					{ 0.0f, 0.0f, 0.0f },  { 1.0f, 1.0f, 1.0f }));
-			}
 
 			entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
 

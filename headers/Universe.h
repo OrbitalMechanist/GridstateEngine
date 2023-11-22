@@ -1,9 +1,9 @@
 #pragma once
 #include "graphics/Renderer.h"
-#include "entity/EntityManager.h"
+#include "ecs/entity/EntityManager.h"
 
-#include "components/TransformComponent.h"
-#include "components/StaticMeshComponent.h"
+#include "ecs/components/TransformComponent.h"
+#include "ecs/components/StaticMeshComponent.h"
 
 class Universe {
 private:
