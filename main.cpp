@@ -41,6 +41,8 @@ extern "C"{
 #include <NsRender/GLFactory.h>
 #include <NsRender/GLRenderDeviceApi.h>
 
+// AI inlucde 
+#include "../headers/ai/AISystemDemoTest.h"
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -62,6 +64,14 @@ int NsMain(int argc, char** argv) {
 
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
+
+	// AI setup
+	EntityManager entityManager;
+	AISystem aiSystem;
+	entityManager.registerComponentType<AIComponent>();
+	Entity newEntity = entityManager.createEntity();
+	AISystemDemoTest aiDemo(entityManager);
+	
 
 	try {
 		if (!glfwInit()) {
@@ -443,6 +453,12 @@ int NsMain(int argc, char** argv) {
 				}
 				gunshotTimer = 600;
 			}
+
+			// AI test
+			aiSystem.update(entityManager, entityManager.getDeltaTime());
+			
+
+
 		} //End of operation loop. Everything after this is cleanup.
 
 		//NSGUI stuff should be manually shut down before exiting the program.
