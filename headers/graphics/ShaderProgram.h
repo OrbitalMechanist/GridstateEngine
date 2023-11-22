@@ -20,5 +20,6 @@ public:
 	void queryUniformLocations();
 
 	const UniformLayout& referenceUniforms();
+
 };
 
