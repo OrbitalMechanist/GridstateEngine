@@ -8,6 +8,7 @@ C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\audio\SoundSource.c
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\ecs\Entities\EntityManager.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\EntityManager.obj
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\ecs\GameObj.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\GameObj.obj
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\ecs\GameObjList.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\GameObjList.obj
+C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\gamemaster\GameMaster.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\GameMaster.obj
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\graphics\glad.c;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\glad.obj
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\graphics\Mesh.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\Mesh.obj
 C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\src\graphics\Renderer.cpp;C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\Renderer.obj

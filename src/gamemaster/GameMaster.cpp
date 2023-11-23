@@ -1,6 +1,6 @@
 #include "gamemaster/GameMaster.h"
 
-GameMaster::GameMaster(EntityManager e) : currentTurn(0), entities(e) {}
+GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e) {}
 
 GameMaster::~GameMaster() {}
 

@@ -10,9 +10,9 @@ enum Turn {
 class GameMaster {
 public:
 	Turn currentTurn;
-	EntityManager entities;
+	EntityManager* entityManager;
 
-	GameMaster(EntityManager e);
+	GameMaster(EntityManager* e);
 
 	~GameMaster();
 
