@@ -1,9 +1,15 @@
 #pragma once
 #include "ecs/entity/EntityManager.h"
 
+enum Turn {
+	enemyTurn,
+	playerTurn,
+	nullTurn
+};
+
 class GameMaster {
 public:
-	int currentTurn;
+	Turn currentTurn;
 	EntityManager entities;
 
 	GameMaster(EntityManager e);
@@ -11,4 +17,6 @@ public:
 	~GameMaster();
 
 	void endTurn();
+
+	void startTurn(Turn t);
 };
