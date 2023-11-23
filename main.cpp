@@ -299,6 +299,7 @@ int NsMain(int argc, char** argv) {
 		void* emPtr = &entityManager;
 		Entity* entPtr = &entity2;
 		bool isPlayerTurn = true;
+		void* gmPtr = &gm;
 
 		targetBtn->Click() += [rendPtr, lightOn,targetText](Noesis::BaseComponent* sender, 
 			const Noesis::RoutedEventArgs& args) mutable {
@@ -337,14 +338,17 @@ int NsMain(int argc, char** argv) {
 					turnText->SetText("Player");
 					gm.endTurn();
 				}
-				else {
+				else if(gm.currentTurn == enemyTurn) {
 					turnText->SetText("Enemy");
 					gm.endTurn();
+				}
+				else {
 
 				}
 			};
 		targetBtn->Click() += [gm, turnBlock](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
+				//std::cout << gm.currentTurn;
 				if (gm.currentTurn == playerTurn) {
 					((EntityManager*)gm.entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
 				}
