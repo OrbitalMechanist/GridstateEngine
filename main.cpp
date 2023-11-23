@@ -9,6 +9,8 @@ extern "C"{
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
+#include "gamemaster/GameMaster.h"
+
 #include "ecs/entity/EntityManager.h"
 
 #include "ai/AISystem.h"
@@ -149,6 +151,8 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
+		
+		GameMaster gm(&entityManager);
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -217,6 +221,11 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<TransformComponent>(mob, trans);
 		entityManager.addComponent<StaticMeshComponent>(mob, stat);
 
+		Entity turnBlock = entityManager.createEntity();
+		trans.pos = { 0, 10 };
+		entityManager.addComponent<TransformComponent>(turnBlock, trans);
+		entityManager.addComponent<StaticMeshComponent>(turnBlock, stat);
+
 		Entity block = entityManager.createEntity();
 		trans.pos = { 1, 5 };
 		entityManager.addComponent<TransformComponent>(block, trans);
@@ -280,6 +289,8 @@ int NsMain(int argc, char** argv) {
 		//correspond to what the element actually has and thus not work as expected.
 		auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
 		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
+		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
+		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
 
 		bool lightOn = true;
 
@@ -287,8 +298,9 @@ int NsMain(int argc, char** argv) {
 		//causes problems
 		void* emPtr = &entityManager;
 		Entity* entPtr = &entity2;
+		bool isPlayerTurn = true;
 
-		targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
+		targetBtn->Click() += [rendPtr, lightOn,targetText](Noesis::BaseComponent* sender, 
 			const Noesis::RoutedEventArgs& args) mutable {
 			if (lightOn) {
 				lightOn = false;
@@ -303,6 +315,7 @@ int NsMain(int argc, char** argv) {
 				targetText->SetText("on");
 			}
 		};
+		
 		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
 		//you can have multiple callbacks.
 		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
@@ -318,6 +331,30 @@ int NsMain(int argc, char** argv) {
 				}
 
 		};
+		turnBtn->Click() += [turnText, gm](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm.currentTurn == playerTurn) {
+					turnText->SetText("Player");
+					gm.endTurn();
+				}
+				else {
+					turnText->SetText("Enemy");
+					gm.endTurn();
+
+				}
+			};
+		targetBtn->Click() += [gm, turnBlock](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm.currentTurn == playerTurn) {
+					((EntityManager*)gm.entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
+				}
+				else if(gm.currentTurn == enemyTurn) {
+					((EntityManager*)gm.entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
+				}
+				else {
+
+				}
+			};
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.

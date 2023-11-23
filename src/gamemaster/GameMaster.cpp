@@ -1,6 +1,6 @@
 #include "gamemaster/GameMaster.h"
 
-GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e) {}
+GameMaster::GameMaster(EntityManager* e) : currentTurn(enemyTurn), entityManager(e) {}
 
 GameMaster::~GameMaster() {}
 
@@ -16,10 +16,5 @@ void GameMaster::endTurn() {
 }
 
 void GameMaster::startTurn(Turn t) {
-	if (t == playerTurn) {
-
-	}
-	else if (t == enemyTurn) {
-
-	}
+	//ping whoever its their turn
 }

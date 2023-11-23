@@ -1,17 +1,10 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
   main.cpp
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(405,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(405,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(409,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(409,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(415,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\main.cpp(415,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  Universe.cpp
-  AISystem.cpp
-  AISystemDemoTest.cpp
-  EntityManager.cpp
-  GameMaster.cpp
-  AISystem.cpp
-  Generating Code...
-  GridstateEngine.vcxproj -> C:\Users\antho\OneDrive\Documents\GitHub\GridstateEngine\x64\Debug\GridstateEngine.exe
+C:\Work\Comp8551\GridstateEngine\main.cpp(442,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(442,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(446,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(446,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(452,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(452,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
