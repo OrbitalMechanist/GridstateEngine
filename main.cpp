@@ -152,7 +152,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
 		
-		GameMaster gm(&entityManager);
+		GameMaster* gm = new GameMaster(&entityManager);
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -332,34 +332,22 @@ int NsMain(int argc, char** argv) {
 				}
 
 		};
-		turnBtn->Click() += [turnText, gm](Noesis::BaseComponent* sender,
+		turnBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm.currentTurn == playerTurn) {
+				if (gm->currentTurn == playerTurn) {
 					turnText->SetText("Player");
-					gm.endTurn();
+					gm->endTurn();
+					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
 				}
-				else if(gm.currentTurn == enemyTurn) {
+				else if(gm->currentTurn == enemyTurn) {
 					turnText->SetText("Enemy");
-					gm.endTurn();
+					gm->endTurn();
+					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
 				}
 				else {
 
 				}
 			};
-		targetBtn->Click() += [gm, turnBlock](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				//std::cout << gm.currentTurn;
-				if (gm.currentTurn == playerTurn) {
-					((EntityManager*)gm.entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
-				}
-				else if(gm.currentTurn == enemyTurn) {
-					((EntityManager*)gm.entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
-				}
-				else {
-
-				}
-			};
-
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
