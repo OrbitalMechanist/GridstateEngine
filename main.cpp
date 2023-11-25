@@ -49,6 +49,16 @@ extern "C"{
 	this file for when we've built testing infrastructure for the engine. - Joe
 */
 
+static void cursorPositionCallback(GLFWwindow* window, double xPos, double yPos);
+static void cursorPanningCheck(GLFWwindow* window, double xPos, double yPos);
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void mouseMovementCallback(GLFWwindow* window, double mouseX, double mouseY);
+double lastX, lastY;
+bool rightButtonDown = false;
+float cameraYaw = 0.0f;
+glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
+glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
+
 //NsMain is a lot like like main but Noesis-flavoured and platform-agnostic
 int NsMain(int argc, char** argv) {
 	NS_UNUSED(argc, argv);
@@ -90,7 +100,15 @@ int NsMain(int argc, char** argv) {
 
 		GLFWwindow* window;
 		window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Window", 0, nullptr);
+		///////////////////////////////////////
+		//glfwSetCursorPosCallback(window, cursorPositionCallback);
+		glfwSetMouseButtonCallback(window, mouseButtonCallback);
+		glfwSetCursorPosCallback(window, cursorPanningCheck);
 
+
+
+
+		//////////////////////////////////////////////
 		if (window == NULL) {
 			glfwTerminate();
 			throw std::runtime_error("Failed to create window.");
@@ -118,8 +136,7 @@ int NsMain(int argc, char** argv) {
 
 		renderer.setBackgroundColor({ 0.1f, 0.075f, 0.1f, 1.0f });
 
-		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
+
 
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
@@ -192,6 +209,8 @@ int NsMain(int argc, char** argv) {
 				{ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
 		}
 		*/
+
+
 
 		Entity diag1 = entityManager.createEntity();
 		trans.pos = { 5, 5 };
@@ -400,6 +419,21 @@ int NsMain(int argc, char** argv) {
 			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 				camPos.z += -2.5f * deltaTime;
 			}
+			if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+				cameraYaw += 1.0f * deltaTime; // Adjust the value as needed
+			}
+			//glm::vec3 newForward;
+			//newForward.x = cos(glm::radians(cameraYaw));
+			//newForward.y = 0; // Keep the camera level on the Y-axis
+			//newForward.z = sin(glm::radians(cameraYaw));
+
+			//trueFwd += glm::normalize(newForward);
+
+			//glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f); // Assuming Y-up world
+			//camPos += 
+		/*	camRight = glm::normalize(glm::cross(camForward, worldUp));
+			camUp = glm::normalize(glm::cross(camRight, camForward));*/
+
 
 			//Send mouse events to NSGUI
 			double x, y;
@@ -484,4 +518,64 @@ int NsMain(int argc, char** argv) {
 	}
 
 	return EXIT_SUCCESS;
+}
+
+static void cursorPositionCallback(GLFWwindow* window, double xPos, double yPos) {
+	std::cout << xPos << " : " << yPos << std::endl;
+}
+
+static void cursorPanningCheck(GLFWwindow* window, double xPos, double yPos) {
+	std::cout << xPos << " : " << yPos << std::endl;
+	if (xPos <= 100) {
+		std::cout << "Move Left!!" << std::endl;
+		camPos += glm::vec3(-1.0f, 0, 0) * 0.1f;
+
+	}
+	//camera move to right
+	if (xPos >= 700) {
+		std::cout << "Move Right!!" << std::endl;
+		camPos += glm::vec3(1.0f, 0, 0) * 0.1f;
+	}
+	//camera move up
+	if (yPos <= 100) {
+		std::cout << "Move Up!!" << std::endl;
+		camPos += glm::vec3(0, 1.0f, 0) * 0.1f;
+
+	}
+	//camera move down
+	if (yPos >= 500) {
+		std::cout << "Move Down!!" << std::endl;
+		camPos += glm::vec3(0, -1.0f, 0) * 0.1f;
+	}
+	//std::cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		std::cout << "LEFT button press" << std::endl;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		std::cout << "LEFT button release" << std::endl;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_RIGHT)
+	{
+		if (action == GLFW_PRESS)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			std::cout << "RIGHT button press" << std::endl;
+			rightButtonDown = true;
+			// Capture the initial mouse position when the right button is pressed
+			glfwGetCursorPos(window, &lastX, &lastY);
+			//std::cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
+
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			rightButtonDown = false;
+			std::cout << "RIGHT button release" << std::endl;
+		}
+	}
 }
