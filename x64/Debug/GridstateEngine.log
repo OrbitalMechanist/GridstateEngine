@@ -1,12 +1,15 @@
-﻿G:\DevData\Microsoft Visual Studio\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
+﻿D:\VisualStudio\VisualStudio2022\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1088,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
   main.cpp
-G:\DevData\school\GridstateEngine\main.cpp(405,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(405,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(409,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(409,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(415,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(415,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  Universe.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\headers\systems\MessagingSystem\TestHeader.h(2,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(425,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(425,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(429,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(429,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(435,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(435,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  MessageSystem.cpp
   Generating Code...
-  GridstateEngine.vcxproj -> G:\DevData\school\GridstateEngine\x64\Debug\GridstateEngine.exe
+x64\Debug\AISystem.obj : warning LNK4042: object specified more than once; extras ignored
+     Creating library E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.lib and object E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exp
+  GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
