@@ -10,6 +10,7 @@ extern "C"{
 #include "audio/SoundSource.h"
 
 #include "gamemaster/GameMaster.h"
+#include "gamemaster/EnemyTurnCalculator.h"
 
 #include "ecs/entity/EntityManager.h"
 
@@ -152,7 +153,8 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
 		
-		GameMaster* gm = new GameMaster(&entityManager);
+		EnemyTurnCalculator* calc = new EnemyTurnCalculator(&entityManager);
+		GameMaster* gm = new GameMaster(calc);
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -337,12 +339,12 @@ int NsMain(int argc, char** argv) {
 				if (gm->currentTurn == playerTurn) {
 					turnText->SetText("Player");
 					gm->endTurn();
-					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
+					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
 				}
 				else if(gm->currentTurn == enemyTurn) {
 					turnText->SetText("Enemy");
 					gm->endTurn();
-					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
+					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
 				}
 				else {
 

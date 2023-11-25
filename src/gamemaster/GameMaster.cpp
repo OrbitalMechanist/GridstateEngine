@@ -1,6 +1,6 @@
 #include "gamemaster/GameMaster.h"
 
-GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e) {}
+GameMaster::GameMaster(EnemyTurnCalculator* e) : currentTurn(playerTurn), calc(e) {}
 
 GameMaster::~GameMaster() {}
 
@@ -12,9 +12,15 @@ void GameMaster::endTurn() {
 	else if (currentTurn == enemyTurn) {
 		currentTurn = playerTurn;
 	}
-	startTurn(currentTurn);
+	startTurn();
 }
 
-void GameMaster::startTurn(Turn t) {
-	//ping whoever its their turn
+void GameMaster::startTurn() {
+	if (currentTurn == playerTurn) {
+		// Give player control & refresh # of moves?
+	}
+	else if (currentTurn == enemyTurn) {
+		// Revoke player control and execute enemy turns
+
+	}
 }

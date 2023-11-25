@@ -1,5 +1,5 @@
 #pragma once
-#include "ecs/entity/EntityManager.h"
+#include "gamemaster/EnemyTurnCalculator.h"
 
 enum Turn {
 	enemyTurn,
@@ -10,13 +10,13 @@ enum Turn {
 class GameMaster {
 public:
 	Turn currentTurn;
-	EntityManager* entityManager;
+	EnemyTurnCalculator* calc;
 
-	GameMaster(EntityManager* e);
+	GameMaster(EnemyTurnCalculator* e);
 
 	~GameMaster();
 
 	void endTurn();
 
-	void startTurn(Turn t);
+	void startTurn();
 };
