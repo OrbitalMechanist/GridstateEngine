@@ -169,6 +169,7 @@
     <ClCompile Include="src\ecs\Entities\EntityManager.cpp" />
     <ClCompile Include="src\ecs\GameObj.cpp" />
     <ClCompile Include="src\ecs\GameObjList.cpp" />
+    <ClCompile Include="src\gamemaster\EnemyTurnCalculator.cpp" />
     <ClCompile Include="src\gamemaster\GameMaster.cpp" />
     <ClCompile Include="src\graphics\glad.c" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="headers\ecs\entity\EntityManager.h" />
     <ClInclude Include="headers\ecs\GameObj.h" />
     <ClInclude Include="headers\ecs\GameObjList.h" />
+    <ClInclude Include="headers\gamemaster\EnemyTurnCalculator.h" />
     <ClInclude Include="headers\gamemaster\GameMaster.h" />
     <ClInclude Include="headers\graphics\GLTypes.h" />
     <ClInclude Include="headers\graphics\Light.h" />

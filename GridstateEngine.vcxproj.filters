@@ -71,6 +71,9 @@
     <ClCompile Include="src\gamemaster\GameMaster.cpp">
       <Filter>Source Files\GameMaster</Filter>
     </ClCompile>
+    <ClCompile Include="src\gamemaster\EnemyTurnCalculator.cpp">
+      <Filter>Source Files\GameMaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -194,6 +197,9 @@
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="headers\gamemaster\GameMaster.h">
+      <Filter>Header Files\GameMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\gamemaster\EnemyTurnCalculator.h">
       <Filter>Header Files\GameMaster</Filter>
     </ClInclude>
   </ItemGroup>

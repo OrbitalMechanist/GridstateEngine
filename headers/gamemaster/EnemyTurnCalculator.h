@@ -5,5 +5,7 @@ class EnemyTurnCalculator {
 public:
 	EntityManager* entityManager;
 	EnemyTurnCalculator(EntityManager* e);
-
-}
+	~EnemyTurnCalculator();
+	void executeEnemyTurns();
+	void executeEnemyTurn(Entity* e);
+};

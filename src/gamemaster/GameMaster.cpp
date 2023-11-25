@@ -21,6 +21,7 @@ void GameMaster::startTurn() {
 	}
 	else if (currentTurn == enemyTurn) {
 		// Revoke player control and execute enemy turns
-
+		calc->executeEnemyTurns();
+		//endTurn();
 	}
 }
