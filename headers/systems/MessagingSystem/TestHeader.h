@@ -1,48 +1,97 @@
 #pragma once
 #include "MessageSystem.h";
-/*
-Test MessageSystem only - Health 
-*/
 
-// A specific message type
-struct HealthChangedMessage : public IMessage {
+
+// test healthComp
+class HealthComponent : public ISubscriber {
+public:
     int entityID;
-    int newHealth;
+    int health;
 
-    HealthChangedMessage(int id, int health) : entityID(id), newHealth(health) {}
+    HealthComponent(int id, int hp) : entityID(id), health(hp) {}
+
+    void handleMessage(const IMessage& message) override {
+        if (auto reqMsg = dynamic_cast<const RequestHealthMessage*>(&message)) {
+            if (reqMsg->entityID == entityID) {
+              
+                ResponseHealthMessage respMsg{ entityID, health };
+               
+            }
+        }
+        else if (auto updateMsg = dynamic_cast<const UpdateHealthMessage*>(&message)) {
+            if (updateMsg->entityID == entityID) {
+                //std::cout << "Updating health from " << health << " to " << updateMsg->newHealth << "\n";
+                health = updateMsg->newHealth;
+            }
+            
+        }
+    }
 };
 
-// Health System that cares about HealthChangedMessage
-class HealthSystem : public ISubscriber {
+class DamageComponent : public ISubscriber {
 public:
-	// put this function in systems that need handle message
+    int entityID;
+    int damage;
+
+    DamageComponent(int id, int dmg) : entityID(id), damage(dmg) {}
+
     void handleMessage(const IMessage& message) override {
-        if (auto healthMsg = dynamic_cast<const HealthChangedMessage*>(&message)) {
-            std::cout << "Entity " << healthMsg->entityID
-                << " health changed to " << healthMsg->newHealth << std::endl;
+        if (auto reqMsg = dynamic_cast<const RequestDamageMessage*>(&message)) {
+            if (reqMsg->entityID == entityID) {
+                
+                ResponseDamageMessage respMsg{ entityID, damage };
+               
+            }
         }
+    }
+};
+
+// test gms
+class GameMasterSystem : public ISubscriber {
+    MessageBus& bus;
+
+public:
+    GameMasterSystem(MessageBus& messageBus) : bus(messageBus) {}
+
+    void handleMessage(const IMessage& message) override {
+        
+    }
+
+    void calculateDamage(int playerEntityID, int aiEntityID) {
+       // std::cout << "Calculating damage\n";
+        bus.postMessage(std::make_unique<RequestDamageMessage>(playerEntityID));
+        
+        bus.postMessage(std::make_unique<RequestHealthMessage>(aiEntityID));
+        
+        int damage = 10; 
+        int health = 100; 
+        int newHealth = health - damage;
+        
+        bus.postMessage(std::make_unique<UpdateHealthMessage>(aiEntityID, newHealth));
     }
 };
 
 
 
-
 /*
-put this in main before game while loop
-// MessageSystem Test start:
+put in main
 
-		MessageBus bus;
-		HealthSystem healthSystem;
+// test messageSystem
+        MessageBus bus;
+        GameMasterSystem gms(bus);
 
-		// Simulating events
-		bus.postMessage(std::make_unique<HealthChangedMessage>(1, 100));
-		bus.postMessage(std::make_unique<HealthChangedMessage>(2, 150));
+        HealthComponent aiHealth(1, 100);
+        DamageComponent playerDamage(2, 10);
 
-		// Dispatch messages to interested subscribers
-		bus.dispatchMessages(healthSystem);
+        // Subscribe components to the MessageBus
+        bus.subscribe<UpdateHealthMessage>([&aiHealth](const IMessage& msg) {
+            aiHealth.handleMessage(msg);
+            });
 
-		// Clear messages after dispatching
-		bus.clearMessages();
 
-// MessageSystem Test end
+        // Perform calculations
+        gms.calculateDamage(2, 1);
+        bus.dispatchAll();
+
+        std::cout << "AI Health: " << aiHealth.health << std::endl;
 */
