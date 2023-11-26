@@ -91,6 +91,7 @@ public:
         requestToEntityMap[requestID] = aiEntityID;
         bus.postMessage(std::make_unique<RequestDamageMessage>(requestID, playerEntityID));
         bus.postMessage(std::make_unique<RequestHealthMessage>(requestID, aiEntityID)); 
+       
     }
 };
 

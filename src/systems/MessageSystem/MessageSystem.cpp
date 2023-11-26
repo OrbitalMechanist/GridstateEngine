@@ -40,11 +40,6 @@ void MessageBus::dispatchAll() {
         else {
             std::cout << "No subscribers for message type: " << typeid(*msg).name() << std::endl;
         }
-       
-       
-
-
- 
         
     }
 
