@@ -25,28 +25,32 @@ struct IMessage {
 
 // damage request message
 struct RequestDamageMessage : IMessage {
+	int requestID;
 	int entityID;
-	RequestDamageMessage(int id) : entityID(id) {}
+	RequestDamageMessage(int reqID, int id) : requestID(reqID), entityID(id) {}
 };
 
 // damage health message
 struct RequestHealthMessage : IMessage {
 	int entityID;
-	RequestHealthMessage(int id) : entityID(id) {}
+	int requestID;
+	RequestHealthMessage(int reqID, int id) : requestID(reqID), entityID(id) {}
 };
 
 // damage response message 
 struct ResponseDamageMessage : IMessage {
+	int requestID;
 	int entityID;
 	int damage;
-	ResponseDamageMessage(int id, int dm) : entityID(id), damage(dm){}
+	ResponseDamageMessage(int reqID, int id, int dmg) : requestID(reqID), entityID(id), damage(dmg) {}
 };
 
 // health response message
 struct ResponseHealthMessage : IMessage {
+	int requestID;
 	int entityID;
 	int health;
-	ResponseHealthMessage(int id, int hp) : entityID(id), health(hp) {}
+	ResponseHealthMessage(int reqID, int id, int hp) : requestID(reqID), entityID(id), health(hp) {}
 };
 
 // health update message
@@ -55,3 +59,4 @@ struct UpdateHealthMessage : IMessage {
 	int newHealth;
 	UpdateHealthMessage(int id, int hp) : entityID(id), newHealth(hp) {}
 };
+
