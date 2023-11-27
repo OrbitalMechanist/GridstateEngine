@@ -123,11 +123,10 @@ put in main
             gms.handleMessage(msg);
             });
 
-        bus.postMessage(std::make_unique<RequestHealthMessage>(1, 1));
+        
         // Perform calculations
         int requestID = 1; // Example unique request identifier
         gms.calculateDamage(requestID, 2, 1);
 
-        // Dispatch request messages
-        bus.dispatchAll();
+       
 */

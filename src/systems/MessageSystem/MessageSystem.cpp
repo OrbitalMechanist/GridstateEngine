@@ -13,6 +13,7 @@ void MessageBus::postMessage(std::unique_ptr<IMessage> message) {
         }
     }
     messages.push_back(std::move(message));
+    clearMessages();
 }
 
 // Dispatches all messages in the queue to a given subscriber.
