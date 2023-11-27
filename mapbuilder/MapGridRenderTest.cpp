@@ -93,16 +93,16 @@ int MapGridRenderTest() {
 
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
-
+			
 			// Loop over every cell on the map, and draw the according tile
 			for (int i = 0; i < mapRows; ++i) {
 				for (int j = 0; j < mapCols; ++j) {
 					if (testMap.getCellValue(i, j) == "X") {
-						renderer.drawByNames("cube", "stone", "basic",
+						renderer.drawByNames("cube", "stone", "singleMaterial", "basic",
 							{ i,j,0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 					}
 					else {
-						renderer.drawByNames("cube", "surface", "basic",
+						renderer.drawByNames("cube", "surface", "surfaceMaterial", "basic",
 							{ i,j,0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 					}
 				}

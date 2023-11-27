@@ -13,8 +13,9 @@ uniform mat4 modelMat;
 uniform mat4 normMat;
 
 void main(){
-	v_norm = normalize(mat3(normMat) * norm);
+	v_norm = normalize((normMat * vec4(norm, 1.0)).xyz);
 	v_texCoord = texCoord;
-	v_worldPos = (modelMat * vec4(pos, 1.0)).xyz;
+	vec4 wp4 = modelMat * vec4(pos, 1.0);
+	v_worldPos = wp4.xyz / wp4.w;
 	gl_Position = mvp * vec4(pos, 1.0);
 }

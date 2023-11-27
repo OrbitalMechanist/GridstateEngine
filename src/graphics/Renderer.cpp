@@ -239,12 +239,14 @@ bool Renderer::loadTexture(const std::string& path, const std::string& resultNam
 	return true;
 }
 
-void Renderer::drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName,
-	const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale) {
+void Renderer::drawByNames(const std::string& modelName, const std::string& textureName, const std::string& shaderName, const 
+	std::string& materialName, const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& scale) {
 	
 	bool modelPresent = models.contains(modelName);
 	bool texturePresent = textures.contains(textureName);
 	bool shaderPresent = shaderPrograms.contains(shaderName);
+	bool materialPresent = materials.contains(materialName);
+
 	if (!modelPresent) {
 		std::cerr << "No model \"" << modelName << "\" loaded; cannot draw." << std::endl;
 	}
@@ -254,16 +256,24 @@ void Renderer::drawByNames(const std::string& modelName, const std::string& text
 	if (!shaderPresent) {
 		std::cerr << "No shader program \"" << shaderName << "\" loaded; cannot draw." << std::endl;
 	}
-	if (!modelPresent || !texturePresent || !shaderPresent) {
+	if (!materialPresent) {
+		std::cerr << "No shader program \"" << shaderName << "\" loaded; cannot draw." << std::endl;
+	}
+	if (!modelPresent || !texturePresent || !shaderPresent || !materialPresent) {
 		return;
 	}
-
 	ShaderProgram& sp = shaderPrograms[shaderName];
 
 	glUseProgram(sp.getGLReference());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[textureName]);
 	glUniform1i(sp.referenceUniforms().diffuseTex, 0);
+	glUniform3f(sp.referenceUniforms().material + 0, materials[materialName].diffuse.r, 
+		materials[materialName].diffuse.g, materials[materialName].diffuse.b);
+	glUniform3f(sp.referenceUniforms().material + 1, materials[materialName].specular.r,
+		materials[materialName].specular.g, materials[materialName].specular.b);
+	glUniform1f(sp.referenceUniforms().material + 2, materials[materialName].shininess);
+	glUniform3f(sp.referenceUniforms().viewPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	glm::mat4 model = glm::mat4(1.0f);
 	
@@ -431,6 +441,13 @@ bool Renderer::loadModel(const std::string& path, const std::string& resultName)
 	glBindVertexArray(0);
 
 	models[resultName] = Mesh(vao, vbo, ebo, indices.size());
+}
+void Renderer::createMaterial(const std::string& materialName, const glm::vec3 diffuse, const glm::vec3 specular, const float shininess) {
+	Material newMaterial;
+	newMaterial.diffuse = diffuse;
+	newMaterial.specular = specular;
+	newMaterial.shininess = shininess;
+	materials[materialName]= newMaterial;
 }
 
 bool Renderer::removeTextureByName(const std::string& name) {
@@ -792,7 +809,7 @@ void Renderer::mainRenderPass(bool clearBuffer)
 	}
 	for (auto ro : renderQueue) {
 		if (ro.visible) {
-			drawByNames(ro.modelName, ro.textureName, ro.shaderName, ro.position, ro.rotation, ro.scale);
+			drawByNames(ro.modelName, ro.textureName, ro.shaderName, ro.material, ro.position, ro.rotation, ro.scale);
 		}
 	}
 }

@@ -26,6 +26,7 @@ uniform sampler2D diffuseTex;
 uniform samplerCube depthMap;
 
 uniform vec3 ambientLight;
+uniform vec3 viewPos;
 
 #define NUM_LIGHTS 8
 uniform Light lights[NUM_LIGHTS];
@@ -34,15 +35,17 @@ uniform samplerCube shadowCubemaps[NUM_LIGHTS];
 uniform mat4 lightSpaceMatrices[NUM_LIGHTS];
 
 struct Material{
-	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
 };
+uniform vec3 diffuse;
+uniform vec3 specular;
+uniform float shininess;
 uniform Material material;
 
-vec3 diffuse(float intensity, vec3 lightColor, vec3 lightDir){
-	return max(dot(v_norm, lightDir), 0) * lightColor * intensity;
+vec3 diffuseScene(float intensity, vec3 lightColor, vec3 lightDir){
+	return max(dot(v_norm, lightDir), 0) * lightColor * material.diffuse * intensity;
 }
 
 float calcShadowFactor(int lightIndex){
@@ -51,7 +54,6 @@ float calcShadowFactor(int lightIndex){
 
     if (light.type == 1 || light.type == 3) {
         mat4 lightSpaceMatrix = lightSpaceMatrices[lightIndex];
-
         vec3 toLight;
         if (light.type == 3) {
             toLight = light.position - v_worldPos.xyz;
@@ -87,7 +89,7 @@ float calcShadowFactor(int lightIndex){
 		//sample the cubemap on a point along the line from the light to this fragment
 		vec3 pointInCube = -toLight; 
 
-		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.01);
+		float shadowBias = max(0.05 * (1.0 - dot(v_norm, toLight)), 0.08);
 	
 		float shadowDepth = texture(shadowCubemaps[lightIndex], pointInCube).r;
 		if(light.distanceLimit > 0){ 
@@ -106,6 +108,20 @@ float calcShadowFactor(int lightIndex){
 	}
 	return shadow;
 }
+
+vec3 calcSpecular(float power, vec3 lightColor, vec3 toLight){
+	//This is supposed to be a Phong model, but apparently for whatever reason
+	//I get a Gouraud interpolation of the normals so it looks terrible.
+	//I can't tell why this is happening right now.
+
+    vec3 viewDir = normalize(viewPos - v_worldPos);
+	vec3 halfwayDir = normalize(viewDir + toLight);
+
+	//behaviour when raising to power of 0 is undefined.
+    return pow(max(0.0f, dot(halfwayDir, v_norm)), material.shininess == 0 ? 1 : material.shininess) 
+		* material.specular * lightColor * power;
+}
+
 
 vec3 calcLightEffect(int lightIndex){
 Light light = lights[lightIndex];
@@ -126,7 +142,8 @@ Light light = lights[lightIndex];
 			return result;
 		}
 		vec3 toLight = normalize(-light.direction);
-		result = diffuse(light.intensity, light.color, toLight);
+		result = diffuseScene(light.intensity, light.color, toLight);
+		//result += calcSpecular(1.0f, light.color, toLight);
 	} 
 	//Point
 	else if(light.type == 2){
@@ -136,7 +153,9 @@ Light light = lights[lightIndex];
 			|| (light.attenuationMax > 0.0 && dist > light.attenuationMax)){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
+		//result += calcSpecular(1.0f, light.color, toLight);
+
 		if(light.attenuationMax >= 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
@@ -152,7 +171,9 @@ Light light = lights[lightIndex];
 		if(acos(dot(normalize(toLight), normalize(-light.direction))) * 2 > light.angle){
 			return result;
 		}
-		result = diffuse(light.intensity, light.color, normalize(toLight));
+		result = diffuseScene(light.intensity, light.color, normalize(toLight));
+		//result += calcSpecular(1.0f, light.color, toLight);
+
 		if(light.attenuationMax > 0.0){
 			result *= 1.0f - dist/light.attenuationMax;
 		}
@@ -162,12 +183,10 @@ Light light = lights[lightIndex];
 }
 
 void main(){
-
 	vec4 lightResult = vec4(ambientLight, 1);
 
 	for(int i = 0; i < NUM_LIGHTS; i++){
 		lightResult.xyz += calcLightEffect(i);
 	}
-
-	o_fragColor = texture(diffuseTex, v_texCoord) * lightResult;
+	o_fragColor = texture(diffuseTex, v_texCoord) * lightResult; //vec4(v_norm, 1);//
 }
