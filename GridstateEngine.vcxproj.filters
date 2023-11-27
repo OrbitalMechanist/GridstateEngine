@@ -74,6 +74,9 @@
     <ClCompile Include="src\gamemaster\EnemyTurnCalculator.cpp">
       <Filter>Source Files\GameMaster</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
+      <Filter>Source Files\Systems\MessagingSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -202,6 +205,15 @@
     <ClInclude Include="headers\gamemaster\EnemyTurnCalculator.h">
       <Filter>Header Files\GameMaster</Filter>
     </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\Message.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -306,6 +318,12 @@
     </Filter>
     <Filter Include="Header Files\GameMaster">
       <UniqueIdentifier>{74ddb87e-f2e3-477d-a0e5-93a03fc2e677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\MessagingSystem">
+      <UniqueIdentifier>{7fd3c4c7-a011-4da7-b243-2c7b100f9e57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\MessagingSystem">
+      <UniqueIdentifier>{0414a86e-f70f-4c69-baea-dcc92af9075a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

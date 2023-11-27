@@ -368,7 +368,9 @@ int NsMain(int argc, char** argv) {
 			//This is probably something I should fix, but performance impact seems negligible, at least.
 			int cWidth, cHeight;
 			glfwGetFramebufferSize(window, &cWidth, &cHeight);
-			if (cWidth != prevWidth || cHeight != prevHeight) {
+			
+			// fixed Crashed when minimized the window -> cWidth == cHeight == 0;
+			if ((cWidth != prevWidth || cHeight != prevHeight) && !(cWidth == 0 || cHeight == 0)) {
 				renderer.updateWindowSize(window, cWidth, cHeight);
 				nsguiView->SetSize(cWidth, cHeight);
 				prevWidth = cWidth;

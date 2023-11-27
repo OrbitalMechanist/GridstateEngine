@@ -123,6 +123,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)/libredist;$(ProjectDir)/headers;$(ProjectDir)/libredist/NoesisGUI;</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,6 +184,7 @@
     <ClCompile Include="src\mapgridbuilder\MapGrid.cpp" />
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp" />
     <ClCompile Include="src\systems\AISystem.cpp" />
+    <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp" />
     <ClCompile Include="src\Universe.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +229,9 @@
     <ClInclude Include="headers\mapgridbuilder\MapGrid.h" />
     <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h" />
     <ClInclude Include="headers\systems\AISystem.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\Message.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h" />
     <ClInclude Include="headers\Universe.h" />
   </ItemGroup>
   <ItemGroup>
