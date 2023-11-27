@@ -1,12 +1,50 @@
-﻿G:\DevData\Microsoft Visual Studio\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
   main.cpp
-G:\DevData\school\GridstateEngine\main.cpp(405,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(405,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(409,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(409,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(415,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-G:\DevData\school\GridstateEngine\main.cpp(415,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(475,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(475,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(479,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(479,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(485,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\main.cpp(485,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  AISystem.cpp
+  AISystemDemoTest.cpp
+  Pathfinding.cpp
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\ai\Pathfinding.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  SoundBuffer.cpp
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundBuffer.cpp(131,43): warning C4267: 'argument': conversion from 'size_t' to 'ALsizei', possible loss of data
+  SoundDevice.cpp
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(39,3): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(39,3): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(43,3): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(43,3): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(46,3): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\audio\SoundDevice.cpp(46,3): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+  SoundSource.cpp
+  EntityManager.cpp
+  GameObj.cpp
+  GameObjList.cpp
+  Mesh.cpp
+  Renderer.cpp
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\graphics\Renderer.cpp(108,55): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\graphics\Renderer.cpp(415,30): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\graphics\Renderer.cpp(443,55): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+  RenderObject.cpp
+  ShaderProgram.cpp
+  ShadowCubeMap.cpp
+  ShadowMap.cpp
+  Vertex.cpp
+  filePairReader.cpp
+  MapGrid.cpp
+  MapGridBuilder.cpp
+  Generating Code...
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\graphics\ShaderProgram.cpp(90): warning C4715: 'ShaderProgram::attemptLightLoading': not all control paths return a value
+C:\Users\guard\Documents\GitHub\GridstateEngine\src\graphics\Renderer.cpp(444): warning C4715: 'Renderer::loadModel': not all control paths return a value
+  Compiling...
+  AISystem.cpp
   Universe.cpp
   Generating Code...
-  GridstateEngine.vcxproj -> G:\DevData\school\GridstateEngine\x64\Debug\GridstateEngine.exe
+  glad.c
+x64\Debug\AISystem.obj : warning LNK4042: object specified more than once; extras ignored
+     Creating library C:\Users\guard\Documents\GitHub\GridstateEngine\x64\Debug\GridstateEngine.lib and object C:\Users\guard\Documents\GitHub\GridstateEngine\x64\Debug\GridstateEngine.exp
+  GridstateEngine.vcxproj -> C:\Users\guard\Documents\GitHub\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
