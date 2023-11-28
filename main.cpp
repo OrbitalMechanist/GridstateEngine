@@ -9,6 +9,8 @@ extern "C"{
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
+#include "glm/gtx/intersect.hpp"
+
 #include "gamemaster/GameMaster.h"
 
 #include "ecs/entity/EntityManager.h"
@@ -455,13 +457,41 @@ int NsMain(int argc, char** argv) {
 					//mat4
 					//mat4
 					//vec4
-					/*auto something = glm::unProject(glm::vec3(x, y, 0.0f),
-						glm::mat4(1.0f),
-						glm::mat4(1.0f),
+
+					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+
+					glm::mat4 view = glm::inverse(cam);
+
+					//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
+					//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+					//
+
+					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+						cWidth / (float)cHeight, 0.1f, 100.0f);
+
+					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, y, 1.0f),
+						view,
+						projection,
 						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
-					std::cout << "\n" << something.b << " : " << something.g  << " : " << something.p;
-					std::cout << "\n" << something.r << " : " << something.s << " : " << something.t;
-					std::cout << "\n" << something.x << " : " << something.y << " : " << something.z;*/
+					//std::cout << "\n" << something.b << " : " << something.g  << " : " << something.p;
+					//std::cout << "\n" << something.r << " : " << something.s << " : " << something.t;
+					std::cout << "\n" << farPlaneClickPos.x << " : "
+						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+
+					auto v = normalize(farPlaneClickPos - camPos);
+					
+					glm::vec3 posOnPlane{ 0, 0, 0 };
+					glm::vec3 planeOrig{ 0, 0, 0 };
+					glm::vec3 planeNorm{ 0, 0, 1 };
+					float res = 0;
+					glm::intersectRayPlane(camPos, v, planeOrig,
+						planeNorm, res);
+					posOnPlane = camPos + v * res;
+					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+
+					entityManager.getComponent<TransformComponent>(entity2).pos = { posOnPlane.x, posOnPlane.y };
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {

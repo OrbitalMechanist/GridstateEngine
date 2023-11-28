@@ -1,18 +1,11 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
   main.cpp
-C:\Work\Comp8551\GridstateEngine\main.cpp(445,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(445,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(452,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(452,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(470,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(470,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(446,11): warning C4101: 'clicked': unreferenced local variable
-AISystem.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
-AISystemDemoTest.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
-Pathfinding.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
-EntityManager.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
-x64\Debug\AISystem.obj : warning LNK4042: object specified more than once; extras ignored
-Universe.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
-     Creating library C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.lib and object C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exp
+C:\Work\Comp8551\GridstateEngine\main.cpp(447,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(447,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(454,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(454,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(502,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(502,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(448,11): warning C4101: 'clicked': unreferenced local variable
   GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
