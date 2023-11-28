@@ -291,6 +291,7 @@ int NsMain(int argc, char** argv) {
 		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
 		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
 		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
+		auto moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
 
 		bool lightOn = true;
 
@@ -335,14 +336,24 @@ int NsMain(int argc, char** argv) {
 		turnBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
-					turnText->SetText("Player");
-					gm->endTurn();
-					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
-				}
-				else if(gm->currentTurn == enemyTurn) {
 					turnText->SetText("Enemy");
 					gm->endTurn();
-					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
+				}
+				else if(gm->currentTurn == enemyTurn) {
+					turnText->SetText("Player");
+					gm->endTurn();
+				}
+				else {
+
+				}
+			};
+		moveBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm->currentTurn == playerTurn) {
+					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
+				}
+				else if (gm->currentTurn == enemyTurn) {
+					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
 				}
 				else {
 
@@ -432,10 +443,25 @@ int NsMain(int argc, char** argv) {
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
 			nsguiView->MouseMove(x, y);
+			Entity clicked;
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
 				if (!lmbDownPrevFrame) {
 					lmbDownPrevFrame = true;
 					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+					std::cout << "\n" << x << " : " << y;
+					//vec3
+					//mat4
+					//mat4
+					//vec4
+					/*auto something = glm::unProject(glm::vec3(x, y, 0.0f),
+						glm::mat4(1.0f),
+						glm::mat4(1.0f),
+						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+					std::cout << "\n" << something.b << " : " << something.g  << " : " << something.p;
+					std::cout << "\n" << something.r << " : " << something.s << " : " << something.t;
+					std::cout << "\n" << something.x << " : " << something.y << " : " << something.z;*/
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
