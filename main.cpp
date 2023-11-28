@@ -471,12 +471,10 @@ int NsMain(int argc, char** argv) {
 					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
 						cWidth / (float)cHeight, 0.1f, 100.0f);
 
-					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, y, 1.0f),
+					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
 						view,
 						projection,
 						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
-					//std::cout << "\n" << something.b << " : " << something.g  << " : " << something.p;
-					//std::cout << "\n" << something.r << " : " << something.s << " : " << something.t;
 					std::cout << "\n" << farPlaneClickPos.x << " : "
 						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
 
