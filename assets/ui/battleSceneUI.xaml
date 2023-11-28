@@ -36,7 +36,7 @@
                     </Ellipse.Fill>
 
                     <Ellipse.Clip>
-                        <RectangleGeometry x:Name="hpBar" Rect="0,50,100,100"/>
+                        <RectangleGeometry x:Name="palyerHP" Rect="0,25,100,100"/>
                     </Ellipse.Clip>
                 </Ellipse>
             </Grid>
@@ -54,13 +54,15 @@
                     </Ellipse.Fill>
 
                     <Ellipse.Clip>
-                        <RectangleGeometry x:Name="mageBar" Rect="0,10,100,100"/>
+                        <RectangleGeometry x:Name="palyerMP" Rect="0,10,100,100"/>
                     </Ellipse.Clip>
                 </Ellipse>
             </Grid>
 
             <Grid>
-                <TextBlock x:Name="gameTitle" FontFamily="../fonts/#superlume" Margin="0,10,0,380" TextWrapping="Wrap" FontSize="24"  HorizontalAlignment="Center" TextAlignment="Center" InputScope="FileName" Foreground="Black"><Run Text="Enemy Name"  Foreground="#FFEFACAC"/></TextBlock>
+                <TextBlock x:Name="enemyName" FontFamily="../fonts/#superlume" Margin="0,10,0,380" TextWrapping="Wrap" FontSize="24"  HorizontalAlignment="Center" TextAlignment="Center" InputScope="FileName" Foreground="Black">
+                    <Run Text="Enemy Name"  Foreground="#FFEFACAC"/>
+                </TextBlock>
                 <Rectangle Width="200" Height="30"  Fill="#FFFF5D5D" Opacity="0.3" Margin="288,60,287,368" />
                 <Rectangle Width="200" Height="30" Margin="288,60,287,368">
                     <Rectangle.Fill>
@@ -73,7 +75,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                     <Rectangle.Clip>
-                        <RectangleGeometry Rect="180,0,200,30" />
+                        <RectangleGeometry x:Name="enemyHP" Rect="100,0,200,30" />
                     </Rectangle.Clip>
                 </Rectangle>
             </Grid>

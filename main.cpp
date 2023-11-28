@@ -44,6 +44,11 @@
 
 // AI inlucde 
 #include "../headers/ai/AISystemDemoTest.h"
+
+#include <NsGui/RectangleGeometry.h>
+
+// UI include
+#include "../headers/UI/BattleSceneUI.h"
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -280,7 +285,7 @@ int NsMain(int argc, char** argv) {
 
 		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
 
-		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("everything.xaml");
+		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
 
 		Noesis::Ptr<Noesis::IView> nsguiView = Noesis::GUI::CreateView(uiElement);
 		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
@@ -295,82 +300,114 @@ int NsMain(int argc, char** argv) {
 		int prevWidth = WINDOW_WIDTH;
 		int	prevHeight = WINDOW_HEIGHT;
 
+		BattleSceneUI bsUI;
+
+		bsUI.SetnsguiView(nsguiView);
+
+		bsUI.SetEnemyName("test");
+
+		bsUI.SetMaxPlayerHP(1000);
+		bsUI.SetMaxPlayerMP(1000);
+
+		bsUI.SetPlayerHP(250);
+		bsUI.SetPlayerMP(250);
+
+		bsUI.SetMaxEnemyHP(1000);
+		bsUI.SetEnemyHP(500);
+		
+		//auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("enemyName");
+
+		//if (targetText) {
+		//	targetText->SetText("dsakhda");
+		//}
+
+		//Noesis::RectangleGeometry* hpBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("hpBar");
+
+		//if (hpBar) {
+		//	Noesis::Rect newRect(0, 10, 100, 100);
+		//	hpBar->SetRect(newRect);
+		//}
+
+
+		//auto targetBtn = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("btn");
+
+
 		//This is how we get the XAML elements in the UI to change them, or get their state.
 		//Important note: FindName will probably still succeed and return the element even if
 		//you give it the wrong type, but the parameters you could get/set would not necessarily
 		//correspond to what the element actually has and thus not work as expected.
-		auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
-		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
+		//auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
+		//auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
 
-		bool lightOn = true;
+		//bool lightOn = true;
 
 		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
 		//causes problems
 		void* emPtr = &entityManager;
 		Entity* entPtr = &entity2;
 
-		targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
-			const Noesis::RoutedEventArgs& args) mutable {
-			if (lightOn) {
-				lightOn = false;
-				rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-				targetText->SetText("off");
-			}
-			else {
-				lightOn = true;
-				rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-				targetText->SetText("on");
-			}
-		};
-		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
-		//you can have multiple callbacks.
-		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
-				if (lightOn) {
-					lightOn = false;
-					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
-				}
-				else {
-					lightOn = true;
-					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
-				}
+		//targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
+		//	const Noesis::RoutedEventArgs& args) mutable {
+		//	if (lightOn) {
+		//		lightOn = false;
+		//		rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+		//			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+		//		targetText->SetText("off");
+		//	}
+		//	else {
+		//		lightOn = true;
+		//		rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+		//			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+		//		targetText->SetText("on");
+		//	}
+		//};
+		////Looks like each callback has a limit on how much memory it can involve. On the bright size,
+		////you can have multiple callbacks.
+		//targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
+		//	const Noesis::RoutedEventArgs& args) mutable {
+		//		((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
+		//		if (lightOn) {
+		//			lightOn = false;
+		//			((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
+		//		}
+		//		else {
+		//			lightOn = true;
+		//			((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
+		//		}
 
-		};
+		//};
 
-		// Load startMenu.xaml after clicking the button.
-		auto button = nsguiView->GetContent()->FindName<Noesis::Button>("btn2");
-		button->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
-			{
-				printf("Button was clicked\t");
+		//// Load startMenu.xaml after clicking the button.
+		//auto button = nsguiView->GetContent()->FindName<Noesis::Button>("btn2");
+		//button->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
+		//	{
+		//		printf("Button was clicked\t");
 
-				Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("startMenu.xaml");
-				//Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
+		//		Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("startMenu.xaml");
+		//		//Noesis::Ptr<Noesis::UserControl> uiElement1 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
 
-				nsguiView = Noesis::GUI::CreateView(uiElement1);
-				nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-				nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-				nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
+		//		nsguiView = Noesis::GUI::CreateView(uiElement1);
+		//		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+		//		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		//		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
 
-				Noesis::Button* starBtn;
-				
-				// Load battleSceneUI.xaml after clicking the button.
-				if (nsguiView->GetContent()->FindName<Noesis::Button>("starBtn")) {
-					starBtn = nsguiView->GetContent()->FindName<Noesis::Button>("starBtn");
-					starBtn->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
-						{
-							printf("Button 3\t");
-							Noesis::Ptr<Noesis::UserControl> uiElement2 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
+		//		Noesis::Button* starBtn;
+		//		
+		//		// Load battleSceneUI.xaml after clicking the button.
+		//		if (nsguiView->GetContent()->FindName<Noesis::Button>("starBtn")) {
+		//			starBtn = nsguiView->GetContent()->FindName<Noesis::Button>("starBtn");
+		//			starBtn->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
+		//				{
+		//					printf("Button 3\t");
+		//					Noesis::Ptr<Noesis::UserControl> uiElement2 = Noesis::GUI::LoadXaml<Noesis::UserControl>("battleSceneUI.xaml");
 
-							nsguiView = Noesis::GUI::CreateView(uiElement2);
-							nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-							nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-							nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
-						};
-				}
-			};
+		//					nsguiView = Noesis::GUI::CreateView(uiElement2);
+		//					nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+		//					nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		//					nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
+		//				};
+		//		}
+		//	};
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
