@@ -309,12 +309,34 @@ int NsMain(int argc, char** argv) {
 		bsUI.SetMaxPlayerHP(1000);
 		bsUI.SetMaxPlayerMP(1000);
 
-		bsUI.SetPlayerHP(250);
-		bsUI.SetPlayerMP(250);
+		bsUI.SetPlayerHP(1000);
+		bsUI.SetPlayerMP(1000);
 
 		bsUI.SetMaxEnemyHP(1000);
-		bsUI.SetEnemyHP(500);
+		bsUI.SetEnemyHP(1000);
 		
+		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("skill1");
+
+
+		targetBtn->Click() += [&](Noesis::BaseComponent* sender,const Noesis::RoutedEventArgs& args) mutable {
+			float enemyHp = bsUI.GetEnemyHP();
+			float playerMP = bsUI.GetPlayerMana();
+			
+			enemyHp -= 100;
+			playerMP -= 50;
+
+			enemyHp >= 0 ? enemyHp = enemyHp : enemyHp = 0;
+			playerMP >= 0 ? playerMP = playerMP : playerMP = 0;
+
+			bsUI.SetPlayerMP(playerMP);
+			bsUI.SetEnemyHP(enemyHp);
+			std::string name = std::to_string((int)enemyHp);
+			bsUI.SetEnemyName(name + " / 1000");
+		};
+ 
+ 
+ 
+ 
 		//auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("enemyName");
 
 		//if (targetText) {

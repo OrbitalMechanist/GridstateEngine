@@ -12,7 +12,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
 
-                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
+                <Button x:Name="skill1" Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
                     <Image Source="../images/skill1.png" Width="80" Height="80"/>
                 </Button>
                 <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="341,325,330,10">
