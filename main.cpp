@@ -489,7 +489,7 @@ int NsMain(int argc, char** argv) {
 					posOnPlane = camPos + v * res;
 					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
 
-					entityManager.getComponent<TransformComponent>(entity2).pos = { posOnPlane.x, posOnPlane.y };
+					entityManager.getComponent<TransformComponent>(entity2).pos = { std::round(posOnPlane.x), std::round(posOnPlane.y) };
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
