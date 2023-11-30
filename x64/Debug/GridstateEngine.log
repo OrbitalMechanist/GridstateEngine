@@ -1,3 +1,9 @@
-﻿  AISystem.cpp
+﻿  main.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(463,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(463,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(467,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(467,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(473,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(473,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied

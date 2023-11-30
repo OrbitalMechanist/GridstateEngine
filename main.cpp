@@ -243,8 +243,27 @@ int NsMain(int argc, char** argv) {
 		MessageBus bus;
 		AISystem aiSystem(entityManager, bus);
 		aiSystem.spawnEnemy();
+		// Setup AI's transform and staciMesh
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
 			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
+			trans.pos = { entityManager.getComponent<GridPositionComponent>(aiEntity).gridX, entityManager.getComponent<GridPositionComponent>(aiEntity).gridY };
+			stat.posOffset.z += 0.6f;
+			stat.rotOffset.y = glm::radians(90.0f);
+			stat.modelName = "ak";  // replace this with actual model
+			stat.textureName = "ak_texture";
+			entityManager.addComponent<TransformComponent>(aiEntity, trans);
+			entityManager.addComponent<StaticMeshComponent>(aiEntity, stat);
+		}
+		
+		// Setup Player's transform and staciMesh
+		for (auto player : entityManager.getEntitiesWithComponent<PlayerComponent>()) {
+			trans.pos = { entityManager.getComponent<GridPositionComponent>(player).gridX, entityManager.getComponent<GridPositionComponent>(player).gridY };
+			stat.posOffset.z += 0.6f;
+			stat.rotOffset.y = glm::radians(90.0f);
+			stat.modelName = "ak";
+			stat.textureName = "ak_texture";
+			entityManager.addComponent<TransformComponent>(player, trans);
+			entityManager.addComponent<StaticMeshComponent>(player, stat);
 		}
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up

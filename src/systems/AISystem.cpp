@@ -123,13 +123,7 @@ void AISystem::spawnEnemy() {
     AttackComponent att(1,1,1); // damage range and attackModifier = 1
     MoveComponent movement(2);
     GridPositionComponent pos(2,2);
-    /*TransformComponent trans;
-    StaticMeshComponent stat;
-    trans.pos = { 1, 1 };
-    stat.posOffset.z += 0.6f;
-    stat.rotOffset.y = glm::radians(90.0f);
-    stat.modelName = "ak";
-    stat.textureName = "ak_texture";*/
+
     GridPositionComponent pos2(4, 4);// test 
     PlayerComponent player(1);// test 
 
