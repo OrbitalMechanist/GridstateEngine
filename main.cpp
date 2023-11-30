@@ -9,6 +9,10 @@ extern "C"{
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
+#include "glm/gtx/intersect.hpp"
+
+#include "gamemaster/GameMaster.h"
+
 #include "ecs/entity/EntityManager.h"
 
 #include "ai/AISystem.h"
@@ -149,6 +153,8 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
+		
+		GameMaster* gm = new GameMaster(&entityManager);
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -217,6 +223,11 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<TransformComponent>(mob, trans);
 		entityManager.addComponent<StaticMeshComponent>(mob, stat);
 
+		Entity turnBlock = entityManager.createEntity();
+		trans.pos = { 0, 10 };
+		entityManager.addComponent<TransformComponent>(turnBlock, trans);
+		entityManager.addComponent<StaticMeshComponent>(turnBlock, stat);
+
 		Entity block = entityManager.createEntity();
 		trans.pos = { 1, 5 };
 		entityManager.addComponent<TransformComponent>(block, trans);
@@ -280,6 +291,9 @@ int NsMain(int argc, char** argv) {
 		//correspond to what the element actually has and thus not work as expected.
 		auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
 		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
+		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
+		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
+		auto moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
 
 		bool lightOn = true;
 
@@ -287,8 +301,10 @@ int NsMain(int argc, char** argv) {
 		//causes problems
 		void* emPtr = &entityManager;
 		Entity* entPtr = &entity2;
+		bool isPlayerTurn = true;
+		void* gmPtr = &gm;
 
-		targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender, 
+		targetBtn->Click() += [rendPtr, lightOn,targetText](Noesis::BaseComponent* sender, 
 			const Noesis::RoutedEventArgs& args) mutable {
 			if (lightOn) {
 				lightOn = false;
@@ -303,6 +319,7 @@ int NsMain(int argc, char** argv) {
 				targetText->SetText("on");
 			}
 		};
+		
 		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
 		//you can have multiple callbacks.
 		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
@@ -318,7 +335,32 @@ int NsMain(int argc, char** argv) {
 				}
 
 		};
+		turnBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm->currentTurn == playerTurn) {
+					turnText->SetText("Enemy");
+					gm->endTurn();
+				}
+				else if(gm->currentTurn == enemyTurn) {
+					turnText->SetText("Player");
+					gm->endTurn();
+				}
+				else {
 
+				}
+			};
+		moveBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm->currentTurn == playerTurn) {
+					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
+				}
+				else if (gm->currentTurn == enemyTurn) {
+					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
+				}
+				else {
+
+				}
+			};
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -405,10 +447,51 @@ int NsMain(int argc, char** argv) {
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
 			nsguiView->MouseMove(x, y);
+			Entity clicked;
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
 				if (!lmbDownPrevFrame) {
 					lmbDownPrevFrame = true;
 					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+					std::cout << "\n" << x << " : " << y;
+					//vec3
+					//mat4
+					//mat4
+					//vec4
+
+					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+
+					glm::mat4 view = glm::inverse(cam);
+
+					//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
+					//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+					//
+
+					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+						cWidth / (float)cHeight, 0.1f, 100.0f);
+
+					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+						view,
+						projection,
+						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+					std::cout << "\n" << farPlaneClickPos.x << " : "
+						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+
+					auto v = normalize(farPlaneClickPos - camPos);
+					
+					glm::vec3 posOnPlane{ 0, 0, 0 };
+					glm::vec3 planeOrig{ 0, 0, 0 };
+					glm::vec3 planeNorm{ 0, 0, 1 };
+					float res = 0;
+					glm::intersectRayPlane(camPos, v, planeOrig,
+						planeNorm, res);
+					posOnPlane = camPos + v * res;
+					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+
+					entityManager.getComponent<TransformComponent>(entity2).pos = { std::round(posOnPlane.x), std::round(posOnPlane.y) };
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {

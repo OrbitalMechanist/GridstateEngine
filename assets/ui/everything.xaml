@@ -26,9 +26,13 @@
                 </UserControl.Resources>
                 <Grid>
                     <Button x:Name="btn" Content="yeah it's a button" HorizontalAlignment="Center" Height="50" VerticalAlignment="Bottom" Width="200" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}"/>
+                    <Button x:Name="turnBtn" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-375"/>
+                    <Button x:Name="actionBtn" Content="Move" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-325"/>
+
                     <Rectangle HorizontalAlignment="Left" Margin="10,0,0,0" Width="16" Fill="{DynamicResource Brush.Primary.Shade25}"/>
                 </Grid>
             </UserControl>
+            <TextBlock x:Name="turnText" FontFamily="../fonts/#superlume" Margin="0,0,10,415" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="Player"/></TextBlock>
             <TextBlock x:Name="textTarget" FontFamily="../fonts/#superlume" Margin="0,0,10,13" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="idk it's not set yet"/></TextBlock>
         </Grid>
     </Viewbox>

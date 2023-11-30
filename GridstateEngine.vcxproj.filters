@@ -68,6 +68,9 @@
     <ClCompile Include="src\ecs\GameObj.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="src\gamemaster\GameMaster.cpp">
+      <Filter>Source Files\GameMaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -190,6 +193,9 @@
     <ClInclude Include="headers\ecs\GameObj.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="headers\gamemaster\GameMaster.h">
+      <Filter>Header Files\GameMaster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -288,6 +294,12 @@
     </Filter>
     <Filter Include="Header Files\ECS\Entities">
       <UniqueIdentifier>{d8b9f649-dcf6-494b-98f6-125b799908f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameMaster">
+      <UniqueIdentifier>{748936d5-46e1-4029-bcff-b78cc098a1c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameMaster">
+      <UniqueIdentifier>{74ddb87e-f2e3-477d-a0e5-93a03fc2e677}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
