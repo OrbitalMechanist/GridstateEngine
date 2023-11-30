@@ -241,7 +241,7 @@ int NsMain(int argc, char** argv) {
 
 		// AI setup
 		MessageBus bus;
-		AISystem aiSystem(entityManager, bus);
+		AISystem aiSystem(entityManager, bus, gm);
 		aiSystem.spawnEnemy();
 		// Setup AI's transform and staciMesh
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
@@ -361,13 +361,13 @@ int NsMain(int argc, char** argv) {
 		turnBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
-					turnText->SetText("Player");
+					turnText->SetText("Enemy");
 					gm->endTurn();
 					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
 				}
 				else if(gm->currentTurn == enemyTurn) {
-					turnText->SetText("Enemy");
-					gm->endTurn();
+					turnText->SetText("Player");
+					//gm->endTurn();
 					
 					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
 				}

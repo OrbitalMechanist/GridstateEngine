@@ -31,7 +31,7 @@ void AISystem::update() {
 // idle state handler
 void AISystem::handleIdleState(Entity entity){
     // swtich to pathfinding when enemy's turn started
-    if (isEnemyTurn) {
+    if (gm->currentTurn == enemyTurn) {
         std::cout << "Idle state" << std::endl;
         AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
         aiComponent.state = AIState::Pathfinding;
@@ -61,8 +61,11 @@ void AISystem::handlePathfindingState(Entity entity){
     path.printDirVec();
     int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
     //std::cout << "new position = " << path.getNewPosition(walkRange).first << " : " << path.getNewPosition(walkRange).second << std::endl;
-    manager.getComponent<GridPositionComponent>(entity).gridX = path.getNewPosition(walkRange).first;
-    manager.getComponent<GridPositionComponent>(entity).gridY = path.getNewPosition(walkRange).second;
+    if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
+        manager.getComponent<GridPositionComponent>(entity).gridX = path.getNewPosition(walkRange).first;
+        manager.getComponent<GridPositionComponent>(entity).gridY = path.getNewPosition(walkRange).second;
+    }
+   
 
 
     // change state
@@ -86,7 +89,8 @@ void AISystem::handleAttackState(Entity entity){
     }
 
     // end enemy turn
-    isEnemyTurn = false;
+
+    gm->endTurn();
     std::cout << "Enemy turn end" << std::endl;
     aiComponent.state = AIState::Idle;
 }
@@ -148,5 +152,5 @@ void AISystem::spawnEnemy() {
 
 // Set isEnemyTurn to allow enemy to start 
 void AISystem::startEnemyTurn() {
-    isEnemyTurn = true;
+    //isEnemyTurn = true;
 }
