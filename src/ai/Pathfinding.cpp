@@ -665,6 +665,11 @@ std::vector<std::pair<int,int>> Pathfinding::GetDirMap() {
     return dirVec;
 }
 
+std::pair<int, int> Pathfinding::getNewPosition(int moveRange) {
+    return dirVec[moveRange];
+}
+
+
 
 
 

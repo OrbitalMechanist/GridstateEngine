@@ -4,6 +4,7 @@
 
 struct PlayerComponent {
     // placeholder - Player data
+    int EntityID;
 };
 
 #endif 

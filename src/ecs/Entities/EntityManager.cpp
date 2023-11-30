@@ -77,7 +77,12 @@ std::vector<Entity> EntityManager::getEntitiesWithComponent() {
     return matchingEntities;
 }
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<AIComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<HealthComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<AttackComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<MoveComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<GridPositionComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<MapComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<PlayerComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<MapComponent>();
 
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<TransformComponent>();
@@ -90,8 +95,13 @@ void EntityManager::registerComponentType() {
     componentArrays[type] = std::make_unique<ComponentArray<T>>();
 }
 template void EntityManager::registerComponentType<AIComponent>();
+template void EntityManager::registerComponentType<HealthComponent>();
+template void EntityManager::registerComponentType<AttackComponent>();
+template void EntityManager::registerComponentType<MoveComponent>();
 template void EntityManager::registerComponentType<MapComponent>();
 template void EntityManager::registerComponentType<GridPositionComponent>();
+template void EntityManager::registerComponentType<PlayerComponent>();
+template void EntityManager::registerComponentType<MapComponent>();
 
 template void EntityManager::registerComponentType<StaticMeshComponent>();
 template void EntityManager::registerComponentType<TransformComponent>();
@@ -102,12 +112,17 @@ T& EntityManager::getComponent(Entity entity) {
     auto compArrayPtr = std::static_pointer_cast<ComponentArray<T>>(componentArrays[std::type_index(typeid(T))]);
     return compArrayPtr->getComponent(entity);
 }
-template AIComponent& EntityManager::getComponent<AIComponent>(Entity entity); // explcit for AIComponent
+template AIComponent& EntityManager::getComponent<AIComponent>(Entity entity);
+template HealthComponent& EntityManager::getComponent<HealthComponent>(Entity entity);
+template AttackComponent& EntityManager::getComponent<AttackComponent>(Entity entity);
+template MoveComponent& EntityManager::getComponent<MoveComponent>(Entity entity);
 template GridPositionComponent& EntityManager::getComponent<GridPositionComponent>(Entity entity);
 template MapComponent& EntityManager::getComponent<MapComponent>(Entity entity);
+template PlayerComponent& EntityManager::getComponent<PlayerComponent>(Entity entity);
 
 template StaticMeshComponent& EntityManager::getComponent<StaticMeshComponent>(Entity entity);
 template TransformComponent& EntityManager::getComponent<TransformComponent>(Entity entity);
+template MapComponent& EntityManager::getComponent<MapComponent>(Entity entity);
 
 
 template<typename T>
@@ -136,9 +151,12 @@ void EntityManager::addComponent(Entity entity, T component) {
     
 }
 template void EntityManager::addComponent<AIComponent>(Entity entity, AIComponent aicomponent);
+template void EntityManager::addComponent<HealthComponent>(Entity entity, HealthComponent healthComponent);
+template void EntityManager::addComponent<AttackComponent>(Entity entity, AttackComponent attackComponent);
+template void EntityManager::addComponent<MoveComponent>(Entity entity, MoveComponent moveComponent);
 template void EntityManager::addComponent<MapComponent>(Entity entity, MapComponent mapcomponent);
 template void EntityManager::addComponent<GridPositionComponent>(Entity entity, GridPositionComponent gridPositioncomponent);
-
 template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
 template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);
-
+template void EntityManager::addComponent<PlayerComponent>(Entity entity, PlayerComponent playerComponent);
+template void EntityManager::addComponent<MapComponent>(Entity entity, MapComponent map);

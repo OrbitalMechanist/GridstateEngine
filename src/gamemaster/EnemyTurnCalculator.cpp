@@ -1,5 +1,5 @@
 #include "gamemaster/EnemyTurnCalculator.h"
-#include <thread>
+
 
 EnemyTurnCalculator::EnemyTurnCalculator(EntityManager* e) : entityManager(e), ready(true) {}
 EnemyTurnCalculator::~EnemyTurnCalculator() {}

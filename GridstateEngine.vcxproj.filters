@@ -56,9 +56,6 @@
     <ClCompile Include="src\audio\SoundSource.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\ai\AISystem.cpp">
-      <Filter>Source Files\AI</Filter>
-    </ClCompile>
     <ClCompile Include="src\ai\AISystemDemoTest.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
@@ -77,6 +74,9 @@
     <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
       <Filter>Source Files\Systems\MessagingSystem</Filter>
     </ClCompile>
+    <ClCompile Include="src\ai\EnemyAI.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -86,9 +86,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\ai\AIState.h">
-      <Filter>Header Files\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ai\AISystem.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="headers\ai\AISystemDemoTest.h">
@@ -213,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
       <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ai\EnemyAI.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

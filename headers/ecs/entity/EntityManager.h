@@ -16,6 +16,10 @@
 
 // Components
 #include "../components/AIComponent.h"
+#include "../components/HealthComponent.h"
+#include "../components/AttackComponent.h"
+#include "../components/MoveComponent.h"
+#include "../components/PlayerComponent.h"
 #include "../components/GridPositionComponent.h"
 #include "../components/MapComponent.h"
 #include "../components/StaticMeshComponent.h"
@@ -54,10 +58,13 @@ public:
 
 
     // Template method implementations for component handling
-    template<typename T> void registerComponentType();
-    template<typename T> T& getComponent(Entity entity);
+    template<typename T>
+    void registerComponentType();
+    template<typename T>
+    T& getComponent(Entity entity);
     template<typename T> bool hasComponent(Entity entity) const;
-    template<typename T> void addComponent(Entity entity, T component);
+    template<typename T>
+    void addComponent(Entity entity, T component);
     template<typename T> void removeComponent(Entity entity);
     template<typename T> std::vector<Entity> getEntitiesWithComponent();
 
@@ -93,7 +100,8 @@ struct ComponentArray : public IComponentArray {
     }
 
     void addComponent(Entity entity, T component) {
-        data[entity] = component;
+        //data[entity] = component;
+        data[entity].emplace(std::move(component));
     }
 
     void removeComponent(Entity entity) {
@@ -104,4 +112,5 @@ struct ComponentArray : public IComponentArray {
         return data[entity].has_value();
     }
 };
+
 #endif

@@ -39,6 +39,7 @@ public:
     void printDirMap();
     void printDirVec();
     std::vector<std::pair<int,int>> GetDirMap();
+    std::pair<int, int> getNewPosition(int moveRange);
     
 
 };

@@ -1,6 +1,8 @@
 #pragma once
 #include "ecs/entity/EntityManager.h"
-
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 class EnemyTurnCalculator {
 public:
 	std::mutex mutex;

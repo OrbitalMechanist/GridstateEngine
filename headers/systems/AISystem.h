@@ -1,23 +1,34 @@
 #pragma once
 #include <iostream>
+#include "ecs/entity/EntityManager.h"
+#include "ai/Pathfinding.h"
+#include "ai/EnemyAI.h"
+#include "Systems/MessagingSystem/MessageSystem.h"
 
 #ifndef AISYSTEM_H
 #define AISYSTEM_H
 
-#include "ecs/entity/EntityManager.h"
-#include "ai/Pathfinding.h"
+
 class AISystem {
+    EntityManager& manager;
+    MessageBus& bus;
+  
 public:
+    // Register type
+    AISystem(EntityManager& manager, MessageBus& bus) : manager(manager), bus(bus)  {};
     // Update function to be called every game loop iteration.
-    void update(EntityManager& manager, float dt); // dt - delta time
+    void update(); 
+    void spawnEnemy();
+    void startEnemyTurn();
 
 private:
     // states handler functions
-    void handleIdleState(Entity entity, EntityManager& manager, float dt);
-    void handlePathfindingState(Entity entity, EntityManager& manager, float dt);
-    void handleAttackState(Entity entity, EntityManager& manager, float dt);
-    void handleTakeCoverState(Entity entity, EntityManager& manager, float dt);
-   
+    void handleIdleState(Entity et);
+    void handlePathfindingState(Entity et);
+    void handleAttackState(Entity et);
+    void handleTakeCoverState(Entity et);
+    int entityID;
+    bool isEnemyTurn = true;
 };
 
 

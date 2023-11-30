@@ -14,7 +14,7 @@ extern "C"{
 
 #include "ecs/entity/EntityManager.h"
 
-#include "ai/AISystem.h"
+
 
 #include "Universe.h"
 
@@ -45,7 +45,7 @@ extern "C"{
 #include <NsRender/GLRenderDeviceApi.h>
 
 // AI inlucde 
-#include "../headers/ai/AISystemDemoTest.h"
+#include "Systems/AISystem.h"
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -68,12 +68,7 @@ int NsMain(int argc, char** argv) {
 	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
 	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
 
-	// AI setup
-	EntityManager entityManager;
-	AISystem aiSystem;
-	entityManager.registerComponentType<AIComponent>();
-	Entity newEntity = entityManager.createEntity();
-	AISystemDemoTest aiDemo(entityManager);
+	
 	
 
 	try {
@@ -179,6 +174,8 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<TransformComponent>(entity2, trans);
 		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
 
+		
+
 		//World setup
 		for (int x = -5; x <= 5; x++) {
 			for (int y = -5; y <= 5; y++) {
@@ -241,6 +238,14 @@ int NsMain(int argc, char** argv) {
 		stat.textureName = "ak_texture";
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
+
+		// AI setup
+		MessageBus bus;
+		AISystem aiSystem(entityManager, bus);
+		aiSystem.spawnEnemy();
+		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
+			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
+		}
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -344,6 +349,7 @@ int NsMain(int argc, char** argv) {
 				else if(gm->currentTurn == enemyTurn) {
 					turnText->SetText("Enemy");
 					gm->endTurn();
+					
 					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
 				}
 				else {
@@ -491,7 +497,7 @@ int NsMain(int argc, char** argv) {
 			}
 
 			// AI test
-			aiSystem.update(entityManager, entityManager.getDeltaTime());
+			aiSystem.update(); // check this later - not sure if deltatime is 'time'
 			
 
 
