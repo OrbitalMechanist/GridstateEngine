@@ -9,6 +9,8 @@ extern "C"{
 #include "audio/SoundBuffer.h"
 #include "audio/SoundSource.h"
 
+#include "glm/gtx/intersect.hpp"
+
 #include "gamemaster/GameMaster.h"
 #include "gamemaster/EnemyTurnCalculator.h"
 
@@ -246,7 +248,7 @@ int NsMain(int argc, char** argv) {
 		// Setup AI's transform and staciMesh
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
 			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
-			trans.pos = { 2, 2 };
+			trans.pos = { 0, 0 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";  // replace this with actual model
@@ -257,7 +259,7 @@ int NsMain(int argc, char** argv) {
 		
 		// Setup Player's transform and staciMesh
 		for (auto player : entityManager.getEntitiesWithComponent<PlayerComponent>()) {
-			trans.pos = { 1, 1 };
+			trans.pos = { 4 , 4 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";
@@ -379,6 +381,8 @@ int NsMain(int argc, char** argv) {
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
 
+		Entity clicked = entityManager.createEntity(); // for clicked entity
+
 		while (!glfwWindowShouldClose(window)) {
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
@@ -465,6 +469,100 @@ int NsMain(int argc, char** argv) {
 				if (!lmbDownPrevFrame) {
 					lmbDownPrevFrame = true;
 					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+					std::cout << "\n" << x << " : " << y;
+					//vec3
+					//mat4
+					//mat4
+					//vec4
+
+					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+
+					glm::mat4 view = glm::inverse(cam);
+
+					//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
+					//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+					//
+
+					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+						cWidth / (float)cHeight, 0.1f, 100.0f);
+
+					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+						view,
+						projection,
+						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+					std::cout << "\n" << farPlaneClickPos.x << " : "
+						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+
+					auto v = normalize(farPlaneClickPos - camPos);
+
+					glm::vec3 posOnPlane{ 0, 0, 0 };
+					glm::vec3 planeOrig{ 0, 0, 0 };
+					glm::vec3 planeNorm{ 0, 0, 1 };
+					float res = 0;
+					glm::intersectRayPlane(camPos, v, planeOrig,planeNorm, res);
+					posOnPlane = camPos + v * res;
+					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+					int gridPositionX = (int)posOnPlane.x;
+					int gridPositionY = (int)posOnPlane.y;
+					//std::cout << gridPositionX << ", " << gridPositionY << ", " << std::endl;
+					std::vector<Entity> entitiesWithAI = entityManager.getEntitiesWithComponent<AIComponent>();
+					std::vector<Entity> entitiesWithPlayers = entityManager.getEntitiesWithComponent<PlayerComponent>();
+					bool clickedFound = false;
+					for (auto entity : entitiesWithPlayers) {
+						if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).y == gridPositionY) {
+							clicked = entity;
+							clickedFound = true; //Get the clicked entity based on the unit clicked, ensuring that you can only click on entities with the player component
+						}
+					}
+					if (clickedFound && entityManager.getComponent<MoveComponent>(clicked).moved == false) { //If you clicked on a clickable entity and it has not moved yet...
+						bool playerFound = false;
+						bool enemyDead = false;
+						bool emptyGrid = true;
+						for (auto entity : entitiesWithPlayers) { //Check if you are trying to move your clicked entity onto a grid that already contains one of your allies
+							if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX &&
+								entityManager.getComponent<TransformComponent>(entity).y == gridPositionY && !entityManager.getComponent<MoveComponent>(entity).moved) {
+								playerFound = true; //If clicking on a player that hasn't moved, select that entity instead.
+								emptyGrid = false;
+								clicked = entity;
+								break;
+							}
+							else if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX &&
+								entityManager.getComponent<TransformComponent>(entity).y == gridPositionY && entityManager.getComponent<MoveComponent>(entity).moved) {
+								playerFound = true; //else, if clicking on a player that has moved, do nothing but declare grid space as non-empty and you found a player
+								emptyGrid = false;
+								break;
+							}
+						}
+						if (!playerFound) { //If you did not try to move onto a grid that contains an ally...
+							for (auto entity : entitiesWithAI) {
+								if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX &&
+									entityManager.getComponent<TransformComponent>(entity).y == gridPositionY) {
+									emptyGrid = false; //If grid space has an enemy
+									float distanceX = abs(entityManager.getComponent<TransformComponent>(clicked).x - entityManager.getComponent<TransformComponent>(entity).x);
+									float distanceY = abs(entityManager.getComponent<TransformComponent>(clicked).y - entityManager.getComponent<TransformComponent>(entity).y); //Check if enemy is within range
+									if ((distanceX == entityManager.getComponent<MoveComponent>(clicked).moveRange && distanceY == 0) || (distanceX == 0 && distanceY == entityManager.getComponent<MoveComponent>(clicked).moveRange)) {
+										entityManager.getComponent<HealthComponent>(entity).health -= entityManager.getComponent<AttackComponent>(clicked).damage; //If within range, subtract enemy's HP by clicked entity's damage
+										if (entityManager.getComponent<HealthComponent>(entity).health <= 0) { //If enemy health is equal or less than 0, destroy it and move the player onto its grid spot. 
+											entityManager.destroyEntity(entity); //Destroys the entity, removeComponent is not implemented yet so that's not called
+											entityManager.getComponent<TransformComponent>(clicked).pos = { gridPositionX, gridPositionY };
+											entityManager.getComponent<MoveComponent>(clicked).moved = true;
+										}
+									}
+								}
+							}
+						}
+						//move entity
+						if (emptyGrid) { //If no player or enemy is on the grid spot...
+							float distanceX = abs(entityManager.getComponent<TransformComponent>(clicked).x - gridPositionX);
+							float distanceY = abs(entityManager.getComponent<TransformComponent>(clicked).y - gridPositionY); //Get the distance of the grid point 
+							if ((distanceX == entityManager.getComponent<MoveComponent>(clicked).moveRange && distanceY == 0) || (distanceX == 0 && distanceY == entityManager.getComponent<MoveComponent>(clicked).moveRange)) {
+								entityManager.getComponent<TransformComponent>(clicked).pos = { gridPositionX, gridPositionY }; //If grid spot is within moving range, move the player onto the spot.
+								entityManager.getComponent<MoveComponent>(clicked).moved = true;
+							}
+						}
+					}
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {

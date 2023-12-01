@@ -130,8 +130,8 @@ void AISystem::spawnEnemy() {
     //// create component
     AIComponent ai(AIState::Idle);
     HealthComponent hp(bus,entityID, 100, 2); // assume health starts at 100 , armor 2
-    AttackComponent att(1,1,1); // damage range and attackModifier = 1
-    MoveComponent movement(2);
+    AttackComponent att(1,2,1); // damage range and attackModifier = 1
+    MoveComponent movement(2,false);
 
 
     //// add component

@@ -4,6 +4,7 @@
 
 struct MoveComponent {
     int moveRange; // movement
+    bool moved;
 };
 
 #endif
