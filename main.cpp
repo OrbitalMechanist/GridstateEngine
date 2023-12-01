@@ -248,7 +248,7 @@ int NsMain(int argc, char** argv) {
 		// Setup AI's transform and staciMesh
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
 			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
-			trans.pos = { 0, 0 };
+			trans.pos = { 5, 5 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";  // replace this with actual model
@@ -258,8 +258,18 @@ int NsMain(int argc, char** argv) {
 		}
 		
 		// Setup Player's transform and staciMesh
+		 /*test - remove this after we have player*/
+		Entity playerEntity = entityManager.createEntity(); // test
+		PlayerComponent player(1);// test 
+		HealthComponent hp(bus, 0, 100, 2); // assume health starts at 100 , armor 2
+		AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
+		MoveComponent movement(2, false);
+		entityManager.addComponent<PlayerComponent>(playerEntity, player);
+		entityManager.addComponent<HealthComponent>(playerEntity, hp);
+		entityManager.addComponent<AttackComponent>(playerEntity, att);
+		entityManager.addComponent<MoveComponent>(playerEntity, movement);
 		for (auto player : entityManager.getEntitiesWithComponent<PlayerComponent>()) {
-			trans.pos = { 4 , 4 };
+			trans.pos = { 0 , 0 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";
@@ -503,15 +513,15 @@ int NsMain(int argc, char** argv) {
 					float res = 0;
 					glm::intersectRayPlane(camPos, v, planeOrig,planeNorm, res);
 					posOnPlane = camPos + v * res;
-					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+					//std::cout << "test1: " << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
 					int gridPositionX = (int)posOnPlane.x;
 					int gridPositionY = (int)posOnPlane.y;
-					//std::cout << gridPositionX << ", " << gridPositionY << ", " << std::endl;
+					//std::cout << "test2: " << gridPositionX << ", " << gridPositionY << ", " << std::endl;
 					std::vector<Entity> entitiesWithAI = entityManager.getEntitiesWithComponent<AIComponent>();
 					std::vector<Entity> entitiesWithPlayers = entityManager.getEntitiesWithComponent<PlayerComponent>();
 					bool clickedFound = false;
 					for (auto entity : entitiesWithPlayers) {
-						if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).y == gridPositionY) {
+						if (static_cast<int>(entityManager.getComponent<TransformComponent>(entity).x) == static_cast<int>(gridPositionX && entityManager.getComponent<TransformComponent>(entity).y) == gridPositionY) {
 							clicked = entity;
 							clickedFound = true; //Get the clicked entity based on the unit clicked, ensuring that you can only click on entities with the player component
 						}
@@ -520,6 +530,7 @@ int NsMain(int argc, char** argv) {
 						bool playerFound = false;
 						bool enemyDead = false;
 						bool emptyGrid = true;
+						std::cout << "Clicked" << std::endl;
 						for (auto entity : entitiesWithPlayers) { //Check if you are trying to move your clicked entity onto a grid that already contains one of your allies
 							if (entityManager.getComponent<TransformComponent>(entity).x == gridPositionX &&
 								entityManager.getComponent<TransformComponent>(entity).y == gridPositionY && !entityManager.getComponent<MoveComponent>(entity).moved) {
@@ -563,6 +574,44 @@ int NsMain(int argc, char** argv) {
 							}
 						}
 					}
+				}
+				else {
+					
+				glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+				cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+				cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+
+				glm::mat4 view = glm::inverse(cam);
+
+				//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
+				//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+				//
+
+				glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+					cWidth / (float)cHeight, 0.1f, 100.0f);
+
+				glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+					view,
+					projection,
+					glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+				std::cout << "\n" << farPlaneClickPos.x << " : "
+					<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+
+				auto v = normalize(farPlaneClickPos - camPos);
+
+				glm::vec3 posOnPlane{ 0, 0, 0 };
+				glm::vec3 planeOrig{ 0, 0, 0 };
+				glm::vec3 planeNorm{ 0, 0, 1 };
+				float res = 0;
+				glm::intersectRayPlane(camPos, v, planeOrig, planeNorm, res);
+				posOnPlane = camPos + v * res;
+				//std::cout << "test1: " << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+				int gridPositionX = (int)posOnPlane.x;
+				int gridPositionY = (int)posOnPlane.y;
+				float distanceX = abs(entityManager.getComponent<TransformComponent>(clicked).x - gridPositionX);
+				float distanceY = abs(entityManager.getComponent<TransformComponent>(clicked).y - gridPositionY); //Get the distance of the grid point 
+				entityManager.getComponent<TransformComponent>(clicked).pos = { gridPositionX, gridPositionY }; //If grid spot is within moving range, move the player onto the spot.
+				entityManager.getComponent<MoveComponent>(clicked).moved = true;
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {

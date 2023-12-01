@@ -114,7 +114,7 @@ void AISystem::spawnEnemy() {
     
     // create new aiEntity
     Entity aiEntity = manager.createEntity();
-    Entity playerEntity = manager.createEntity(); // test
+    
 
     // register
     manager.registerComponentType<AIComponent>();
@@ -143,11 +143,6 @@ void AISystem::spawnEnemy() {
 
 
 
-    /*test - remove this after we have player*/
-    PlayerComponent player(1);// test 
-    manager.addComponent<PlayerComponent>(playerEntity, player);
-    manager.addComponent<HealthComponent>(playerEntity, hp);
-    manager.addComponent<AttackComponent>(playerEntity, att);
-    manager.addComponent<MoveComponent>(playerEntity, movement);
+   
 
 }
