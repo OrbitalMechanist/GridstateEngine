@@ -15,8 +15,8 @@ double EnemyAI::calculateDistance(std::pair<int, int> pos1, std::pair<int, int> 
 }
 
 void EnemyAI::enemyPerform(Entity attacker, Entity target) {
-    std::pair<int, int> aiPos = std::make_pair(manager.getComponent<GridPositionComponent>(attacker).gridX , manager.getComponent<GridPositionComponent>(attacker).gridY);
-    std::pair<int, int> playerPos = std::make_pair(manager.getComponent<GridPositionComponent>(target).gridX, manager.getComponent<GridPositionComponent>(target).gridY);
+    std::pair<int, int> aiPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x , manager.getComponent<TransformComponent>(attacker).pos.y);
+    std::pair<int, int> playerPos = std::make_pair(manager.getComponent<TransformComponent>(target).pos.x, manager.getComponent<TransformComponent>(target).pos.y);
     std::cout << aiPos.first << " : " << aiPos.second << std::endl;
     double distance = calculateDistance(aiPos, playerPos);
 
@@ -83,8 +83,8 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
     for (Entity player : entitiesWithPlayer) {
         
         // Get this player position
-        std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<GridPositionComponent>(attacker).gridX, manager.getComponent<GridPositionComponent>(attacker).gridY);
-        std::pair<int, int> playerPos = std::make_pair(manager.getComponent<GridPositionComponent>(player).gridX, manager.getComponent<GridPositionComponent>(player).gridY);
+        std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y);
+        std::pair<int, int> playerPos = std::make_pair(manager.getComponent<TransformComponent>(player).pos.x, manager.getComponent<TransformComponent>(player).pos.y);
       
         int currentDistance = calculateDistance(playerPos, attackerPos);
         if (closestDistance == -1 || closestDistance > currentDistance) {

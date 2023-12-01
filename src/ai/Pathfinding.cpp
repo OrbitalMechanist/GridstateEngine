@@ -91,8 +91,12 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest)
     {
         std::pair<int, int> p = Path.top();
         Path.pop();
-        Pathfinding::dirMap[p.first][p.second] = 1;
-        Pathfinding::dirVec.push_back(std::make_pair(p.first, p.second));
+
+        // avoid the target and object at the same place
+        if (!Path.empty()) {
+            Pathfinding::dirMap[p.first][p.second] = 1;
+            Pathfinding::dirVec.push_back(std::make_pair(p.first, p.second));
+        }
     }
 
     return;
@@ -666,8 +670,12 @@ std::vector<std::pair<int,int>> Pathfinding::GetDirMap() {
 }
 
 std::pair<int, int> Pathfinding::getNewPosition(int moveRange) {
-    if (dirVec.size() >= moveRange) {
-        return dirVec[moveRange];
+    if (!dirVec.empty()) {
+        // Ensure we access a valid index
+        if (moveRange < dirVec.size()) {
+            return dirVec[moveRange];
+        }
+        return dirVec.back(); // Return the last element if moveRange is too large
     }
     return std::make_pair(NULL, NULL);
 }

@@ -30,6 +30,7 @@ private:
     void handleAttackState(Entity et);
     void handleTakeCoverState(Entity et);
     int entityID = 0; 
+    int hasAttackCount = 0; // use this to check if all enemy has finished 
 };
 
 

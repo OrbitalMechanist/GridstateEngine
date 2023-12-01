@@ -246,7 +246,7 @@ int NsMain(int argc, char** argv) {
 		// Setup AI's transform and staciMesh
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
 			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
-			trans.pos = { entityManager.getComponent<GridPositionComponent>(aiEntity).gridX, entityManager.getComponent<GridPositionComponent>(aiEntity).gridY };
+			trans.pos = { 2, 2 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";  // replace this with actual model
@@ -257,7 +257,7 @@ int NsMain(int argc, char** argv) {
 		
 		// Setup Player's transform and staciMesh
 		for (auto player : entityManager.getEntitiesWithComponent<PlayerComponent>()) {
-			trans.pos = { entityManager.getComponent<GridPositionComponent>(player).gridX, entityManager.getComponent<GridPositionComponent>(player).gridY };
+			trans.pos = { 1, 1 };
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";

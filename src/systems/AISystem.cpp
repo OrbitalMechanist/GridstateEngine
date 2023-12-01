@@ -23,8 +23,14 @@ void AISystem::update() {
                 // take cover
                 handleTakeCoverState(entity);
                 break;
-        }
+        }   
     }
+    if (gm->currentTurn == enemyTurn && hasAttackCount == entitiesWithAI.size()) {
+        hasAttackCount = 0; // reset for next turn
+        gm->endTurn();
+        std::cout << "Enemy turn end" << std::endl;
+    }
+   
 
 }
 
@@ -42,28 +48,31 @@ void AISystem::handleIdleState(Entity entity){
 void AISystem::handlePathfindingState(Entity entity){
     std::cout << "Pathfinding state" << std::endl;
     int map[7][7] = {
-    {1,1,1,0,1,1,1 },
-    {1,1,1,0,1,1,1 },
-    {1,1,1,0,1,1,1 },
+    {1,1,1,1,1,1,1 },
+    {1,1,1,1,1,1,1 },
+    {1,1,1,1,1,1,1 },
     {1,1,1,1,1,2,1 },
-    {1,1,1,0,1,1,1 },
-    {1,1,1,0,1,1,1 },
-    {1,1,1,0,1,1,1 },
+    {1,1,1,1,1,1,1 },
+    {1,1,1,1,1,1,1 },
+    {1,1,1,1,1,1,1 },
     };
     AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
     EnemyAI aiPath(manager);
     Entity player = aiPath.GetClosestPlayer(entity);
-    std::pair aiPosition = std::make_pair(manager.getComponent<GridPositionComponent>(entity).gridX, manager.getComponent<GridPositionComponent>(entity).gridY);
-    std::pair playerPosition = std::make_pair(manager.getComponent<GridPositionComponent>(player).gridX, manager.getComponent<GridPositionComponent>(player).gridY);
-    // pathfinding
+    std::pair aiPosition = std::make_pair(manager.getComponent<TransformComponent>(entity).pos.x, manager.getComponent<TransformComponent>(entity).pos.y);
+    std::pair playerPosition = std::make_pair(manager.getComponent<TransformComponent>(player).pos.x, manager.getComponent<TransformComponent>(player).pos.y);
+    
+    //// pathfinding
     Pathfinding path;
     path.aStarSearch(map, aiPosition, playerPosition);
     path.printDirVec();
     int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
+  
     //std::cout << "new position = " << path.getNewPosition(walkRange).first << " : " << path.getNewPosition(walkRange).second << std::endl;
     if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
-        manager.getComponent<GridPositionComponent>(entity).gridX = path.getNewPosition(walkRange).first;
-        manager.getComponent<GridPositionComponent>(entity).gridY = path.getNewPosition(walkRange).second;
+        std::cout << "new position = " << path.GetDirMap().size() << std::endl;
+        manager.getComponent<TransformComponent>(entity).pos.x = path.getNewPosition(walkRange).first;
+        manager.getComponent<TransformComponent>(entity).pos.y = path.getNewPosition(walkRange).second;
     }
    
 
@@ -88,10 +97,7 @@ void AISystem::handleAttackState(Entity entity){
         std::cout << "Current Health: " << manager.getComponent<HealthComponent>(target).health << std::endl;
     }
 
-    // end enemy turn
-
-    gm->endTurn();
-    std::cout << "Enemy turn end" << std::endl;
+    hasAttackCount++;
     aiComponent.state = AIState::Idle;
 }
 
@@ -115,7 +121,7 @@ void AISystem::spawnEnemy() {
     manager.registerComponentType<HealthComponent>();
     manager.registerComponentType<AttackComponent>();
     manager.registerComponentType<MoveComponent>();
-    manager.registerComponentType<GridPositionComponent>();
+
 
  
     // increment entityID
@@ -126,10 +132,6 @@ void AISystem::spawnEnemy() {
     HealthComponent hp(bus,entityID, 100, 2); // assume health starts at 100 , armor 2
     AttackComponent att(1,1,1); // damage range and attackModifier = 1
     MoveComponent movement(2);
-    GridPositionComponent pos(2,2);
-
-    GridPositionComponent pos2(4, 4);// test 
-    PlayerComponent player(1);// test 
 
 
     //// add component
@@ -138,19 +140,14 @@ void AISystem::spawnEnemy() {
     manager.addComponent<HealthComponent>(aiEntity, hp);
     manager.addComponent<AttackComponent>(aiEntity, att);
     manager.addComponent<MoveComponent>(aiEntity, movement);
-    manager.addComponent<GridPositionComponent>(aiEntity, pos);
-    /*manager.addComponent<TransformComponent>(aiEntity, trans);
-    manager.addComponent<StaticMeshComponent>(aiEntity, stat);*/
 
-    /*test*/
+
+
+    /*test - remove this after we have player*/
+    PlayerComponent player(1);// test 
     manager.addComponent<PlayerComponent>(playerEntity, player);
     manager.addComponent<HealthComponent>(playerEntity, hp);
     manager.addComponent<AttackComponent>(playerEntity, att);
     manager.addComponent<MoveComponent>(playerEntity, movement);
-    manager.addComponent<GridPositionComponent>(playerEntity, pos2);
-}
 
-// Set isEnemyTurn to allow enemy to start 
-void AISystem::startEnemyTurn() {
-    //isEnemyTurn = true;
 }
