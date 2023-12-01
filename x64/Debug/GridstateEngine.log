@@ -1,11 +1,11 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1116,5): warning MSB8027: Two or more files with the name of AISystem.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\ai\AISystem.cpp, src\systems\AISystem.cpp.
   main.cpp
-C:\Work\Comp8551\GridstateEngine\main.cpp(447,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(447,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(454,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(454,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(498,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(498,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Work\Comp8551\GridstateEngine\main.cpp(448,11): warning C4101: 'clicked': unreferenced local variable
-  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(524,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(524,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(531,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(531,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(575,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(575,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gurjo\GitHub\GridstateEngine\main.cpp(525,11): warning C4101: 'clicked': unreferenced local variable
+  GridstateEngine.vcxproj -> C:\Users\gurjo\GitHub\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied

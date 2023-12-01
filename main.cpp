@@ -113,9 +113,20 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
+		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
+		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
+		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
+		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/cone45.obj", "cone");
+		renderer.loadModel("assets/models/bushTree.fbx", "tree");
+		renderer.loadModel("assets/models/leafyTree.fbx", "pine_tree");
+		renderer.loadModel("assets/models/leafyTree2.fbx", "pine_tree2");
+		renderer.loadModel("assets/models/lightColorRock.fbx", "rock_light");
+		renderer.loadModel("assets/models/rocks.fbx", "rocks");
+		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
+		renderer.loadModel("assets/models/bush.fbx", "bush");
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -169,9 +180,72 @@ int NsMain(int argc, char** argv) {
 		stat.textureName = "stone";
 		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
-
 		entityManager.addComponent<TransformComponent>(newEntity, trans);
 		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+
+		Entity bush = entityManager.createEntity();
+		trans.pos = { 2, 4 };
+		stat.modelName = "bush";
+		stat.textureName = "surface";
+		stat.textureName = "bush_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(bush, trans);
+		entityManager.addComponent<StaticMeshComponent>(bush, stat);
+
+		Entity tree = entityManager.createEntity();
+		trans.pos = { 1, 3 };
+		stat.modelName = "tree";
+		stat.textureName = "surface";
+		stat.textureName = "tree_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(tree, trans);
+		entityManager.addComponent<StaticMeshComponent>(tree, stat);
+
+		Entity rocks = entityManager.createEntity();
+		trans.pos = { -3, 3 };
+		stat.modelName = "rocks";
+		stat.textureName = "surface";
+		stat.textureName = "rock_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(rocks, trans);
+		entityManager.addComponent<StaticMeshComponent>(rocks, stat);
+
+		Entity big_rock = entityManager.createEntity();
+		trans.pos = { 1, 1 };
+		stat.modelName = "rock_big";
+		stat.textureName = "surface";
+		stat.textureName = "rock_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(big_rock, trans);
+		entityManager.addComponent<StaticMeshComponent>(big_rock, stat);
+
+		Entity light_rock = entityManager.createEntity();
+		trans.pos = { 0, 2 };
+		stat.modelName = "rock_light";
+		stat.textureName = "surface";
+		stat.textureName = "light_rock_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(light_rock, trans);
+		entityManager.addComponent<StaticMeshComponent>(light_rock, stat);
+
+		Entity pine_tree = entityManager.createEntity();
+		trans.pos = { -1, -4 };
+		stat.modelName = "pine_tree";
+		stat.textureName = "surface";
+		stat.textureName = "tree_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(pine_tree, trans);
+		entityManager.addComponent<StaticMeshComponent>(pine_tree, stat);
+
+		Entity pine_tree2 = entityManager.createEntity();
+		trans.pos = { 3, -3 };
+		stat.modelName = "pine_tree2";
+		stat.textureName = "surface";
+		stat.textureName = "tree_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(pine_tree2, trans);
+		entityManager.addComponent<StaticMeshComponent>(pine_tree2, stat);
+
 
 		stat.modelName = "cube";
 		trans.pos = { 2, 7 };
@@ -241,6 +315,7 @@ int NsMain(int argc, char** argv) {
 		stat.textureName = "ak_texture";
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
+
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);

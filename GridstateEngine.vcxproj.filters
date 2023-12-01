@@ -224,6 +224,9 @@
     <None Include="shaders\SYSTEM_shadow.frag">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\rocks.fbx" />
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\bushTree.fbx" />
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\leafyTree.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="assets\ui\test.xaml" />

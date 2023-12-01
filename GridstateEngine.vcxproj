@@ -228,6 +228,9 @@
     <ClInclude Include="headers\Universe.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\bushTree.fbx" />
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\leafyTree.fbx" />
+    <None Include="..\..\Documents\term 7\adv_games_programming\proj_art\rocks.fbx" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
     <None Include="shaders\basic.frag" />
