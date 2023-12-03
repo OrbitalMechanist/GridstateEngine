@@ -14,6 +14,7 @@ Functions for pathfinding
 #include <set>
 #include <vector>
 /* Source:https://stackoverflow.com/questions/19193413/pathfinding-in-a-grid-system */
+// modified based on our game map 
 
 
 
@@ -57,6 +58,7 @@ bool Pathfinding::isDestination(int row, int col, Pair dest)
         return (true);
     else
         return (false);
+   
 }
 
 // A Utility Function to calculate the 'h' heuristics.
@@ -110,14 +112,15 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
     // If the source is out of range
     if (isValid(src.first, src.second) == false)
     {
-        //printf("Start is invalid\n");
+        printf("Start is invalid\n");
         return;
     }
 
     // If the destination is out of range
     if (isValid(dest.first, dest.second) == false)
     {
-       // printf("Destination is invalid\n");
+        std::cout << "pOS: " << dest.first << " " << dest.second << std::endl;
+        printf("Destination is invalid\n");
         return;
     }
 
@@ -125,14 +128,14 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
     if (isUnBlocked(grid, src.first, src.second) == false ||
         isUnBlocked(grid, dest.first, dest.second) == false)
     {
-        //printf("Start or the destination is blocked\n");
+        printf("Start or the destination is blocked\n");
         return;
     }
 
     // If the destination cell is the same as source cell
     if (isDestination(src.first, src.second, dest) == true)
     {
-        //printf("We are already at the destination\n");
+        printf("We are already at the destination\n");
         return;
     }
 
@@ -657,7 +660,7 @@ void Pathfinding:: printDirMap() {
 void Pathfinding::printDirVec() {
     std::cout << "\nStart ->";
     for (int i = 0; i < dirVec.size(); i++) {
-        std::cout << "(" << dirVec.at(i).first << " , " << dirVec.at(i).second << ") -> ";
+        std::cout << "(" << dirVec.at(i).second << " , " << dirVec.at(i).first << ") -> ";
     }
     std::cout << "end" << std::endl;
 }

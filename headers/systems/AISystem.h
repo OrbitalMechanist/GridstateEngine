@@ -15,13 +15,15 @@ class AISystem {
     EntityManager& manager;
     MessageBus& bus;
     GameMaster* gm;
+    std::array<std::array<int, 11>, 11> map = {}; // gameMap
 public:
     // Register type
-    AISystem(EntityManager& manager, MessageBus& bus, GameMaster* gm) : manager(manager), bus(bus), gm(gm) {};
+    AISystem(EntityManager& manager, MessageBus& bus, GameMaster* gm, const std::array<std::array<int, 11>, 11>& map) : manager(manager), bus(bus), gm(gm), map(map) {};
     // Update function to be called every game loop iteration.
     void update(); 
     void spawnEnemy();
     void startEnemyTurn();
+    //void updateMap(int x, int y, int flag); // flag is 0 - 1 -2 : obstacle,unoccupied,player/enemy
 
 private:
     // states handler functions

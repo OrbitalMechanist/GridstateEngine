@@ -149,9 +149,25 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
+		entityManager.registerComponentType<AIComponent>();
+		entityManager.registerComponentType<HealthComponent>();
+		entityManager.registerComponentType<AttackComponent>();
+		entityManager.registerComponentType<MoveComponent>();
 		
 		EnemyTurnCalculator* calc = new EnemyTurnCalculator(&entityManager);
 		GameMaster* gm = new GameMaster(calc);
+
+		//map
+		const int MAP_SIZE = 11; // Size of the map
+		std::array<std::array<int, MAP_SIZE>, MAP_SIZE> map = {};
+		// set all to 1
+		for (int i = 0; i <= 10; ++i) {
+			for (int j = 0; j <= 10; ++j) {
+				map[i][j] = 1;
+				//std::cout << map[i][j] << " ";
+			}
+			//std::cout << std::endl;
+		}
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -172,6 +188,7 @@ int NsMain(int argc, char** argv) {
 
 		stat.modelName = "cube";
 		trans.pos = { 2, 7 };
+		
 
 		entityManager.addComponent<TransformComponent>(entity2, trans);
 		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
@@ -179,7 +196,9 @@ int NsMain(int argc, char** argv) {
 		
 
 		//World setup
+		int count = 0;
 		for (int x = -5; x <= 5; x++) {
+			count++;
 			for (int y = -5; y <= 5; y++) {
 				Entity fresh = entityManager.createEntity();
 				trans.pos = { x, y };
@@ -190,6 +209,10 @@ int NsMain(int argc, char** argv) {
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
 			}
 		}
+		std::cout << "Cout: " << count << std::endl;
+
+		
+		
 
 		/*
 		for (int y = 0; y <= 12; y += 2) {
@@ -200,6 +223,7 @@ int NsMain(int argc, char** argv) {
 
 		Entity diag1 = entityManager.createEntity();
 		trans.pos = { 5, 5 };
+		map[0][10] = 0; // occupied 
 		stat.posOffset = { 0.0f, 0.0f, 1.0f };
 		stat.textureName = "stone";
 		entityManager.addComponent<TransformComponent>(diag1, trans);
@@ -207,18 +231,21 @@ int NsMain(int argc, char** argv) {
 
 		Entity ctr = entityManager.createEntity();
 		trans.pos = { 0, 0 };
+		map[5][5] = 0; // occupied 
 		stat.rotOffset = { 0.0f, 0.0f, glm::radians(45.0f) };
 		entityManager.addComponent<TransformComponent>(ctr, trans);
 		entityManager.addComponent<StaticMeshComponent>(ctr, stat);
 
 		Entity diag2 = entityManager.createEntity();
 		trans.pos = { -5, -5 };
+		map[10][0] = 0;// occupied 
 		stat.rotOffset = { 0.0f, 0.0f, 0.0f };
 		entityManager.addComponent<TransformComponent>(diag2, trans);
 		entityManager.addComponent<StaticMeshComponent>(diag2, stat);
 
 		Entity mob = entityManager.createEntity();
 		trans.pos = { 0, 4 };
+		map[1][5] = 0;// occupied 
 		entityManager.addComponent<TransformComponent>(mob, trans);
 		entityManager.addComponent<StaticMeshComponent>(mob, stat);
 
@@ -229,11 +256,13 @@ int NsMain(int argc, char** argv) {
 
 		Entity block = entityManager.createEntity();
 		trans.pos = { 1, 5 };
+		map[0][6] = 0;// occupied 
 		entityManager.addComponent<TransformComponent>(block, trans);
 		entityManager.addComponent<StaticMeshComponent>(block, stat);
 
 		Entity ak = entityManager.createEntity();
 		trans.pos = { 0, 0 };
+		map[5][5] = 0;// occupied 
 		stat.posOffset.z += 0.6f;
 		stat.rotOffset.y = glm::radians(90.0f);
 		stat.modelName = "ak";
@@ -241,14 +270,38 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
 
+		/*for (int i = 0; i <= 10; ++i) {
+			for (int j = 0; j <= 10; ++j) {
+				
+				std::cout << map[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}*/
+
 		// AI setup
 		MessageBus bus;
-		AISystem aiSystem(entityManager, bus, gm);
+		AISystem aiSystem(entityManager, bus, gm, map);
 		aiSystem.spawnEnemy();
+		//aiSystem.spawnEnemy();
+		//aiSystem.spawnEnemy();
 		// Setup AI's transform and staciMesh
+		int countAI = 1;
 		for (auto aiEntity : entityManager.getEntitiesWithComponent<AIComponent>()) {
 			std::cout << "ai spawned: " << entityManager.getComponent<HealthComponent>(aiEntity).health << std::endl;
-			trans.pos = { 5, 5 };
+			
+			if (countAI == 0) {
+				trans.pos = { 4, 5 };
+				//map[0][9] = 2;
+			}
+			else if (countAI == 1) {
+				trans.pos = { -4, 4 };
+				//map[0][9] = 2;
+			}
+			else if (countAI == 2) {
+				trans.pos = { 4, -4 };
+				//map[0][9] = 2;
+			}
+			countAI++;
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";  // replace this with actual model
@@ -260,6 +313,9 @@ int NsMain(int argc, char** argv) {
 		// Setup Player's transform and staciMesh
 		 /*test - remove this after we have player*/
 		Entity playerEntity = entityManager.createEntity(); // test
+		Entity playerEntity2 = entityManager.createEntity(); // test
+
+		// player 1
 		PlayerComponent player(1);// test 
 		HealthComponent hp(bus, 0, 100, 2); // assume health starts at 100 , armor 2
 		AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
@@ -268,8 +324,25 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<HealthComponent>(playerEntity, hp);
 		entityManager.addComponent<AttackComponent>(playerEntity, att);
 		entityManager.addComponent<MoveComponent>(playerEntity, movement);
+
+		// player 2
+		//PlayerComponent player2(2);// test 
+		//entityManager.addComponent<PlayerComponent>(playerEntity2, player2);
+		//entityManager.addComponent<HealthComponent>(playerEntity2, hp);
+		//entityManager.addComponent<AttackComponent>(playerEntity2, att);
+		//entityManager.addComponent<MoveComponent>(playerEntity2, movement);
+		int countP = 0;
 		for (auto player : entityManager.getEntitiesWithComponent<PlayerComponent>()) {
-			trans.pos = { 0 , 0 };
+			if (countP == 0) {
+				trans.pos = { -3 , -3 };
+				//map[8][2] = 2;
+			}
+			else if(countP == 1) {
+				trans.pos = { 1 , -3 };
+				//map[8][2] = 2;
+			}
+			//countP++;
+			
 			stat.posOffset.z += 0.6f;
 			stat.rotOffset.y = glm::radians(90.0f);
 			stat.modelName = "ak";
@@ -576,42 +649,45 @@ int NsMain(int argc, char** argv) {
 					}
 				}
 				else {
-					
-				glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
-				cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
-				cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+					/*
+					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
 
-				glm::mat4 view = glm::inverse(cam);
+					glm::mat4 view = glm::inverse(cam);
 
-				//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
-				//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
-				//
+					//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
+					//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+					//
 
-				glm::mat4 projection = glm::perspective(glm::radians(60.0f),
-					cWidth / (float)cHeight, 0.1f, 100.0f);
+					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+						cWidth / (float)cHeight, 0.1f, 100.0f);
 
-				glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
-					view,
-					projection,
-					glm::vec4(0.0f, 0.0f, cWidth, cHeight));
-				std::cout << "\n" << farPlaneClickPos.x << " : "
-					<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+						view,
+						projection,
+						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+					std::cout << "\n" << farPlaneClickPos.x << " : "
+						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
 
-				auto v = normalize(farPlaneClickPos - camPos);
+					auto v = normalize(farPlaneClickPos - camPos);
 
-				glm::vec3 posOnPlane{ 0, 0, 0 };
-				glm::vec3 planeOrig{ 0, 0, 0 };
-				glm::vec3 planeNorm{ 0, 0, 1 };
-				float res = 0;
-				glm::intersectRayPlane(camPos, v, planeOrig, planeNorm, res);
-				posOnPlane = camPos + v * res;
-				//std::cout << "test1: " << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
-				int gridPositionX = (int)posOnPlane.x;
-				int gridPositionY = (int)posOnPlane.y;
-				float distanceX = abs(entityManager.getComponent<TransformComponent>(clicked).x - gridPositionX);
-				float distanceY = abs(entityManager.getComponent<TransformComponent>(clicked).y - gridPositionY); //Get the distance of the grid point 
-				entityManager.getComponent<TransformComponent>(clicked).pos = { gridPositionX, gridPositionY }; //If grid spot is within moving range, move the player onto the spot.
-				entityManager.getComponent<MoveComponent>(clicked).moved = true;
+					glm::vec3 posOnPlane{ 0, 0, 0 };
+					glm::vec3 planeOrig{ 0, 0, 0 };
+					glm::vec3 planeNorm{ 0, 0, 1 };
+					float res = 0;
+					glm::intersectRayPlane(camPos, v, planeOrig, planeNorm, res);
+					posOnPlane = camPos + v * res;
+					//std::cout << "test1: " << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+					int gridPositionX = (int)posOnPlane.x;
+					int gridPositionY = (int)posOnPlane.y;
+					float distanceX = abs(entityManager.getComponent<TransformComponent>(clicked).x - gridPositionX);
+					float distanceY = abs(entityManager.getComponent<TransformComponent>(clicked).y - gridPositionY); //Get the distance of the grid point 
+					if (5 >= gridPositionX >= -5 && 5 >= gridPositionY >= -5) {
+						entityManager.getComponent<TransformComponent>(clicked).pos = { gridPositionX, gridPositionY }; //If grid spot is within moving range, move the player onto the spot.
+						entityManager.getComponent<MoveComponent>(clicked).moved = true;
+					}
+					*/
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {

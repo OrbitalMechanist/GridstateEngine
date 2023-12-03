@@ -1,9 +1,9 @@
 ﻿  main.cpp
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(477,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(477,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(481,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(481,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(620,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(620,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(550,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(550,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(554,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(554,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(696,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(696,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied

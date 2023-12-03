@@ -47,39 +47,69 @@ void AISystem::handleIdleState(Entity entity){
 // Pathfinding state handler
 void AISystem::handlePathfindingState(Entity entity){
     std::cout << "Pathfinding state" << std::endl;
-    int map[7][7] = {
-    {1,1,1,1,1,1,1 },
-    {1,1,1,1,1,1,1 },
-    {1,1,1,1,1,1,1 },
-    {1,1,1,1,1,2,1 },
-    {1,1,1,1,1,1,1 },
-    {1,1,1,1,1,1,1 },
-    {1,1,1,1,1,1,1 },
-    };
+    
+    
     AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
     EnemyAI aiPath(manager);
     Entity player = aiPath.GetClosestPlayer(entity);
-    std::pair aiPosition = std::make_pair(manager.getComponent<TransformComponent>(entity).pos.x, manager.getComponent<TransformComponent>(entity).pos.y);
-    std::pair playerPosition = std::make_pair(manager.getComponent<TransformComponent>(player).pos.x, manager.getComponent<TransformComponent>(player).pos.y);
+
+    // Get Position
+    int aiPosX = manager.getComponent<TransformComponent>(entity).pos.x;
+    int aiPosY = manager.getComponent<TransformComponent>(entity).pos.y;
+    int playerPosX = manager.getComponent<TransformComponent>(player).pos.x;
+    int playerPosY = manager.getComponent<TransformComponent>(player).pos.y;
+   
+    int gridAiPosX = aiPosX + 5;
+    int gridAiPosY = 5 - aiPosY;
+
+    int gridPlayerPosX = playerPosX + 5;
+    int gridPlayerPosY = 5 - playerPosY;
+   
+  
+    std::pair aiPosition = std::make_pair(gridAiPosX, gridAiPosY);
+    std::pair playerPosition = std::make_pair(gridPlayerPosX, gridPlayerPosY);
     
     //// pathfinding
     Pathfinding path;
-    path.aStarSearch(map, aiPosition, playerPosition);
-    path.printDirVec();
+    int rawMap[11][11]; // saving time - if have time, chaneg this
+    for (int i = 0; i < 11; ++i) {
+        std::copy(map[i].begin(), map[i].end(), rawMap[i]);
+    }
+   // std::cout << "Before ai position = " << aiPosition.second << " : " << aiPosition.first << std::endl;
+    //std::cout << "Before pla position = " << playerPosition.second << " : " << playerPosition.first << std::endl;
+   
+    path.aStarSearch(rawMap, aiPosition, playerPosition);
+    //path.printDirVec();
     int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
-  
-    //std::cout << "new position = " << path.getNewPosition(walkRange).first << " : " << path.getNewPosition(walkRange).second << std::endl;
+    //std::cout << "Walk Range: " << walkRange << std::endl;
+    //std::cout << "new position = " << path.getNewPosition(walkRange).second << " : " << path.getNewPosition(walkRange).first << std::endl;
     if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
-        std::cout << "new position = " << path.GetDirMap().size() << std::endl;
-        manager.getComponent<TransformComponent>(entity).pos.x = path.getNewPosition(walkRange).first;
-        manager.getComponent<TransformComponent>(entity).pos.y = path.getNewPosition(walkRange).second;
+        //std::cout << "Grid position = " << gridAiPosY << " " << gridAiPosX << std::endl;
+        map[gridAiPosY][gridAiPosX] = 1;
+        int newX = path.getNewPosition(walkRange).first - 5;
+        int newY = 5 - path.getNewPosition(walkRange).second ;
+
+       // std::cout << "x " << newX << " : " << newY << std::endl;
+
+        manager.getComponent<TransformComponent>(entity).pos.x = newX;
+        manager.getComponent<TransformComponent>(entity).pos.y = newY;
+        
+
+        //map[path.getNewPosition(walkRange).second][path.getNewPosition(walkRange).first] = 2; // not sure why it has bug - fix this later
     }
    
-
 
     // change state
     aiComponent.state = AIState::Attack;
 }
+/*for (int i = 0; i <= 10; ++i) {
+            for (int j = 0; j <= 10; ++j) {
+
+                std::cout << map[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;*/
 
 // Attack state handler
 void AISystem::handleAttackState(Entity entity){
@@ -116,11 +146,7 @@ void AISystem::spawnEnemy() {
     Entity aiEntity = manager.createEntity();
     
 
-    // register
-    manager.registerComponentType<AIComponent>();
-    manager.registerComponentType<HealthComponent>();
-    manager.registerComponentType<AttackComponent>();
-    manager.registerComponentType<MoveComponent>();
+   
 
 
  
@@ -131,7 +157,7 @@ void AISystem::spawnEnemy() {
     AIComponent ai(AIState::Idle);
     HealthComponent hp(bus,entityID, 100, 2); // assume health starts at 100 , armor 2
     AttackComponent att(1,2,1); // damage range and attackModifier = 1
-    MoveComponent movement(2,false);
+    MoveComponent movement(1,false);
 
 
     //// add component
@@ -141,8 +167,6 @@ void AISystem::spawnEnemy() {
     manager.addComponent<AttackComponent>(aiEntity, att);
     manager.addComponent<MoveComponent>(aiEntity, movement);
 
-
-
-   
-
 }
+
+
