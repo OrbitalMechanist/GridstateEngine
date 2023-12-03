@@ -43,7 +43,7 @@ void AISystem::handlePathfindingState(Entity& entity, EntityManager& manager, fl
 
 void AISystem::handleAttackState(Entity& entity, EntityManager& manager, float dt) {
     // Attack state
-    std::cout << "Attack State" << std::endl;
+    //std::cout << "Attack State" << std::endl;
 }
 
 void AISystem::handleTakeCoverState(Entity& entity, EntityManager& manager, float dt) {

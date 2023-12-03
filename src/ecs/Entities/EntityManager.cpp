@@ -81,6 +81,8 @@ template std::vector<Entity> EntityManager::getEntitiesWithComponent<GridPositio
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<MapComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<PlayerComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<MoveComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<AttackComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<HealthComponent>();
 
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<TransformComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<StaticMeshComponent>();
@@ -96,6 +98,8 @@ template void EntityManager::registerComponentType<MapComponent>();
 template void EntityManager::registerComponentType<GridPositionComponent>();
 template void EntityManager::registerComponentType<PlayerComponent>();
 template void EntityManager::registerComponentType<MoveComponent>();
+template void EntityManager::registerComponentType<AttackComponent>();
+template void EntityManager::registerComponentType<HealthComponent>();
 
 template void EntityManager::registerComponentType<StaticMeshComponent>();
 template void EntityManager::registerComponentType<TransformComponent>();
@@ -111,6 +115,8 @@ template GridPositionComponent& EntityManager::getComponent<GridPositionComponen
 template MapComponent& EntityManager::getComponent<MapComponent>(Entity entity);
 template PlayerComponent& EntityManager::getComponent<PlayerComponent>(Entity entity);
 template MoveComponent& EntityManager::getComponent<MoveComponent>(Entity entity);
+template AttackComponent& EntityManager::getComponent<AttackComponent>(Entity entity);
+template HealthComponent& EntityManager::getComponent<HealthComponent>(Entity entity);
 
 template StaticMeshComponent& EntityManager::getComponent<StaticMeshComponent>(Entity entity);
 template TransformComponent& EntityManager::getComponent<TransformComponent>(Entity entity);
@@ -146,6 +152,8 @@ template void EntityManager::addComponent<MapComponent>(Entity entity, MapCompon
 template void EntityManager::addComponent<GridPositionComponent>(Entity entity, GridPositionComponent gridPositioncomponent);
 template void EntityManager::addComponent<PlayerComponent>(Entity entity, PlayerComponent playerComponent);
 template void EntityManager::addComponent<MoveComponent>(Entity entity, MoveComponent moveComponent);
+template void EntityManager::addComponent<AttackComponent>(Entity entity, AttackComponent moveComponent);
+template void EntityManager::addComponent<HealthComponent>(Entity entity, HealthComponent moveComponent);
 
 template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
 template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);

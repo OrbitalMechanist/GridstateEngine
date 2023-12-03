@@ -237,15 +237,15 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<TransformComponent>(mob, trans);
 		entityManager.addComponent<StaticMeshComponent>(mob, stat);*/
 
-		Entity turnBlock = entityManager.createEntity();
-		trans.pos = { 0, 10 };
-		entityManager.addComponent<TransformComponent>(turnBlock, trans);
-		entityManager.addComponent<StaticMeshComponent>(turnBlock, stat);
-
 		/*Entity block = entityManager.createEntity();
 		trans.pos = { 1, 5 };
 		entityManager.addComponent<TransformComponent>(block, trans);
 		entityManager.addComponent<StaticMeshComponent>(block, stat);*/
+
+		PlayerComponent playComp;
+		MoveComponent moveComp;
+		AttackComponent atkComp;
+		HealthComponent hpComp;
 
 		Entity ak = entityManager.createEntity();
 		trans.pos = { 5, 5 };
@@ -253,14 +253,17 @@ int NsMain(int argc, char** argv) {
 		stat.rotOffset.y = glm::radians(90.0f);
 		stat.modelName = "ak";
 		stat.textureName = "ak_texture";
-		PlayerComponent playComp;
-		MoveComponent moveComp;
+		atkComp.damage = 2;
+		atkComp.range = 3;
 		moveComp.moved = false;
 		moveComp.moveRange = 2;
+		hpComp.health = 5;
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
 		entityManager.addComponent<PlayerComponent>(ak, playComp);
 		entityManager.addComponent<MoveComponent>(ak, moveComp);
+		entityManager.addComponent<AttackComponent>(ak, atkComp);
+		entityManager.addComponent<HealthComponent>(ak, hpComp);
 
 		Entity ak2 = entityManager.createEntity();
 		trans.pos = { 5, 6 };
@@ -270,6 +273,21 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
 		entityManager.addComponent<PlayerComponent>(ak2, playComp);
 		entityManager.addComponent<MoveComponent>(ak2, moveComp);
+		entityManager.addComponent<AttackComponent>(ak2, atkComp);
+		entityManager.addComponent<HealthComponent>(ak2, hpComp);
+
+		Entity enemy1 = entityManager.createEntity();
+		trans.pos = { 7,7 };
+		moveComp.moved = true;
+		AIComponent ai;
+		ai.state = AIState::Idle;
+		entityManager.addComponent<TransformComponent>(enemy1, trans);
+		entityManager.addComponent<StaticMeshComponent>(enemy1, stat);
+		entityManager.addComponent<AIComponent>(enemy1, ai);
+		entityManager.addComponent<MoveComponent>(enemy1, moveComp);
+		entityManager.addComponent<AttackComponent>(enemy1, atkComp);
+		entityManager.addComponent<HealthComponent>(enemy1, hpComp);
+
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -323,6 +341,11 @@ int NsMain(int argc, char** argv) {
 		auto modeBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
 		auto modeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("modeText");
 
+		auto healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
+		auto moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");
+		auto attackText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackText");
+		auto canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
+
 		bool lightOn = true;
 
 		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
@@ -348,21 +371,21 @@ int NsMain(int argc, char** argv) {
 				}
 			};*/
 
-		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
-		//you can have multiple callbacks.
-		/*targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
-				if (lightOn) {
-					lightOn = false;
-					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
-				}
-				else {
-					lightOn = true;
-					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
-				}
+			//Looks like each callback has a limit on how much memory it can involve. On the bright size,
+			//you can have multiple callbacks.
+			/*targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
+				const Noesis::RoutedEventArgs& args) mutable {
+					((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
+					if (lightOn) {
+						lightOn = false;
+						((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
+					}
+					else {
+						lightOn = true;
+						((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
+					}
 
-		};*/
+			};*/
 		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
@@ -480,6 +503,10 @@ int NsMain(int argc, char** argv) {
 				camPos.z += -2.5f * deltaTime;
 			}
 
+			//Audio Test
+			sounddevice->SetPosition(camPos);
+			sounddevice->SetOrientation(trueFwd, trueUp);
+
 			//Send mouse events to NSGUI
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
@@ -533,19 +560,14 @@ int NsMain(int argc, char** argv) {
 					}
 					else if (gm->currentMode == move) {
 						if (gm->selected != NULL) {
-							std::cout << "\nSelected : " << entityManager.getComponent<TransformComponent>(gm->selected).pos.x << " , " << entityManager.getComponent<TransformComponent>(gm->selected).pos.y;
-							std::cout << "\nClicked : " << gridPositionX << " , " << gridPositionY;
 							auto moveComp = entityManager.getComponent<MoveComponent>(gm->selected);
 							auto transComp = entityManager.getComponent<TransformComponent>(gm->selected);
 							int moveAmount = moveComp.moveRange;
 							bool canMove = false;
 							bool noStack = true;
 							if (!moveComp.moved) {
-								if (moveAmount - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0){
+								if (moveAmount - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0) {
 									canMove = true;
-								}
-								else {
-									canMove = false;
 								}
 								if (canMove) {
 									for (auto entity : entitiesWithPlayers) {
@@ -569,7 +591,38 @@ int NsMain(int argc, char** argv) {
 						}
 					}
 					else {
-						std::cout << "idk";
+						if (gm->selected != NULL) {
+							auto unitAtk = entityManager.getComponent<AttackComponent>(gm->selected);
+							auto transComp = entityManager.getComponent<TransformComponent>(gm->selected);
+							int atkRange = unitAtk.range;
+							bool canAttack = false;
+							bool foundEnemy = false;
+							Entity enemyUnit;
+							if (!entityManager.getComponent<MoveComponent>(gm->selected).moved) {
+								if (atkRange - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0) {
+									canAttack = true;
+								}
+								if (canAttack) {
+									for (auto entity : entitiesWithAI) {
+										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
+											foundEnemy = true;
+											enemyUnit = entity;
+											break;
+										}
+									}
+									if (foundEnemy) {
+										SourceA.Play(gunA);
+										entityManager.getComponent<MoveComponent>(gm->selected).moved = true;
+										if (entityManager.getComponent<HealthComponent>(enemyUnit).health > unitAtk.damage) {
+											entityManager.getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage;
+										}
+										else {
+											entityManager.destroyEntity(enemyUnit);
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -579,7 +632,6 @@ int NsMain(int argc, char** argv) {
 					nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
 				}
 			}
-
 
 			prevTime = time;
 
@@ -602,24 +654,6 @@ int NsMain(int argc, char** argv) {
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-
-			//Audio Test
-			/*sounddevice->SetPosition(camPos);
-			sounddevice->SetOrientation(trueFwd, trueUp);
-
-			if (gunshotTimer > 0) {
-				gunshotTimer--;
-			}
-			else {
-				int j = rand() % 2;
-				if (j == 0) {
-					SourceA.Play(gunA);
-				}
-				if (j == 1) {
-					SourceA.Play(gunB);
-				}
-				gunshotTimer = 600;
-			}*/
 
 			// AI test
 			aiSystem.update(entityManager, entityManager.getDeltaTime());

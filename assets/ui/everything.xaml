@@ -24,13 +24,21 @@
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </UserControl.Resources>
-                <Grid>
+                <Grid HorizontalAlignment="Right" Width="200">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="193*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
                     <Button x:Name="turnBtn" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-375"/>
                     <Button x:Name="actionBtn" Content="Switch Mode" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-325"/>
-                    
-                    <Rectangle HorizontalAlignment="Left" Margin="10,0,0,0" Width="16" Fill="{DynamicResource Brush.Primary.Shade25}"/>
                 </Grid>
             </UserControl>
+            <TextBlock x:Name="healthText" FontFamily="../fonts/#superlume" Margin="0,0,0,409" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
+            <TextBlock x:Name="moveText" FontFamily="../fonts/#superlume" Margin="0,0,0,364" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
+            <TextBlock x:Name="attackText" FontFamily="../fonts/#superlume" Margin="0,0,0,316" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
+            <TextBlock x:Name="canMoveText" FontFamily="../fonts/#superlume" Margin="0,0,0,272" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
+
+
             <TextBlock x:Name="turnText" FontFamily="../fonts/#superlume" Margin="0,0,10,415" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="Player"/></TextBlock>
             <TextBlock x:Name="modeText" FontFamily="../fonts/#superlume" Margin="0,0,10,13" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="Select Mode"/></TextBlock>
         </Grid>
