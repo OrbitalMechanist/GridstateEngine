@@ -1,4 +1,4 @@
-extern "C"{
+extern "C" {
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
@@ -23,8 +23,8 @@ extern "C"{
 #include <functional>
 
 //Noesis stuff, not all of this may be needed
-#define NS_LICENSE_NAME "OrbitalMechanist"
-#define NS_LICENSE_KEY "egazOJZKszhcgEWAByyi6qR5C0lQah8MCo95rksg472ePAcY"
+#define NS_LICENSE_NAME "Yunaan"
+#define NS_LICENSE_KEY "aUm+v2UEvr8OruLsSdY8RDX82J70l50/EZrDDIIoDtocqYXH"
 #include <NsRender/RenderContext.h>
 #include <NsCore/HighResTimer.h>
 #include <NsGui/IntegrationAPI.h>
@@ -66,8 +66,8 @@ int NsMain(int argc, char** argv) {
 	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
 	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
 
-	SoundSource SourceA(1.f, 1.f, {0.0f,0.0f,0.0f}, {0,0,0}, false, true);
-	SoundSource SourceB(1.f, 1.f, {0.0f,0.0f,0.0f}, { 0,0,0 }, false, true);
+	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
+	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 
 	// AI setup
 	EntityManager entityManager;
@@ -75,7 +75,7 @@ int NsMain(int argc, char** argv) {
 	entityManager.registerComponentType<AIComponent>();
 	Entity newEntity = entityManager.createEntity();
 	AISystemDemoTest aiDemo(entityManager);
-	
+
 
 	try {
 		if (!glfwInit()) {
@@ -113,6 +113,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
+		renderer.loadTexture("assets/textures/grass.jpg", "grass");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/cone45.obj", "cone");
@@ -123,7 +124,7 @@ int NsMain(int argc, char** argv) {
 		renderer.setBackgroundColor({ 0.1f, 0.075f, 0.1f, 1.0f });
 
 		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
+		glm::vec3 camPos{ 5.0f, 5.0f, 10.0f };
 
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
@@ -153,7 +154,7 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
-		
+
 		GameMaster* gm = new GameMaster(&entityManager);
 
 		Entity newEntity = entityManager.createEntity();
@@ -169,26 +170,39 @@ int NsMain(int argc, char** argv) {
 		stat.textureName = "stone";
 		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
+		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
-		entityManager.addComponent<TransformComponent>(newEntity, trans);
-		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+		/*entityManager.addComponent<TransformComponent>(newEntity, trans);
+		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);*/
 
 		stat.modelName = "cube";
-		trans.pos = { 2, 7 };
+		//trans.pos = { 2, 7 };
 
 		entityManager.addComponent<TransformComponent>(entity2, trans);
 		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
+		bool swapTex = false;
 
 		//World setup
-		for (int x = -5; x <= 5; x++) {
-			for (int y = -5; y <= 5; y++) {
+		for (int x = 0; x <= 10; x++) {
+			for (int y = 0; y <= 10; y++) {
 				Entity fresh = entityManager.createEntity();
 				trans.pos = { x, y };
 				stat.modelName = "cube";
-				stat.textureName = "surface";
+				if (swapTex) {
+					stat.textureName = "grass";
+				}
+				else {
+					stat.textureName = "surface";
+				}
 				stat.shaderName = "basic";
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
+				if (swapTex) {
+					swapTex = false;
+				}
+				else {
+					swapTex = true;
+				}
 			}
 		}
 
@@ -199,7 +213,7 @@ int NsMain(int argc, char** argv) {
 		}
 		*/
 
-		Entity diag1 = entityManager.createEntity();
+		/*Entity diag1 = entityManager.createEntity();
 		trans.pos = { 5, 5 };
 		stat.posOffset = { 0.0f, 0.0f, 1.0f };
 		stat.textureName = "stone";
@@ -216,31 +230,46 @@ int NsMain(int argc, char** argv) {
 		trans.pos = { -5, -5 };
 		stat.rotOffset = { 0.0f, 0.0f, 0.0f };
 		entityManager.addComponent<TransformComponent>(diag2, trans);
-		entityManager.addComponent<StaticMeshComponent>(diag2, stat);
+		entityManager.addComponent<StaticMeshComponent>(diag2, stat);*/
 
-		Entity mob = entityManager.createEntity();
+		/*Entity mob = entityManager.createEntity();
 		trans.pos = { 0, 4 };
 		entityManager.addComponent<TransformComponent>(mob, trans);
-		entityManager.addComponent<StaticMeshComponent>(mob, stat);
+		entityManager.addComponent<StaticMeshComponent>(mob, stat);*/
 
 		Entity turnBlock = entityManager.createEntity();
 		trans.pos = { 0, 10 };
 		entityManager.addComponent<TransformComponent>(turnBlock, trans);
 		entityManager.addComponent<StaticMeshComponent>(turnBlock, stat);
 
-		Entity block = entityManager.createEntity();
+		/*Entity block = entityManager.createEntity();
 		trans.pos = { 1, 5 };
 		entityManager.addComponent<TransformComponent>(block, trans);
-		entityManager.addComponent<StaticMeshComponent>(block, stat);
+		entityManager.addComponent<StaticMeshComponent>(block, stat);*/
 
 		Entity ak = entityManager.createEntity();
-		trans.pos = { 0, 0 };
+		trans.pos = { 5, 5 };
 		stat.posOffset.z += 0.6f;
 		stat.rotOffset.y = glm::radians(90.0f);
 		stat.modelName = "ak";
 		stat.textureName = "ak_texture";
+		PlayerComponent playComp;
+		MoveComponent moveComp;
+		moveComp.moved = false;
+		moveComp.moveRange = 2;
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
+		entityManager.addComponent<PlayerComponent>(ak, playComp);
+		entityManager.addComponent<MoveComponent>(ak, moveComp);
+
+		Entity ak2 = entityManager.createEntity();
+		trans.pos = { 5, 6 };
+		moveComp.moved = false;
+		moveComp.moveRange = 2;
+		entityManager.addComponent<TransformComponent>(ak2, trans);
+		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
+		entityManager.addComponent<PlayerComponent>(ak2, playComp);
+		entityManager.addComponent<MoveComponent>(ak2, moveComp);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -289,11 +318,10 @@ int NsMain(int argc, char** argv) {
 		//Important note: FindName will probably still succeed and return the element even if
 		//you give it the wrong type, but the parameters you could get/set would not necessarily
 		//correspond to what the element actually has and thus not work as expected.
-		auto targetText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("textTarget");
-		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("btn");
 		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
 		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
-		auto moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
+		auto modeBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
+		auto modeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("modeText");
 
 		bool lightOn = true;
 
@@ -304,25 +332,25 @@ int NsMain(int argc, char** argv) {
 		bool isPlayerTurn = true;
 		void* gmPtr = &gm;
 
-		targetBtn->Click() += [rendPtr, lightOn,targetText](Noesis::BaseComponent* sender, 
+		/*targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
-			if (lightOn) {
-				lightOn = false;
-				rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-				targetText->SetText("off");
-			}
-			else {
-				lightOn = true;
-				rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-					{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-				targetText->SetText("on");
-			}
-		};
-		
+				if (lightOn) {
+					lightOn = false;
+					rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+						{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+					targetText->SetText("off");
+				}
+				else {
+					lightOn = true;
+					rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+						{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+					targetText->SetText("on");
+				}
+			};*/
+
 		//Looks like each callback has a limit on how much memory it can involve. On the bright size,
 		//you can have multiple callbacks.
-		targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
+		/*targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
 				if (lightOn) {
@@ -334,31 +362,40 @@ int NsMain(int argc, char** argv) {
 					((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
 				}
 
-		};
-		turnBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
+		};*/
+		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
-					turnText->SetText("Enemy");
+					turnText->SetText("Enemy Turn");
 					gm->endTurn();
 				}
-				else if(gm->currentTurn == enemyTurn) {
-					turnText->SetText("Player");
+				else if (gm->currentTurn == enemyTurn) {
+					turnText->SetText("Player Turn");
 					gm->endTurn();
+					gm->selected = NULL;
+					gm->switchMode(select);
+					modeText->SetText("Select Mode");
 				}
 				else {
 
 				}
 			};
-		moveBtn->Click() += [turnText, gm, turnBlock](Noesis::BaseComponent* sender,
+		modeBtn->Click() += [modeText, gm](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm->currentTurn == playerTurn) {
-					((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x -= 1;
+				if (gm->currentMode == select) {
+					gm->switchMode(move);
+					modeText->SetText("Move Mode");
+					std::cout << "Move";
 				}
-				else if (gm->currentTurn == enemyTurn) {
-					//((EntityManager*)gm->entityManager)->getComponent<TransformComponent>(turnBlock).pos.x += 1;
+				else if (gm->currentMode == move) {
+					gm->switchMode(attack);
+					modeText->SetText("Attack Mode");
+					std::cout << "Attack";
 				}
-				else {
-
+				else if (gm->currentMode == attack) {
+					gm->switchMode(select);
+					modeText->SetText("Select Mode");
+					std::cout << "Select";
 				}
 			};
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
@@ -379,7 +416,7 @@ int NsMain(int argc, char** argv) {
 			//This is probably something I should fix, but performance impact seems negligible, at least.
 			int cWidth, cHeight;
 			glfwGetFramebufferSize(window, &cWidth, &cHeight);
-			
+
 			// fixed Crashed when minimized the window -> cWidth == cHeight == 0;
 			if ((cWidth != prevWidth || cHeight != prevHeight) && !(cWidth == 0 || cHeight == 0)) {
 				renderer.updateWindowSize(window, cWidth, cHeight);
@@ -391,7 +428,7 @@ int NsMain(int argc, char** argv) {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
-			entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
+			//entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
 
 			universe.update(deltaTime);
 
@@ -454,21 +491,12 @@ int NsMain(int argc, char** argv) {
 				if (!lmbDownPrevFrame) {
 					lmbDownPrevFrame = true;
 					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
-					std::cout << "\n" << x << " : " << y;
-					//vec3
-					//mat4
-					//mat4
-					//vec4
 
 					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
 					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
 					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
 
 					glm::mat4 view = glm::inverse(cam);
-
-					//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f),
-					//glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
-					//
 
 					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
 						cWidth / (float)cHeight, 0.1f, 100.0f);
@@ -481,7 +509,7 @@ int NsMain(int argc, char** argv) {
 						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
 
 					auto v = normalize(farPlaneClickPos - camPos);
-					
+
 					glm::vec3 posOnPlane{ 0, 0, 0 };
 					glm::vec3 planeOrig{ 0, 0, 0 };
 					glm::vec3 planeNorm{ 0, 0, 1 };
@@ -492,6 +520,57 @@ int NsMain(int argc, char** argv) {
 					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
 
 					entityManager.getComponent<TransformComponent>(entity2).pos = { std::round(posOnPlane.x), std::round(posOnPlane.y) };
+					int gridPositionX = std::round(posOnPlane.x);
+					int gridPositionY = std::round(posOnPlane.y);
+					std::vector<Entity> entitiesWithAI = entityManager.getEntitiesWithComponent<AIComponent>();
+					std::vector<Entity> entitiesWithPlayers = entityManager.getEntitiesWithComponent<PlayerComponent>();
+					if (gm->currentMode == select) {
+						for (auto entity : entitiesWithPlayers) {
+							if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY) {
+								gm->selected = entity;
+							}
+						}
+					}
+					else if (gm->currentMode == move) {
+						if (gm->selected != NULL) {
+							std::cout << "\nSelected : " << entityManager.getComponent<TransformComponent>(gm->selected).pos.x << " , " << entityManager.getComponent<TransformComponent>(gm->selected).pos.y;
+							std::cout << "\nClicked : " << gridPositionX << " , " << gridPositionY;
+							auto moveComp = entityManager.getComponent<MoveComponent>(gm->selected);
+							auto transComp = entityManager.getComponent<TransformComponent>(gm->selected);
+							int moveAmount = moveComp.moveRange;
+							bool canMove = false;
+							bool noStack = true;
+							if (!moveComp.moved) {
+								if (moveAmount - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0){
+									canMove = true;
+								}
+								else {
+									canMove = false;
+								}
+								if (canMove) {
+									for (auto entity : entitiesWithPlayers) {
+										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
+											noStack = false;
+											break;
+										}
+									}
+									for (auto entity : entitiesWithAI) {
+										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
+											noStack = false;
+											break;
+										}
+									}
+									if (noStack) {
+										entityManager.getComponent<MoveComponent>(gm->selected).moved = true;
+										entityManager.getComponent<TransformComponent>(gm->selected).pos = { gridPositionX, gridPositionY };
+									}
+								}
+							}
+						}
+					}
+					else {
+						std::cout << "idk";
+					}
 				}
 			}
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
@@ -508,7 +587,7 @@ int NsMain(int argc, char** argv) {
 			bool nsguiTreeDirty = nsguiView->GetRenderer()->UpdateRenderTree();
 			if (nsguiTreeDirty) {
 				//Rendering to offscreen buffer (I think) only needs to happen
- 			    //if something changed in the UI. If not, the previous one is kept and reused this frame.
+				//if something changed in the UI. If not, the previous one is kept and reused this frame.
 				nsguiView->GetRenderer()->RenderOffscreen();
 			}
 
@@ -525,7 +604,7 @@ int NsMain(int argc, char** argv) {
 			glfwPollEvents();
 
 			//Audio Test
-			sounddevice->SetPosition(camPos);
+			/*sounddevice->SetPosition(camPos);
 			sounddevice->SetOrientation(trueFwd, trueUp);
 
 			if (gunshotTimer > 0) {
@@ -540,11 +619,11 @@ int NsMain(int argc, char** argv) {
 					SourceA.Play(gunB);
 				}
 				gunshotTimer = 600;
-			}
+			}*/
 
 			// AI test
 			aiSystem.update(entityManager, entityManager.getDeltaTime());
-			
+
 
 
 		} //End of operation loop. Everything after this is cleanup.
