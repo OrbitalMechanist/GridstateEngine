@@ -51,7 +51,16 @@ bool EnemyAI::performAttack(Entity attacker, Entity target) {
         int damageDealt = manager.getComponent<AttackComponent>(attacker).damage;
 
         // Reduce target's health by the damage dealt
-        manager.getComponent<HealthComponent>(target).health -= damageDealt; // changet this one later using GMS
+        int currentHealth = manager.getComponent<HealthComponent>(target).health;
+        int updateHealth = currentHealth - damageDealt; // change this one later using GMS
+
+        if (updateHealth <= 0) {
+            manager.getComponent<HealthComponent>(target).health = 0;
+            manager.destroyEntity(target);
+        }
+        else {
+            manager.getComponent<HealthComponent>(target).health = updateHealth;
+        }
 
         std::cout << "Attack hits! Damage dealt: " << damageDealt << std::endl;
         return true;

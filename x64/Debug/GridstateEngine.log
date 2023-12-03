@@ -5,5 +5,8 @@ E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(554,36
 E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(554,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(696,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(696,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  EnemyAI.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\EnemyAI.cpp(97,29): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
   GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied

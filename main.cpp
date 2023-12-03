@@ -317,7 +317,7 @@ int NsMain(int argc, char** argv) {
 
 		// player 1
 		PlayerComponent player(1);// test 
-		HealthComponent hp(bus, 0, 100, 2); // assume health starts at 100 , armor 2
+		HealthComponent hp(bus, 0, 2, 2); // assume health starts at 100 , armor 2
 		AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
 		MoveComponent movement(2, false);
 		entityManager.addComponent<PlayerComponent>(playerEntity, player);
