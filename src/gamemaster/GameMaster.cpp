@@ -1,16 +1,16 @@
 #include "gamemaster/GameMaster.h"
 
-GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e), currentMode(select) {}
+GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e), currentMode(select), botSelected(false) {}
 
 GameMaster::~GameMaster() {}
 
 void GameMaster::endTurn() {
 	if (currentTurn == playerTurn) {
 		currentTurn = enemyTurn;
-		/*std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
+		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		for (auto entity : entitiesWithPlayer) {
 			entityManager->getComponent<MoveComponent>(entity).moved = true;
-		}*/
+		}
 	}
 	else if (currentTurn == enemyTurn) {
 		currentTurn = playerTurn;
@@ -32,16 +32,23 @@ void GameMaster::switchMode(Mode mode) {
 
 void GameMaster::selectUnit(int x, int y) {
 	std::vector<Entity> entitiesWithPlayers = entityManager->getEntitiesWithComponent<PlayerComponent>();
+	std::vector<Entity> entitiesWithAI = entityManager->getEntitiesWithComponent<AIComponent>();
 	for (auto entity : entitiesWithPlayers) {
 		if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y) {
 			selected = entity;
+			botSelected = false;
 		}
 	}
-
+	for (auto entity : entitiesWithAI) {
+		if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y) {
+			selected = entity;
+			botSelected = true;
+		}
+	}
 }
 
-void GameMaster::moveSelected(int x, int y) {
-	if (selected != NULL) {
+bool GameMaster::moveSelected(int x, int y) {
+	if (selected != NULL && !botSelected) {
 		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		std::vector<Entity> entitiesWithAI = entityManager->getEntitiesWithComponent<AIComponent>();
 		auto moveComp = entityManager->getComponent<MoveComponent>(selected);
@@ -70,18 +77,19 @@ void GameMaster::moveSelected(int x, int y) {
 					if (noStack) {
 						entityManager->getComponent<MoveComponent>(selected).moved = true;
 						entityManager->getComponent<TransformComponent>(selected).pos = { x, y };
+						selected = NULL;
+						currentMode = select;
+						return true;
 					}
 				}
 			}
-			if (moveAmount - (abs(transComp.pos.x - x) + abs(transComp.pos.y - y)) >= 0) {
-				canMove = true;
-			}
 		}
 	}
+	return false;
 }
 
 bool GameMaster::attackSelected(int x, int y) {
-	if (selected != NULL) {
+	if (selected != NULL && !botSelected) {
 		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		std::vector<Entity> entitiesWithAI = entityManager->getEntitiesWithComponent<AIComponent>();
 		auto unitAtk = entityManager->getComponent<AttackComponent>(selected);
@@ -110,6 +118,8 @@ bool GameMaster::attackSelected(int x, int y) {
 					else {
 						entityManager->destroyEntity(enemyUnit);
 					}
+					selected = NULL;
+					currentMode = select;
 					return true;
 				}
 			}

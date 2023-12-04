@@ -9,8 +9,7 @@ enum Turn {
 enum Mode {
 	select,
 	move,
-	attack,
-	test
+	attack
 };
 
 class GameMaster {
@@ -19,6 +18,7 @@ public:
 	EntityManager* entityManager;
 	Entity selected;
 	Mode currentMode;
+	bool botSelected;
 
 	GameMaster(EntityManager* e);
 
@@ -32,7 +32,7 @@ public:
 
 	void selectUnit(int x, int y);
 
-	void moveSelected(int x, int y);
+	bool moveSelected(int x, int y);
 
 	bool attackSelected(int x, int y);
 };

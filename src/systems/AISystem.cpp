@@ -139,7 +139,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
 
     //// create component
     AIComponent ai(AIState::Idle);
-    HealthComponent hp(entityID, 100, 2); // assume health starts at 100 , armor 2
+    HealthComponent hp(entityID, 5, 2); // assume health starts at 5 , armor 2
     AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
     MoveComponent movement(1, false);
 

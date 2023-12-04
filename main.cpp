@@ -223,7 +223,10 @@ int NsMain(int argc, char** argv) {
 		Entity ak2 = entityManager.createEntity();
 		trans.pos = { 5, 6 };
 		moveComp.moved = false;
-		moveComp.moveRange = 2;
+		moveComp.moveRange = 1;
+		atkComp.damage = 3;
+		hpComp.health = 7;
+		atkComp.range = 2;
 		entityManager.addComponent<TransformComponent>(ak2, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
 		entityManager.addComponent<PlayerComponent>(ak2, playComp);
@@ -300,6 +303,7 @@ int NsMain(int argc, char** argv) {
 
 		auto healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
 		auto moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");
+		auto attackRangeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackRangeText");
 		auto attackText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackText");
 		auto canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
 
@@ -478,15 +482,47 @@ int NsMain(int argc, char** argv) {
 
 					if (gm->currentMode == select) {
 						gm->selectUnit(gridPositionX, gridPositionY);
+						if (gm->selected != NULL) {
+							std::cout << "\nNOT NULL";
+							std::string stringVar = "Health " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health);
+							healthText->SetText(stringVar.c_str());
+							stringVar = "Move Range " + std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
+							moveText->SetText(stringVar.c_str());
+							stringVar = "Attack Range " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
+							attackRangeText->SetText(stringVar.c_str());
+							stringVar = "Damage " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
+							attackText->SetText(stringVar.c_str());
+							if (!gm->botSelected) {
+								if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
+									canMoveText->SetText("Moved True");
+								}
+								else {
+									canMoveText->SetText("Moved False");
+								}
+							}
+						}
 					}
 					else if (gm->currentMode == move) {
-						gm->moveSelected(gridPositionX, gridPositionY);
+						bool moved = gm->moveSelected(gridPositionX, gridPositionY);
+						if (moved) {
+							canMoveText->SetText("Moved True");
+							modeText->SetText("Select");
+						}
 					}
 					else {
 						bool hit = gm->attackSelected(gridPositionX, gridPositionY);
 						if (hit) {
 							SourceA.Play(gunA);
+							canMoveText->SetText("Moved True");
+							modeText->SetText("Select");
 						}
+					}
+					if (gm->selected == NULL) {
+						healthText->SetText("");
+						moveText->SetText("");
+						attackRangeText->SetText("");
+						attackText->SetText("");
+						canMoveText->SetText("");
 					}
 				}
 			}
