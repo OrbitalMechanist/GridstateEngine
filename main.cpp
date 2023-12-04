@@ -520,7 +520,7 @@ int NsMain(int argc, char** argv) {
 			glfwPollEvents();
 
 			// AI test
-			aiSystem.update();
+			aiSystem.update(nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText"));
 
 
 

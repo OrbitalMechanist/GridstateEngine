@@ -6,6 +6,7 @@
 #include "Systems/MessagingSystem/MessageSystem.h"
 #include "gamemaster/GameMaster.h"
 #include <mutex>
+#include <NsGui/TextBlock.h>
 #ifndef AISYSTEM_H
 #define AISYSTEM_H
 
@@ -13,10 +14,11 @@ class AISystem {
     EntityManager& manager;
     MessageBus& bus;
     GameMaster& gm;
+   
 public:
     AISystem(EntityManager& manager, MessageBus& bus, GameMaster& gm) : manager(manager), bus(bus), gm(gm) {};
     // Update function to be called every game loop iteration.
-    void update();
+    void update(Noesis::TextBlock *turnText);
     void spawnEnemy(TransformComponent trans, StaticMeshComponent stat);
 
 private:
