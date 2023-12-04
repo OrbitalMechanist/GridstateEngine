@@ -42,6 +42,8 @@ void AISystem::handleIdleState(Entity entity) {
         std::cout << "Idle state" << std::endl;
         AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
 
+        
+
         // Switch to pathfinding State
         aiComponent.state = AIState::Pathfinding;
     }
@@ -51,54 +53,72 @@ void AISystem::handleIdleState(Entity entity) {
 void AISystem::handlePathfindingState(Entity entity) {
     std::cout << "Pathfinding state" << std::endl;
     AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
-    updateMap();
-    EnemyAI aiPath(manager);
-    Entity player = aiPath.GetClosestPlayer(entity);
-
-    // Get Position
-    int aiPosX = manager.getComponent<TransformComponent>(entity).pos.x;
-    int aiPosY = MAX_Y-manager.getComponent<TransformComponent>(entity).pos.y;
-    int playerPosX = manager.getComponent<TransformComponent>(player).pos.x;
-    int playerPosY = MAX_Y-manager.getComponent<TransformComponent>(player).pos.y;
-    std::pair aiPosition = std::make_pair(aiPosX, aiPosY);
-    std::pair playerPosition = std::make_pair(playerPosX, playerPosY);
-
-    // pathfinding
-    Pathfinding path;
-    path.aStarSearch(map, aiPosition, playerPosition);
-
-    // Move
-    int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
-    if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
+    if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
        
-        int newX = path.getNewPosition(walkRange).first ;
-        int newY = MAX_Y - path.getNewPosition(walkRange).second;
-
-        manager.getComponent<TransformComponent>(entity).pos.x = newX;
-        manager.getComponent<TransformComponent>(entity).pos.y = newY;
-
         updateMap();
+
+        // Find Closest player
+        EnemyAI aiPath(manager);
+        Entity player = aiPath.GetClosestPlayer(entity);
+
+        // Get Position
+        int aiPosX = manager.getComponent<TransformComponent>(entity).pos.x;
+        int aiPosY = MAX_Y - manager.getComponent<TransformComponent>(entity).pos.y;
+        int playerPosX = manager.getComponent<TransformComponent>(player).pos.x;
+        int playerPosY = MAX_Y - manager.getComponent<TransformComponent>(player).pos.y;
+        std::pair aiPosition = std::make_pair(aiPosX, aiPosY);
+        std::pair playerPosition = std::make_pair(playerPosX, playerPosY);
+
+        // check if already within attackRange - skip moving
+        EnemyAI aiAttack(manager);
+        if (manager.getComponent<AttackComponent>(entity).range >= aiAttack.calculateDistance(aiPosition, playerPosition)) {
+            std::cout << "st";
+            aiComponent.state = AIState::Attack;
+        }
+
+        /*std::cout << "AIPOS: " << manager.getComponent<TransformComponent>(entity).pos.x << " : " << manager.getComponent<TransformComponent>(entity).pos.y << std::endl;
+         std::cout << "player: " << manager.getComponent<TransformComponent>(player).pos.x << " : " << manager.getComponent<TransformComponent>(player).pos.y << std::endl;*/
+
+         // pathfinding
+        Pathfinding path;
+        path.aStarSearch(map, aiPosition, playerPosition);
+        path.printDirVec();
+
+        // Move
+        int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
+        if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
+
+            int newX = path.getNewPosition(walkRange).first;
+            int newY = MAX_Y - path.getNewPosition(walkRange).second;
+
+            manager.getComponent<TransformComponent>(entity).pos.x = newX;
+            manager.getComponent<TransformComponent>(entity).pos.y = newY;
+
+
+        }
+   
     }
-
-
     // Switch to Attack State
     aiComponent.state = AIState::Attack;
 }
 
 // Attack state handler
 void AISystem::handleAttackState(Entity entity){
-    std::cout << "Attack state" << std::endl;
+   // std::cout << "Attack state" << std::endl;
     AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
-    // find attack target
-    EnemyAI aiAttack(manager);
-    Entity target = aiAttack.GetClosestPlayer(entity);
-    if (target == NULL) {
-        std::cout << "NO player exited " << std::endl;
+    if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
+        // find attack target
+        EnemyAI aiAttack(manager);
+        Entity target = aiAttack.GetClosestPlayer(entity);
+        if (target == NULL) {
+            std::cout << "NO player exited " << std::endl;
+        }
+        else {
+            aiAttack.enemyPerform(entity, target);
+            std::cout << "Current Health: " << manager.getComponent<HealthComponent>(target).health << std::endl;
+        }
     }
-    else {
-        aiAttack.enemyPerform(entity, target);
-        std::cout << "Current Health: " << manager.getComponent<HealthComponent>(target).health << std::endl;
-    }
+    
     hasAttackCount++;
     aiComponent.state = AIState::Idle;
 }
@@ -147,27 +167,29 @@ void AISystem::updateMap() {
         //std::cout << std::endl;
     }
 
-    for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {
-        
-        int x = manager.getComponent<TransformComponent>(aiEntity).pos.x;
-        int y = manager.getComponent<TransformComponent>(aiEntity).pos.y;
-        int invertedY = MAX_Y - y;  
-        //std::cout << x << " : " << y << std::endl;
-        map[invertedY][x] = 0;
-    }
+    //for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {
+    //    
+    //    int x = manager.getComponent<TransformComponent>(aiEntity).pos.x;
+    //    int y = manager.getComponent<TransformComponent>(aiEntity).pos.y;
+    //    int invertedY = MAX_Y - y;  
+    //    //std::cout << x << " : " << y << std::endl;
+    //    map[invertedY][x] = 0;
+    //}
 
-    for (Entity playerEntity : manager.getEntitiesWithComponent<PlayerComponent>()) {
+  /*  for (Entity playerEntity : manager.getEntitiesWithComponent<PlayerComponent>()) {
         int x = manager.getComponent<TransformComponent>(playerEntity).pos.x;
         int y = manager.getComponent<TransformComponent>(playerEntity).pos.y;
         int invertedY = MAX_Y - y;
-        map[invertedY][x] = 0;
-    }
+        map[invertedY][x] = 2;
+    }*/
 
-    /*for (int i = 0; i < MAX_Y; ++i) {
+    /*std::cout << std::endl;
+    for (int i = 0; i < MAX_Y; ++i) {
         for (int j = 0; j < MAX_Y; ++j) {
            
             std::cout << map[i][j] << " ";
         }
         std::cout << std::endl;
+        
     }*/
 }

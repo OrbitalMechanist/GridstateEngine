@@ -106,14 +106,14 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
     // If the source is out of range
     if (isValid(src.first, src.second) == false)
     {
-        //printf("Start is invalid\n");
+        printf("Start is invalid\n");
         return;
     }
 
     // If the destination is out of range
     if (isValid(dest.first, dest.second) == false)
     {
-       // printf("Destination is invalid\n");
+        printf("Destination is invalid\n");
         return;
     }
 
@@ -121,14 +121,14 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
     if (isUnBlocked(grid, src.first, src.second) == false ||
         isUnBlocked(grid, dest.first, dest.second) == false)
     {
-        //printf("Start or the destination is blocked\n");
+        printf("Start or the destination is blocked\n");
         return;
     }
 
     // If the destination cell is the same as source cell
     if (isDestination(src.first, src.second, dest) == true)
     {
-        //printf("We are already at the destination\n");
+        printf("We are already at the destination\n");
         return;
     }
 
@@ -666,7 +666,7 @@ std::vector<std::pair<int,int>> Pathfinding::GetDirMap() {
 }
 
 std::pair<int, int> Pathfinding::getNewPosition(int moveRange) {
-    if (!dirVec.empty()) {
+    if (dirVec.size() > 2) {
         // Ensure we access a valid index
         if (moveRange < dirVec.size()) {
             return dirVec[moveRange];

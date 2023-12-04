@@ -17,7 +17,7 @@ double EnemyAI::calculateDistance(std::pair<int, int> pos1, std::pair<int, int> 
 void EnemyAI::enemyPerform(Entity attacker, Entity target) {
     std::pair<int, int> aiPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x , manager.getComponent<TransformComponent>(attacker).pos.y);
     std::pair<int, int> playerPos = std::make_pair(manager.getComponent<TransformComponent>(target).pos.x, manager.getComponent<TransformComponent>(target).pos.y);
-    std::cout << aiPos.first << " : " << aiPos.second << std::endl;
+    //std::cout << aiPos.first << " : " << aiPos.second << std::endl;
     double distance = calculateDistance(aiPos, playerPos);
 
     // check if within range
@@ -27,13 +27,13 @@ void EnemyAI::enemyPerform(Entity attacker, Entity target) {
         bool attackResult = performAttack(attacker, target);
 
         if (attackResult) {
-            std::cout << "AI unit attacks player!" << std::endl;
+           // std::cout << "AI unit attacks player!" << std::endl;
         } else {
-            std::cout << "AI unit misses the attack!" << std::endl;
+           // std::cout << "AI unit misses the attack!" << std::endl;
         }  
     }
     else {
-        std::cout << "Out of AttackRange" << std::endl;
+        //std::cout << "Out of AttackRange" << std::endl;
     }
 }
 
@@ -62,11 +62,11 @@ bool EnemyAI::performAttack(Entity attacker, Entity target) {
             manager.getComponent<HealthComponent>(target).health = updateHealth;
         }
 
-        std::cout << "Attack hits! Damage dealt: " << damageDealt << std::endl;
+        //std::cout << "Attack hits! Damage dealt: " << damageDealt << std::endl;
         return true;
     }
     else {
-        std::cout << "Attack misses!" << std::endl;
+       // std::cout << "Attack misses!" << std::endl;
         return false;
     }
 }
@@ -102,11 +102,11 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
         }
     }
     if (closestDistance == -1) {
-        std::cout << "Is null" << std::endl;
+        //std::cout << "Is null" << std::endl;
         return NULL;
     }
     else {
-        std::cout << "Distance " << closestDistance << std::endl;
+        //std::cout << "Distance " << closestDistance << std::endl;
     }
     return closestPlayer;
 }

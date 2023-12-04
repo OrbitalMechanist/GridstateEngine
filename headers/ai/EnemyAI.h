@@ -21,13 +21,14 @@ class EnemyAI {
 public:
 	EnemyAI(EntityManager& manager) : manager(manager) {};
 	Entity GetClosestPlayer(Entity attacker); // attack the closest player
+	double calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2);
 	void enemyPerform(Entity attacker, Entity target);
 private:
-	double calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2);
+	
 	
 	bool performAttack(Entity attacker, Entity target);
-
 	float calculateHitChance(Entity attacker, Entity target);
+	
 };
 
 

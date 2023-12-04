@@ -1,3 +1,4 @@
-﻿  AISystem.cpp
+﻿  Pathfinding.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\Pathfinding.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
