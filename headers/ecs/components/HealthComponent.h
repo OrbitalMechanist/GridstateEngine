@@ -4,7 +4,9 @@
 
 // health
 struct HealthComponent {
-    int health; 
+    int entityID;
+    int health;
+    int armor;
 };
 
 #endif 

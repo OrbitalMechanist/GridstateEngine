@@ -56,12 +56,6 @@
     <ClCompile Include="src\audio\SoundSource.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\ai\AISystem.cpp">
-      <Filter>Source Files\AI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ai\AISystemDemoTest.cpp">
-      <Filter>Source Files\AI</Filter>
-    </ClCompile>
     <ClCompile Include="src\ai\Pathfinding.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
@@ -70,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="src\gamemaster\GameMaster.cpp">
       <Filter>Source Files\GameMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ai\EnemyAI.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
+      <Filter>Source Files\Systems\MessagingSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,12 +80,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\ai\AIState.h">
-      <Filter>Header Files\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ai\AISystem.h">
-      <Filter>Header Files\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ai\AISystemDemoTest.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="headers\ai\Pathfinding.h">
@@ -196,6 +190,18 @@
     <ClInclude Include="headers\gamemaster\GameMaster.h">
       <Filter>Header Files\GameMaster</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ai\EnemyAI.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\Message.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
+      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -300,6 +306,12 @@
     </Filter>
     <Filter Include="Header Files\GameMaster">
       <UniqueIdentifier>{74ddb87e-f2e3-477d-a0e5-93a03fc2e677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\MessagingSystem">
+      <UniqueIdentifier>{443536c8-92af-4e63-9c85-d6d7c17d9647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\MessagingSystem">
+      <UniqueIdentifier>{df64ce2b-48b7-46cc-be4c-4018258e4f25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

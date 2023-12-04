@@ -665,7 +665,16 @@ std::vector<std::pair<int,int>> Pathfinding::GetDirMap() {
     return dirVec;
 }
 
-
+std::pair<int, int> Pathfinding::getNewPosition(int moveRange) {
+    if (!dirVec.empty()) {
+        // Ensure we access a valid index
+        if (moveRange < dirVec.size()) {
+            return dirVec[moveRange];
+        }
+        return dirVec.back(); // Return the last element if moveRange is too large
+    }
+    return std::make_pair(NULL, NULL);
+}
 
 
 

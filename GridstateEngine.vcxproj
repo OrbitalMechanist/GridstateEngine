@@ -160,8 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\ai\AISystem.cpp" />
-    <ClCompile Include="src\ai\AISystemDemoTest.cpp" />
+    <ClCompile Include="src\ai\EnemyAI.cpp" />
     <ClCompile Include="src\ai\Pathfinding.cpp" />
     <ClCompile Include="src\audio\SoundBuffer.cpp" />
     <ClCompile Include="src\audio\SoundDevice.cpp" />
@@ -182,12 +181,12 @@
     <ClCompile Include="src\mapgridbuilder\MapGrid.cpp" />
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp" />
     <ClCompile Include="src\systems\AISystem.cpp" />
+    <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp" />
     <ClCompile Include="src\Universe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\ai\AIState.h" />
-    <ClInclude Include="headers\ai\AISystem.h" />
-    <ClInclude Include="headers\ai\AISystemDemoTest.h" />
+    <ClInclude Include="headers\ai\EnemyAI.h" />
     <ClInclude Include="headers\ai\Pathfinding.h" />
     <ClInclude Include="headers\audio\SoundBuffer.h" />
     <ClInclude Include="headers\audio\SoundDevice.h" />
@@ -225,6 +224,9 @@
     <ClInclude Include="headers\mapgridbuilder\MapGrid.h" />
     <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h" />
     <ClInclude Include="headers\systems\AISystem.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\Message.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h" />
+    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h" />
     <ClInclude Include="headers\Universe.h" />
   </ItemGroup>
   <ItemGroup>

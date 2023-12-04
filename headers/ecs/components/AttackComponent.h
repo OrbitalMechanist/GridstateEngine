@@ -6,6 +6,7 @@
 struct AttackComponent {
     int damage;
     int range;
+    int attackModifier;
 };
 
 #endif 

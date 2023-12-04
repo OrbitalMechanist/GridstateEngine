@@ -7,10 +7,10 @@ GameMaster::~GameMaster() {}
 void GameMaster::endTurn() {
 	if (currentTurn == playerTurn) {
 		currentTurn = enemyTurn;
-		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
+		/*std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		for (auto entity : entitiesWithPlayer) {
 			entityManager->getComponent<MoveComponent>(entity).moved = true;
-		}
+		}*/
 	}
 	else if (currentTurn == enemyTurn) {
 		currentTurn = playerTurn;

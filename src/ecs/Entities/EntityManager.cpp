@@ -153,7 +153,7 @@ template void EntityManager::addComponent<GridPositionComponent>(Entity entity, 
 template void EntityManager::addComponent<PlayerComponent>(Entity entity, PlayerComponent playerComponent);
 template void EntityManager::addComponent<MoveComponent>(Entity entity, MoveComponent moveComponent);
 template void EntityManager::addComponent<AttackComponent>(Entity entity, AttackComponent moveComponent);
-template void EntityManager::addComponent<HealthComponent>(Entity entity, HealthComponent moveComponent);
+template void EntityManager::addComponent<HealthComponent>(Entity entity, HealthComponent healthComponent);
 
 template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
 template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);

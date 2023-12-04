@@ -15,7 +15,6 @@ extern "C" {
 
 #include "ecs/entity/EntityManager.h"
 
-#include "ai/AISystem.h"
 
 #include "Universe.h"
 
@@ -46,7 +45,7 @@ extern "C" {
 #include <NsRender/GLRenderDeviceApi.h>
 
 // AI inlucde 
-#include "../headers/ai/AISystemDemoTest.h"
+#include "../headers/systems/AISystem.h"
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -69,13 +68,7 @@ int NsMain(int argc, char** argv) {
 	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 
-	// AI setup
-	EntityManager entityManager;
-	AISystem aiSystem;
-	entityManager.registerComponentType<AIComponent>();
-	Entity newEntity = entityManager.createEntity();
-	AISystemDemoTest aiDemo(entityManager);
-
+	
 
 	try {
 		if (!glfwInit()) {
@@ -154,8 +147,13 @@ int NsMain(int argc, char** argv) {
 
 		entityManager.registerComponentType<TransformComponent>();
 		entityManager.registerComponentType<StaticMeshComponent>();
+		entityManager.registerComponentType<AIComponent>();
+		entityManager.registerComponentType<HealthComponent>();
+		entityManager.registerComponentType<AttackComponent>();
+		entityManager.registerComponentType<MoveComponent>();
 
 		GameMaster* gm = new GameMaster(&entityManager);
+
 
 		Entity newEntity = entityManager.createEntity();
 		Entity entity2 = entityManager.createEntity();
@@ -199,7 +197,7 @@ int NsMain(int argc, char** argv) {
 			}
 		}
 
-		PlayerComponent playComp;
+		PlayerComponent playComp(0);
 		MoveComponent moveComp;
 		AttackComponent atkComp;
 		HealthComponent hpComp;
@@ -233,17 +231,19 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<AttackComponent>(ak2, atkComp);
 		entityManager.addComponent<HealthComponent>(ak2, hpComp);
 
-		Entity enemy1 = entityManager.createEntity();
-		trans.pos = { 7,7 };
-		moveComp.moved = true;
-		AIComponent ai;
-		ai.state = AIState::Idle;
-		entityManager.addComponent<TransformComponent>(enemy1, trans);
-		entityManager.addComponent<StaticMeshComponent>(enemy1, stat);
-		entityManager.addComponent<AIComponent>(enemy1, ai);
-		entityManager.addComponent<MoveComponent>(enemy1, moveComp);
-		entityManager.addComponent<AttackComponent>(enemy1, atkComp);
-		entityManager.addComponent<HealthComponent>(enemy1, hpComp);
+		// AI setup
+		MessageBus bus;
+		AISystem aiSystem(entityManager, bus, *gm);
+		const int numOfEnemy = 2;
+		// Generate Enemy
+		for (int i = 0; i < numOfEnemy; i++) {
+			trans.pos = { 7 + i, 7 };
+			stat.modelName = "ak";  // replace this with actual model
+			stat.textureName = "ak_texture";
+			aiSystem.spawnEnemy(trans, stat);
+		}
+		
+	
 
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
@@ -310,39 +310,9 @@ int NsMain(int argc, char** argv) {
 		void* emPtr = &entityManager;
 		Entity* entPtr = &entity2;
 		bool isPlayerTurn = true;
-		void* gmPtr = &gm;
+		//void* gmPtr = &gm;
 
-		/*targetBtn->Click() += [rendPtr, lightOn, targetText](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				if (lightOn) {
-					lightOn = false;
-					rendPtr->setLightState("basic", 0, 0, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-						{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-					targetText->SetText("off");
-				}
-				else {
-					lightOn = true;
-					rendPtr->setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-						{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-					targetText->SetText("on");
-				}
-			};*/
 
-			//Looks like each callback has a limit on how much memory it can involve. On the bright size,
-			//you can have multiple callbacks.
-			/*targetBtn->Click() += [emPtr, newEntity, mob, lightOn](Noesis::BaseComponent* sender,
-				const Noesis::RoutedEventArgs& args) mutable {
-					((EntityManager*)emPtr)->getComponent<TransformComponent>(mob).pos.x -= 1;
-					if (lightOn) {
-						lightOn = false;
-						((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "surface";
-					}
-					else {
-						lightOn = true;
-						((EntityManager*)emPtr)->getComponent<StaticMeshComponent>(newEntity).textureName = "stone";
-					}
-
-			};*/
 		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
@@ -550,7 +520,7 @@ int NsMain(int argc, char** argv) {
 			glfwPollEvents();
 
 			// AI test
-			aiSystem.update(entityManager, entityManager.getDeltaTime());
+			aiSystem.update();
 
 
 
