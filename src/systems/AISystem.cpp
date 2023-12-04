@@ -69,19 +69,16 @@ void AISystem::handlePathfindingState(Entity entity) {
         std::pair aiPosition = std::make_pair(aiPosX, aiPosY);
         std::pair playerPosition = std::make_pair(playerPosX, playerPosY);
 
-        // check if already within attackRange - skip moving
-        EnemyAI aiAttack(manager);
-        if (manager.getComponent<AttackComponent>(entity).range >= aiAttack.calculateDistance(aiPosition, playerPosition)) {
-            std::cout << "st";
-            aiComponent.state = AIState::Attack;
-        }
-
         /*std::cout << "AIPOS: " << manager.getComponent<TransformComponent>(entity).pos.x << " : " << manager.getComponent<TransformComponent>(entity).pos.y << std::endl;
          std::cout << "player: " << manager.getComponent<TransformComponent>(player).pos.x << " : " << manager.getComponent<TransformComponent>(player).pos.y << std::endl;*/
 
          // pathfinding
         Pathfinding path;
+        map[aiPosX][aiPosY] = 1;
+        map[playerPosX][playerPosY] = 1;
         path.aStarSearch(map, aiPosition, playerPosition);
+        map[aiPosX][aiPosY] = 0;
+        map[playerPosX][playerPosY] = 2;
         path.printDirVec();
 
         // Move
@@ -167,21 +164,23 @@ void AISystem::updateMap() {
         //std::cout << std::endl;
     }
 
-    //for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {
-    //    
-    //    int x = manager.getComponent<TransformComponent>(aiEntity).pos.x;
-    //    int y = manager.getComponent<TransformComponent>(aiEntity).pos.y;
-    //    int invertedY = MAX_Y - y;  
-    //    //std::cout << x << " : " << y << std::endl;
-    //    map[invertedY][x] = 0;
-    //}
+    // slot taken by Enemy
+    for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {
+        
+        int x = manager.getComponent<TransformComponent>(aiEntity).pos.x;
+        int y = manager.getComponent<TransformComponent>(aiEntity).pos.y;
+        int invertedY = MAX_Y - y;  
+        //std::cout << x << " : " << y << std::endl;
+        map[invertedY][x] = 0;
+    }
 
-  /*  for (Entity playerEntity : manager.getEntitiesWithComponent<PlayerComponent>()) {
+    // slot taken by player
+    for (Entity playerEntity : manager.getEntitiesWithComponent<PlayerComponent>()) {
         int x = manager.getComponent<TransformComponent>(playerEntity).pos.x;
         int y = manager.getComponent<TransformComponent>(playerEntity).pos.y;
         int invertedY = MAX_Y - y;
         map[invertedY][x] = 2;
-    }*/
+    }
 
     /*std::cout << std::endl;
     for (int i = 0; i < MAX_Y; ++i) {

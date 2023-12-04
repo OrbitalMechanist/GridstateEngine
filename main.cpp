@@ -203,7 +203,7 @@ int NsMain(int argc, char** argv) {
 		HealthComponent hpComp;
 
 		Entity ak = entityManager.createEntity();
-		trans.pos = { 0, 5 };
+		trans.pos = { 5, 5 };
 		stat.posOffset.z += 0.6f;
 		stat.rotOffset.y = glm::radians(90.0f);
 		stat.modelName = "ak";
@@ -234,7 +234,7 @@ int NsMain(int argc, char** argv) {
 		// AI setup
 		MessageBus bus;
 		AISystem aiSystem(entityManager, bus, *gm);
-		const int numOfEnemy = 1;
+		const int numOfEnemy = 2;
 		// Generate Enemy
 		for (int i = 0; i < numOfEnemy; i++) {
 			trans.pos = { 7 + i, 7 };

@@ -1,4 +1,12 @@
-﻿  Pathfinding.cpp
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\Pathfinding.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+﻿  main.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(440,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(440,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(447,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(447,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(476,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(477,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(496,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(496,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(441,11): warning C4101: 'clicked': unreferenced local variable
   GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
