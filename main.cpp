@@ -172,14 +172,7 @@ int NsMain(int argc, char** argv) {
 		stat.materialName = "surfaceMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
-		/*entityManager.addComponent<TransformComponent>(newEntity, trans);
-		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);*/
-
 		stat.modelName = "cube";
-		//trans.pos = { 2, 7 };
-
-		entityManager.addComponent<TransformComponent>(entity2, trans);
-		entityManager.addComponent<StaticMeshComponent>(entity2, stat);
 		bool swapTex = false;
 
 		//World setup
@@ -205,42 +198,6 @@ int NsMain(int argc, char** argv) {
 				}
 			}
 		}
-
-		/*
-		for (int y = 0; y <= 12; y += 2) {
-			renderer.addRenderObject(RenderObject("cube", "stone", "basic", { 10.0f, y + 1.0f, 0.0f },
-				{ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }));
-		}
-		*/
-
-		/*Entity diag1 = entityManager.createEntity();
-		trans.pos = { 5, 5 };
-		stat.posOffset = { 0.0f, 0.0f, 1.0f };
-		stat.textureName = "stone";
-		entityManager.addComponent<TransformComponent>(diag1, trans);
-		entityManager.addComponent<StaticMeshComponent>(diag1, stat);
-
-		Entity ctr = entityManager.createEntity();
-		trans.pos = { 0, 0 };
-		stat.rotOffset = { 0.0f, 0.0f, glm::radians(45.0f) };
-		entityManager.addComponent<TransformComponent>(ctr, trans);
-		entityManager.addComponent<StaticMeshComponent>(ctr, stat);
-
-		Entity diag2 = entityManager.createEntity();
-		trans.pos = { -5, -5 };
-		stat.rotOffset = { 0.0f, 0.0f, 0.0f };
-		entityManager.addComponent<TransformComponent>(diag2, trans);
-		entityManager.addComponent<StaticMeshComponent>(diag2, stat);*/
-
-		/*Entity mob = entityManager.createEntity();
-		trans.pos = { 0, 4 };
-		entityManager.addComponent<TransformComponent>(mob, trans);
-		entityManager.addComponent<StaticMeshComponent>(mob, stat);*/
-
-		/*Entity block = entityManager.createEntity();
-		trans.pos = { 1, 5 };
-		entityManager.addComponent<TransformComponent>(block, trans);
-		entityManager.addComponent<StaticMeshComponent>(block, stat);*/
 
 		PlayerComponent playComp;
 		MoveComponent moveComp;
@@ -546,82 +503,19 @@ int NsMain(int argc, char** argv) {
 					posOnPlane = camPos + v * res;
 					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
 
-					entityManager.getComponent<TransformComponent>(entity2).pos = { std::round(posOnPlane.x), std::round(posOnPlane.y) };
 					int gridPositionX = std::round(posOnPlane.x);
 					int gridPositionY = std::round(posOnPlane.y);
-					std::vector<Entity> entitiesWithAI = entityManager.getEntitiesWithComponent<AIComponent>();
-					std::vector<Entity> entitiesWithPlayers = entityManager.getEntitiesWithComponent<PlayerComponent>();
+
 					if (gm->currentMode == select) {
-						for (auto entity : entitiesWithPlayers) {
-							if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY) {
-								gm->selected = entity;
-							}
-						}
+						gm->selectUnit(gridPositionX, gridPositionY);
 					}
 					else if (gm->currentMode == move) {
-						if (gm->selected != NULL) {
-							auto moveComp = entityManager.getComponent<MoveComponent>(gm->selected);
-							auto transComp = entityManager.getComponent<TransformComponent>(gm->selected);
-							int moveAmount = moveComp.moveRange;
-							bool canMove = false;
-							bool noStack = true;
-							if (!moveComp.moved) {
-								if (moveAmount - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0) {
-									canMove = true;
-								}
-								if (canMove) {
-									for (auto entity : entitiesWithPlayers) {
-										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
-											noStack = false;
-											break;
-										}
-									}
-									for (auto entity : entitiesWithAI) {
-										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
-											noStack = false;
-											break;
-										}
-									}
-									if (noStack) {
-										entityManager.getComponent<MoveComponent>(gm->selected).moved = true;
-										entityManager.getComponent<TransformComponent>(gm->selected).pos = { gridPositionX, gridPositionY };
-									}
-								}
-							}
-						}
+						gm->moveSelected(gridPositionX, gridPositionY);
 					}
 					else {
-						if (gm->selected != NULL) {
-							auto unitAtk = entityManager.getComponent<AttackComponent>(gm->selected);
-							auto transComp = entityManager.getComponent<TransformComponent>(gm->selected);
-							int atkRange = unitAtk.range;
-							bool canAttack = false;
-							bool foundEnemy = false;
-							Entity enemyUnit;
-							if (!entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-								if (atkRange - (abs(transComp.pos.x - gridPositionX) + abs(transComp.pos.y - gridPositionY)) >= 0) {
-									canAttack = true;
-								}
-								if (canAttack) {
-									for (auto entity : entitiesWithAI) {
-										if (entityManager.getComponent<TransformComponent>(entity).pos.x == gridPositionX && entityManager.getComponent<TransformComponent>(entity).pos.y == gridPositionY && entity != gm->selected) {
-											foundEnemy = true;
-											enemyUnit = entity;
-											break;
-										}
-									}
-									if (foundEnemy) {
-										SourceA.Play(gunA);
-										entityManager.getComponent<MoveComponent>(gm->selected).moved = true;
-										if (entityManager.getComponent<HealthComponent>(enemyUnit).health > unitAtk.damage) {
-											entityManager.getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage;
-										}
-										else {
-											entityManager.destroyEntity(enemyUnit);
-										}
-									}
-								}
-							}
+						bool hit = gm->attackSelected(gridPositionX, gridPositionY);
+						if (hit) {
+							SourceA.Play(gunA);
 						}
 					}
 				}

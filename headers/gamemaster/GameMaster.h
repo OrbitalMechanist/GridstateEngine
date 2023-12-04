@@ -29,4 +29,10 @@ public:
 	void startTurn(Turn t);
 
 	void switchMode(Mode mode);
+
+	void selectUnit(int x, int y);
+
+	void moveSelected(int x, int y);
+
+	bool attackSelected(int x, int y);
 };
