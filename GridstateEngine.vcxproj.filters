@@ -68,6 +68,7 @@
     <ClCompile Include="src\ecs\GameObj.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\BattleSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">

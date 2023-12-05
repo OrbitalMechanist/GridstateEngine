@@ -181,6 +181,7 @@
     <ClCompile Include="src\mapgridbuilder\MapGrid.cpp" />
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp" />
     <ClCompile Include="src\systems\AISystem.cpp" />
+    <ClCompile Include="src\ui\BattleSceneUI.cpp" />
     <ClCompile Include="src\Universe.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -40,6 +40,11 @@ const float BattleSceneUI::GetMaxPlayerMP()
 	return _maxPlayerMP;
 }
 
+const int BattleSceneUI::GetEnemyNum()
+{
+	return _enemyNum;
+}
+
 void BattleSceneUI::SetEnemyName(std::string enemyName)
 {
 	_enemyName = enemyName;
@@ -101,5 +106,39 @@ void BattleSceneUI::SetMaxPlayerMP(float maxPlayerMP)
 	if (maxPlayerMP > 0)
 	{
 		_maxPlayerMP = maxPlayerMP;
+	}
+}
+
+void BattleSceneUI::DisplayPlayerUI(bool flag)
+{
+	if (flag && _nsguiView->GetContent()->FindName<Noesis::Grid>("playerUI"))
+	{
+		_nsguiView->GetContent()->FindName<Noesis::Grid>("playerUI")->SetVisibility(Visibility_Visible);
+	}
+	else
+	{
+		_nsguiView->GetContent()->FindName<Noesis::Grid>("playerUI")->SetVisibility(Visibility_Hidden);
+	}
+}
+
+void BattleSceneUI::DisplayEnemyInfoUI(bool flag)
+{
+	if (flag && _nsguiView->GetContent()->FindName<Noesis::Grid>("enemyInfo"))
+	{
+		_nsguiView->GetContent()->FindName<Noesis::Grid>("enemyInfo")->SetVisibility(Visibility_Visible);
+	}
+	else
+	{
+		_nsguiView->GetContent()->FindName<Noesis::Grid>("enemyInfo")->SetVisibility(Visibility_Hidden);
+	}
+}
+
+void BattleSceneUI::SetEnemyNum(int enemyNum)
+{
+	_enemyNum = enemyNum;
+
+	if (_nsguiView->GetContent()->FindName<Noesis::Run>("ennmyNum"))
+	{
+		_nsguiView->GetContent()->FindName<Noesis::Run>("ennmyNum")->SetText(std::to_string(_enemyNum).c_str());
 	}
 }

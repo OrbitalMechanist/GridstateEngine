@@ -314,6 +314,11 @@ int NsMain(int argc, char** argv) {
 
 		bsUI.SetMaxEnemyHP(1000);
 		bsUI.SetEnemyHP(1000);
+
+		bsUI.DisplayPlayerUI(true);
+		bsUI.DisplayEnemyInfoUI(true);
+
+		bsUI.SetEnemyNum(99);
 		
 		auto targetBtn = nsguiView->GetContent()->FindName<Noesis::Button>("skill1");
 
@@ -334,6 +339,14 @@ int NsMain(int argc, char** argv) {
 			bsUI.SetEnemyName(name + " / 1000");
 		};
  
+		bool flag = false;
+
+		auto targetBtn1 = nsguiView->GetContent()->FindName<Noesis::Button>("skill2");
+		targetBtn1->Click() += [&](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args) mutable {
+			bsUI.DisplayEnemyInfoUI(flag);
+			bsUI.DisplayPlayerUI(flag);
+			flag = !flag;
+			};
  
  
  

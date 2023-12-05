@@ -5,61 +5,65 @@
 
     <Viewbox>
         <Grid>
-            <Grid>
-                <Rectangle Width="400" Height="100" Margin="186,328,185,9" RadiusX="100" RadiusY="80">
-                    <Rectangle.Fill>
-                        <ImageBrush ImageSource="../images/skillBar4.png" Stretch="None"/>
-                    </Rectangle.Fill>
-                </Rectangle>
+            <!--skill bar and HP/MP bar-->
+            <Grid x:Name="playerUI" Visibility="Hidden">
+                <Grid>
+                    <Rectangle Width="400" Height="100" Margin="186,328,185,9" RadiusX="100" RadiusY="80">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="../images/skillBar4.png" Stretch="None"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
 
-                <Button x:Name="skill1" Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
-                    <Image Source="../images/skill1.png" Width="80" Height="80"/>
-                </Button>
-                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="341,325,330,10">
-                    <Image Source="../images/skill3.png" Width="100" Height="100"/>
-                </Button>
-                <Button Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="443,320,232,11">
-                    <Image Source="../images/skill4.png" Width="100" Height="100"/>
-                </Button>
+                    <Button x:Name="skill1" Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="240,327,435,10">
+                        <Image Source="../images/skill1.png" Width="80" Height="80"/>
+                    </Button>
+                    <Button x:Name="skill2" Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="341,325,330,10">
+                        <Image Source="../images/skill3.png" Width="100" Height="100"/>
+                    </Button>
+                    <Button x:Name="skill3" Width="100" Height="100" Click="Button_Click" Background="Transparent" Margin="443,320,232,11">
+                        <Image Source="../images/skill4.png" Width="100" Height="100"/>
+                    </Button>
+                </Grid>
+
+                <Grid Margin="85,328,586,9" RenderTransformOrigin="1.608,0.481">
+                    <Ellipse Width="100" Height="100" Fill="#FF963131" StrokeThickness="2" Opacity="0.7"/>
+                    <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                <!--The color of the central bright part-->
+                                <GradientStop Offset="0" Color="Red" />
+                                <!--The color of the outer dark part-->
+                                <GradientStop Offset="1" Color="#FF1A1515" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+
+                        <Ellipse.Clip>
+                            <RectangleGeometry x:Name="palyerHP" Rect="0,25,100,100"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                </Grid>
+
+                <Grid Margin="572,328,69,9">
+                    <Ellipse Width="100" Height="100" Fill="#FF316D96"  StrokeThickness="2" Opacity="0.7"/>
+                    <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                <!--The color of the central bright part-->
+                                <GradientStop Offset="0" Color="#FF0089FF" />
+                                <!--The color of the outer dark part-->
+                                <GradientStop Offset="1" Color="#FF1A1515" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+
+                        <Ellipse.Clip>
+                            <RectangleGeometry x:Name="palyerMP" Rect="0,10,100,100"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                </Grid>
             </Grid>
 
-            <Grid Margin="85,328,586,9" RenderTransformOrigin="1.608,0.481">
-                <Ellipse Width="100" Height="100" Fill="#FF963131" StrokeThickness="2" Opacity="0.7"/>
-                <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Ellipse.Fill>
-                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                            <!--The color of the central bright part-->
-                            <GradientStop Offset="0" Color="Red" />
-                            <!--The color of the outer dark part-->
-                            <GradientStop Offset="1" Color="#FF1A1515" />
-                        </RadialGradientBrush>
-                    </Ellipse.Fill>
-
-                    <Ellipse.Clip>
-                        <RectangleGeometry x:Name="palyerHP" Rect="0,25,100,100"/>
-                    </Ellipse.Clip>
-                </Ellipse>
-            </Grid>
-
-            <Grid Margin="572,328,69,9">
-                <Ellipse Width="100" Height="100" Fill="#FF316D96"  StrokeThickness="2" Opacity="0.7"/>
-                <Ellipse Width="100" Height="100" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Ellipse.Fill>
-                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                            <!--The color of the central bright part-->
-                            <GradientStop Offset="0" Color="#FF0089FF" />
-                            <!--The color of the outer dark part-->
-                            <GradientStop Offset="1" Color="#FF1A1515" />
-                        </RadialGradientBrush>
-                    </Ellipse.Fill>
-
-                    <Ellipse.Clip>
-                        <RectangleGeometry x:Name="palyerMP" Rect="0,10,100,100"/>
-                    </Ellipse.Clip>
-                </Ellipse>
-            </Grid>
-
-            <Grid>
+            <!--Enemy hpbar and name-->
+            <Grid x:Name="enemyInfo" Visibility="Hidden">
                 <TextBlock x:Name="enemyName" FontFamily="../fonts/#superlume" Margin="0,10,0,380" TextWrapping="Wrap" FontSize="24"  HorizontalAlignment="Center" TextAlignment="Center" InputScope="FileName" Foreground="Black">
                     <Run Text="Enemy Name"  Foreground="#FFEFACAC"/>
                 </TextBlock>
@@ -78,6 +82,13 @@
                         <RectangleGeometry x:Name="enemyHP" Rect="100,0,200,30" />
                     </Rectangle.Clip>
                 </Rectangle>
+            </Grid>
+
+            <Grid>
+                <TextBlock  FontSize="24" HorizontalAlignment="Left" TextAlignment="Center" InputScope="FileName" Foreground="Black" Margin="24,25,0,-25">
+                    <Run Foreground="#FFB97D7D" FontWeight="Bold">Enemies: </Run>
+                    <Run x:Name="ennmyNum" Foreground="#FFB97D7D" Text="7" FontWeight="Bold" />
+                </TextBlock>
             </Grid>
         </Grid>
     </Viewbox>

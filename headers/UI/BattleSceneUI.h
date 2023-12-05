@@ -16,6 +16,7 @@ public:
 	const float GetPlayerMana();
 	const float GetMaxPlayerHP();
 	const float GetMaxPlayerMP();
+	const int GetEnemyNum();
 
 	void SetEnemyName(std::string enemyName);
 	void SetEnemyHP(float enemyHP);
@@ -24,9 +25,13 @@ public:
 	void SetPlayerMP(float playerMP);
 	void SetMaxPlayerHP(float maxPlayerHP);
 	void SetMaxPlayerMP(float maxPlayerMP);
+	void DisplayPlayerUI(bool flag);
+	void DisplayEnemyInfoUI(bool flag);
+	void SetEnemyNum(int enemyNum);
 
 private:
 	std::string _enemyName;
 	float _enemyHP, _maxEnemyHP, _playerHP, _playerMP, _maxPlayerHP, _maxPlayerMP;
+	int _enemyNum;
 	Noesis::Ptr<Noesis::IView> _nsguiView;
 };
