@@ -202,6 +202,8 @@ int NsMain(int argc, char** argv) {
 		AttackComponent atkComp;
 		HealthComponent hpComp;
 
+
+		//TODO: player1
 		Entity ak = entityManager.createEntity();
 		trans.pos = { 5, 5 };
 		stat.posOffset.z += 0.6f;
@@ -220,6 +222,8 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<AttackComponent>(ak, atkComp);
 		entityManager.addComponent<HealthComponent>(ak, hpComp);
 
+
+		//TODO: player2
 		Entity ak2 = entityManager.createEntity();
 		trans.pos = { 5, 6 };
 		moveComp.moved = false;
