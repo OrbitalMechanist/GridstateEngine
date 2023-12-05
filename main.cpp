@@ -109,9 +109,11 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
 		renderer.loadTexture("assets/textures/grass.jpg", "grass");
+		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/cone45.obj", "cone");
+		renderer.loadModel("assets/models/character.fbx", "character");
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -171,6 +173,20 @@ int NsMain(int argc, char** argv) {
 		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.0f };
+
+
+
+		Entity character = entityManager.createEntity();
+		trans.pos = { 4,4 };
+		stat.modelName = "character";
+		stat.textureName = "surface";
+		stat.textureName = "tree_texture";
+		stat.shaderName = "basic";
+		//stat.materialName = "surfaceMaterial";
+
+		entityManager.addComponent<TransformComponent>(character, trans);
+		entityManager.addComponent<StaticMeshComponent>(character, stat);
+
 
 		stat.modelName = "cube";
 		bool swapTex = false;
