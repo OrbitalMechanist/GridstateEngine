@@ -4,8 +4,8 @@ void SkeletalAnimation::calculateFinalKeyframes()
 {
 	size_t numKeyframes = perBoneKeyframes.size();
 
-	std::pair<size_t, std::vector<glm::mat4>> pairTemplate 
-		= std::make_pair<size_t, std::vector<glm::mat4>>(0, std::vector<glm::mat4>());
+	std::pair<double, std::vector<glm::mat4>> pairTemplate 
+		= std::make_pair<double, std::vector<glm::mat4>>(0, std::vector<glm::mat4>());
 
 	finalKeyframes = perBoneKeyframes; //this gets copied (I think/hope)
 
@@ -68,7 +68,7 @@ size_t SkeletalAnimation::getKeyframeCount()
 }
 
 SkeletalAnimation::SkeletalAnimation(Skeleton& skel, size_t numFrames, float timeDuration,
-	std::vector<std::pair<size_t, std::vector<glm::mat4>>> keyframes) 
+	std::vector<std::pair<double, std::vector<glm::mat4>>> keyframes) 
 	: skeleton(skel), frameLength(numFrames), duration(timeDuration)
 {
 	perBoneKeyframes = keyframes;
@@ -79,6 +79,37 @@ SkeletalAnimation::SkeletalAnimation(Skeleton& skel, size_t numFrames, float tim
 
 std::map<std::string, SkeletalAnimation> SkeletalAnimation::loadAllFromFile(Skeleton& skeleton, std::string path)
 {
-	return std::map<std::string, SkeletalAnimation>();
+	Assimp::Importer import;
+	const aiScene* scene = import.ReadFile(path, aiProcess_PopulateArmatureData);
+
+	std::map<std::string, SkeletalAnimation> result{};
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		std::cerr << "Animation loading failure: " << import.GetErrorString() << std::endl;
+		return result;
+	}
+
+	if (!scene->HasAnimations()) {
+		std::cerr << "Animation loading failure: scene has no animations." << std::endl;
+		return result;
+	}
+
+	for (size_t i = 0; i < scene->mNumAnimations; i++) {
+		auto currentAnim = scene->mAnimations[i];
+		
+		double animDuration = currentAnim->mTicksPerSecond * (double)currentAnim->mDuration;
+		
+		unsigned int numKeyframes = 0;
+
+		//This loop finds how many keyframes we will end up having
+		for (size_t j = 0; j < currentAnim->mNumChannels; j++) {
+			numKeyframes = std::max({ currentAnim->mChannels[j]->mNumPositionKeys,
+				currentAnim->mChannels[j]->mNumRotationKeys,
+				currentAnim->mChannels[j]->mNumScalingKeys,
+				numKeyframes});
+		}
+	}
+
+	return result;
 }
 

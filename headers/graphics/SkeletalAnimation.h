@@ -21,10 +21,10 @@ private:
 
 	//Pre-calculated final transforms for each bone for each keyframe.
 	//Cheaper than calculating the cascading effects of bones every single time.
-	std::vector<std::pair<size_t, std::vector<glm::mat4>>> finalKeyframes;
+	std::vector<std::pair<double, std::vector<glm::mat4>>> finalKeyframes;
 	//Per-bone transforms for each keyframe. May sometimes be necessary, especially for any
 	//procedural animations like IK and whatnot.
-	std::vector<std::pair<size_t, std::vector<glm::mat4>>> perBoneKeyframes;
+	std::vector<std::pair<double, std::vector<glm::mat4>>> perBoneKeyframes;
 
 	//Overwrites the finalKeyframes vector with final frames based on the current contents of perBoneKeyframes.
 	void calculateFinalKeyframes();
@@ -42,7 +42,7 @@ public:
 	size_t getKeyframeCount();
 
 	SkeletalAnimation(Skeleton& skel, size_t numFrames, float timeDuration,
-		std::vector<std::pair<size_t, std::vector<glm::mat4>>> keyframes);
+		std::vector<std::pair<double, std::vector<glm::mat4>>> keyframes);
 
 	//Returns a map containing all animations found in file at path,
 	//assuming the given skeleton matches what's in the file.

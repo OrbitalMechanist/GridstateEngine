@@ -128,7 +128,6 @@ int NsMain(int argc, char** argv) {
 		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
 			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
 
-
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
 
