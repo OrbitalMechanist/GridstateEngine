@@ -1,30 +1,41 @@
 #include "../headers/Systems/AISystem.h"
-
+#include <thread>
 
 void AISystem::update(Noesis::TextBlock *turnText) {
     std::vector<Entity> entitiesWithAI = manager.getEntitiesWithComponent<AIComponent>();
+    std::thread* threads = new std::thread[entitiesWithAI.size()];
+    int count = 0;
+
     for (auto entity : entitiesWithAI) {
-        std::lock_guard<std::mutex> guard(mtx);
+       
+       
         auto& aicomponent = manager.getComponent<AIComponent>(entity);
         // states
         switch (aicomponent.state) {
             case AIState::Idle:
                 // idle
-                handleIdleState(entity);
+                threads[count] = std::thread(&AISystem::handleIdleState, this, entity);
+                threads[count].join();
+                //handleIdleState(entity);
                 break;
             case AIState::Pathfinding:
                 // pathfinding
-                handlePathfindingState(entity);
+                threads[count] = std::thread(&AISystem::handlePathfindingState, this, entity);
+                threads[count].join();
+               // handlePathfindingState(entity);
                 break;
             case AIState::Attack:
                 // attack
-                handleAttackState(entity);
+                threads[count] = std::thread(&AISystem::handleAttackState, this, entity);
+                threads[count].join();
+               // handleAttackState(entity);
                 break;
             case AIState::TakeCover:
                 // take cover
                 handleTakeCoverState(entity);
                 break;
         }
+        count++;
     }
     if (gm.currentTurn == enemyTurn && hasAttackCount == entitiesWithAI.size()) {
         hasAttackCount = 0; // reset for next turn
@@ -53,6 +64,7 @@ void AISystem::handleIdleState(Entity entity) {
 // Pathfinding state handler
 void AISystem::handlePathfindingState(Entity entity) {
     std::cout << "Pathfinding state" << std::endl;
+    std::unique_lock<std::mutex> lock(mutex);
     AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
     if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
        

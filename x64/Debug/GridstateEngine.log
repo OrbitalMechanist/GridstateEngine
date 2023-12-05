@@ -1,2 +1,55 @@
-﻿  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
+﻿  main.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(444,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(444,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(451,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(451,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(480,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(481,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(532,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(532,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\main.cpp(445,11): warning C4101: 'clicked': unreferenced local variable
+  Universe.cpp
+  EnemyAI.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\EnemyAI.cpp(98,29): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Pathfinding.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\Pathfinding.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  SoundBuffer.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundBuffer.cpp(131,74): warning C4267: 'argument': conversion from 'size_t' to 'ALsizei', possible loss of data
+  SoundDevice.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(39,1): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(39,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(43,1): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(43,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(46,1): warning C4297: 'SoundDevice::~SoundDevice': function assumed not to throw an exception but does
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\audio\SoundDevice.cpp(46,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+  SoundSource.cpp
+  EntityManager.cpp
+  GameObj.cpp
+  GameObjList.cpp
+  GameMaster.cpp
+  Mesh.cpp
+  RenderObject.cpp
+  Renderer.cpp
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\graphics\Renderer.cpp(108,58): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\graphics\Renderer.cpp(415,32): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\graphics\Renderer.cpp(443,58): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+  ShaderProgram.cpp
+  ShadowCubeMap.cpp
+  ShadowMap.cpp
+  Vertex.cpp
+  MapGrid.cpp
+  MapGridBuilder.cpp
+  Generating Code...
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\graphics\ShaderProgram.cpp(90): warning C4715: 'ShaderProgram::attemptLightLoading': not all control paths return a value
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\graphics\Renderer.cpp(444): warning C4715: 'Renderer::loadModel': not all control paths return a value
+E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\gamemaster\GameMaster.cpp(129): warning C4715: 'GameMaster::attackSelected': not all control paths return a value
+  Compiling...
+  filePairReader.cpp
+  AISystem.cpp
+  MessageSystem.cpp
+  Generating Code...
+  glad.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winbase.h(9531,5): warning C5105: macro expansion producing 'defined' has undefined behavior
+     Creating library E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.lib and object E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exp
+  GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
