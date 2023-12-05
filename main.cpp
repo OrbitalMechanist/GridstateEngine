@@ -41,6 +41,8 @@ extern "C" {
 #include <NsApp/LocalFontProvider.h>
 #include <NsApp/ThemeProviders.h>
 
+#include <NsGui/VisualTreeHelper.h>
+
 #include <NsRender/GLFactory.h>
 #include <NsRender/GLRenderDeviceApi.h>
 
@@ -450,79 +452,89 @@ int NsMain(int argc, char** argv) {
 					lmbDownPrevFrame = true;
 					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
 
-					glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
-					cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
-					cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+					Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
+						Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{static_cast<float>(x), static_cast<float>(y)});
 
-					glm::mat4 view = glm::inverse(cam);
+					if (uiHitTest.visualHit == nullptr) {
 
-					glm::mat4 projection = glm::perspective(glm::radians(60.0f),
-						cWidth / (float)cHeight, 0.1f, 100.0f);
+						glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+						cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+						cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
 
-					glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
-						view,
-						projection,
-						glm::vec4(0.0f, 0.0f, cWidth, cHeight));
-					std::cout << "\n" << farPlaneClickPos.x << " : "
-						<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
+						glm::mat4 view = glm::inverse(cam);
 
-					auto v = normalize(farPlaneClickPos - camPos);
+						glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+							cWidth / (float)cHeight, 0.1f, 100.0f);
 
-					glm::vec3 posOnPlane{ 0, 0, 0 };
-					glm::vec3 planeOrig{ 0, 0, 0 };
-					glm::vec3 planeNorm{ 0, 0, 1 };
-					float res = 0;
-					glm::intersectRayPlane(camPos, v, planeOrig,
-						planeNorm, res);
-					posOnPlane = camPos + v * res;
-					std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+						glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+							view,
+							projection,
+							glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+						std::cout << "\n" << farPlaneClickPos.x << " : "
+							<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
 
-					int gridPositionX = std::round(posOnPlane.x);
-					int gridPositionY = std::round(posOnPlane.y);
+						auto v = normalize(farPlaneClickPos - camPos);
 
-					if (gm->currentMode == select) {
-						gm->selectUnit(gridPositionX, gridPositionY);
-						if (gm->selected != NULL) {
-							std::cout << "\nNOT NULL";
-							std::string stringVar = "Health " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health);
-							healthText->SetText(stringVar.c_str());
-							stringVar = "Move Range " + std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
-							moveText->SetText(stringVar.c_str());
-							stringVar = "Attack Range " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
-							attackRangeText->SetText(stringVar.c_str());
-							stringVar = "Damage " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
-							attackText->SetText(stringVar.c_str());
-							if (!gm->botSelected) {
-								if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-									canMoveText->SetText("Moved True");
-								}
-								else {
-									canMoveText->SetText("Moved False");
+						glm::vec3 posOnPlane{ 0, 0, 0 };
+						glm::vec3 planeOrig{ 0, 0, 0 };
+						glm::vec3 planeNorm{ 0, 0, 1 };
+						float res = 0;
+						glm::intersectRayPlane(camPos, v, planeOrig,
+							planeNorm, res);
+						posOnPlane = camPos + v * res;
+						std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
+
+						int gridPositionX = std::round(posOnPlane.x);
+						int gridPositionY = std::round(posOnPlane.y);
+
+						if (gm->currentMode == select) {
+							gm->selectUnit(gridPositionX, gridPositionY);
+							if (gm->selected != NULL) {
+								std::cout << "\nNOT NULL";
+								std::string stringVar = "Health " +
+									std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health);
+								healthText->SetText(stringVar.c_str());
+								stringVar = "Move Range " +
+									std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
+								moveText->SetText(stringVar.c_str());
+								stringVar = "Attack Range " +
+									std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
+								attackRangeText->SetText(stringVar.c_str());
+								stringVar = "Damage " +
+									std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
+								attackText->SetText(stringVar.c_str());
+								if (!gm->botSelected) {
+									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
+										canMoveText->SetText("Moved True");
+									}
+									else {
+										canMoveText->SetText("Moved False");
+									}
 								}
 							}
 						}
-					}
-					else if (gm->currentMode == move) {
-						bool moved = gm->moveSelected(gridPositionX, gridPositionY);
-						if (moved) {
-							canMoveText->SetText("Moved True");
-							modeText->SetText("Select");
+						else if (gm->currentMode == move) {
+							bool moved = gm->moveSelected(gridPositionX, gridPositionY);
+							if (moved) {
+								canMoveText->SetText("Moved True");
+								modeText->SetText("Select");
+							}
 						}
-					}
-					else {
-						bool hit = gm->attackSelected(gridPositionX, gridPositionY);
-						if (hit) {
-							SourceA.Play(gunA);
-							canMoveText->SetText("Moved True");
-							modeText->SetText("Select");
+						else {
+							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
+							if (hit) {
+								SourceA.Play(gunA);
+								canMoveText->SetText("Moved True");
+								modeText->SetText("Select");
+							}
 						}
-					}
-					if (gm->selected == NULL) {
-						healthText->SetText("");
-						moveText->SetText("");
-						attackRangeText->SetText("");
-						attackText->SetText("");
-						canMoveText->SetText("");
+						if (gm->selected == NULL) {
+							healthText->SetText("");
+							moveText->SetText("");
+							attackRangeText->SetText("");
+							attackText->SetText("");
+							canMoveText->SetText("");
+						}
 					}
 				}
 			}
