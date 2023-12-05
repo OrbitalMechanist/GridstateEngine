@@ -127,6 +127,8 @@ int NsMain(int argc, char** argv) {
 		renderer.loadModel("assets/models/rocks.fbx", "rocks");
 		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
 		renderer.loadModel("assets/models/bush.fbx", "bush");
+		renderer.loadModel("assets/models/character.fbx", "character");
+
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -182,6 +184,15 @@ int NsMain(int argc, char** argv) {
 		stat.materialName = "surfaceMaterial";
 		entityManager.addComponent<TransformComponent>(newEntity, trans);
 		entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+
+		Entity character = entityManager.createEntity();
+		trans.pos = { 4, 4 };
+		stat.modelName = "character";
+		stat.textureName = "surface";
+		stat.textureName = "tree_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(character, trans);
+		entityManager.addComponent<StaticMeshComponent>(character, stat);
 
 		Entity bush = entityManager.createEntity();
 		trans.pos = { 2, 4 };
