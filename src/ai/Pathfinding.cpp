@@ -86,12 +86,12 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest)
         col = temp_col;
     }
 
-    Path.push(std::make_pair(row, col));
+   // Path.push(std::make_pair(row, col));
+    
     while (!Path.empty())
     {
         std::pair<int, int> p = Path.top();
         Path.pop();
-        Pathfinding::dirMap[p.first][p.second] = 1;
         Pathfinding::dirVec.push_back(std::make_pair(p.first, p.second));
     }
 
@@ -639,16 +639,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
 }
 
 
-// test print
-void Pathfinding:: printDirMap() {
-    std::cout << "\n";
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            std::cout << Pathfinding::dirMap[i][j];
-        }
-        std::cout << "\n";
-    }
-}
 
 void Pathfinding::printDirVec() {
     std::cout << "\nStart ->";
@@ -666,14 +656,19 @@ std::vector<std::pair<int,int>> Pathfinding::GetDirMap() {
 }
 
 std::pair<int, int> Pathfinding::getNewPosition(int moveRange) {
-    if (dirVec.size() > 2) {
+    if (dirVec.size() > 1 && moveRange > 0) {
         // Ensure we access a valid index
-        if (moveRange < dirVec.size()) {
-            return dirVec[moveRange];
+        if (moveRange <= dirVec.size()) {
+            std::pair<int, int> newPos = dirVec[moveRange - 1];
+            dirVec.clear();
+            return newPos;
         }
-        return dirVec.back(); // Return the last element if moveRange is too large
+        std::pair<int, int> newPos = dirVec.back();
+        dirVec.clear();
+        return newPos; // Return the last element if moveRange is too large
     }
-    return std::make_pair(NULL, NULL);
+    dirVec.clear();
+    return std::make_pair(-1, -1);
 }
 
 

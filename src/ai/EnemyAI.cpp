@@ -11,7 +11,7 @@
 double EnemyAI::calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2) {
     int dx = pos2.first - pos1.first;
     int dy = pos2.second - pos1.second;
-    return abs(sqrt(dx * dx + dy * dy));
+    return std::hypot(dx, dy);
 }
 
 void EnemyAI::enemyPerform(Entity attacker, Entity target) {
@@ -87,12 +87,12 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
     std::vector<Entity> entitiesWithPlayer = manager.getEntitiesWithComponent<PlayerComponent>();
     
     // Closest Player Entity
-    Entity closestPlayer = manager.createEntity();
+    Entity closestPlayer = NULL;
     int closestDistance = -1;
+    std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y);
     for (Entity player : entitiesWithPlayer) {
         
         // Get this player position
-        std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y);
         std::pair<int, int> playerPos = std::make_pair(manager.getComponent<TransformComponent>(player).pos.x, manager.getComponent<TransformComponent>(player).pos.y);
       
         int currentDistance = calculateDistance(playerPos, attackerPos);
@@ -106,7 +106,7 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
         return NULL;
     }
     else {
-        //std::cout << "Distance " << closestDistance << std::endl;
+       // std::cout << "Distance " << closestDistance << std::endl;
     }
     return closestPlayer;
 }
