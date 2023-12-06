@@ -117,6 +117,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
 		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
 		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
+		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/cone45.obj", "cone");
@@ -128,6 +129,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
 		renderer.loadModel("assets/models/bush.fbx", "bush");
 		renderer.loadModel("assets/models/character.fbx", "character");
+		renderer.loadModel("assets/models/enemy.fbx", "enemy");
 
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
@@ -189,10 +191,19 @@ int NsMain(int argc, char** argv) {
 		trans.pos = { 4, 4 };
 		stat.modelName = "character";
 		stat.textureName = "surface";
-		stat.textureName = "tree_texture";
+		stat.textureName = "red_blue_texture";
 		stat.shaderName = "basic";
 		entityManager.addComponent<TransformComponent>(character, trans);
 		entityManager.addComponent<StaticMeshComponent>(character, stat);
+
+		Entity enemy = entityManager.createEntity();
+		trans.pos = { 3, 1 };
+		stat.modelName = "enemy";
+		stat.textureName = "surface";
+		stat.textureName = "red_blue_texture";
+		stat.shaderName = "basic";
+		entityManager.addComponent<TransformComponent>(enemy, trans);
+		entityManager.addComponent<StaticMeshComponent>(enemy, stat);
 
 		Entity bush = entityManager.createEntity();
 		trans.pos = { 2, 4 };
