@@ -215,6 +215,7 @@ int NsMain(int argc, char** argv) {
 		moveComp.moved = false;
 		moveComp.moveRange = 2;
 		hpComp.health = 5;
+		hpComp.maxHealth = 5;
 		entityManager.addComponent<TransformComponent>(ak, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak, stat);
 		entityManager.addComponent<PlayerComponent>(ak, playComp);
@@ -230,6 +231,7 @@ int NsMain(int argc, char** argv) {
 		moveComp.moveRange = 1;
 		atkComp.damage = 3;
 		hpComp.health = 7;
+		hpComp.maxHealth = 7;
 		atkComp.range = 2;
 		entityManager.addComponent<TransformComponent>(ak2, trans);
 		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
@@ -488,7 +490,7 @@ int NsMain(int argc, char** argv) {
 						gm->selectUnit(gridPositionX, gridPositionY);
 						if (gm->selected != NULL) {
 							std::cout << "\nNOT NULL";
-							std::string stringVar = "Health " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health);
+							std::string stringVar = "Health " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).maxHealth);
 							healthText->SetText(stringVar.c_str());
 							stringVar = "Move Range " + std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
 							moveText->SetText(stringVar.c_str());

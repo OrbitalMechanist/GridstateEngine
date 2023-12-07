@@ -7,6 +7,7 @@ struct HealthComponent {
     int entityID;
     int health;
     int armor;
+    int maxHealth;
 };
 
 #endif 
