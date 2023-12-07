@@ -304,13 +304,16 @@ int NsMain(int argc, char** argv) {
 		//correspond to what the element actually has and thus not work as expected.
 		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
 		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
-		auto modeBtn = nsguiView->GetContent()->FindName<Noesis::Button>("actionBtn");
-		auto modeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("modeText");
+
+		auto selectBtn = nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn");
+		auto moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn");
+		auto attackBtn = nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn");
 
 		auto healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
 		auto moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");
 		auto attackRangeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackRangeText");
 		auto attackText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackText");
+		auto armorText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("armorText");
 		auto canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
 
 		bool lightOn = true;
@@ -322,8 +325,34 @@ int NsMain(int argc, char** argv) {
 		bool isPlayerTurn = true;
 		//void* gmPtr = &gm;
 
+		selectBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				gm->switchMode(select);
+				std::cout << "Select";
+				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
+				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
+				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
+			};
 
-		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
+		moveBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				gm->switchMode(move);
+				std::cout << "Move";
+				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
+				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(180);
+				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
+			};
+
+		attackBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				gm->switchMode(attack);
+				std::cout << "Attack";
+				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
+				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
+				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(180);
+			};
+
+		turnBtn->Click() += [nsguiView, turnText, gm](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
 					turnText->SetText("Enemy Turn");
@@ -334,30 +363,15 @@ int NsMain(int argc, char** argv) {
 					gm->endTurn();
 					gm->selected = NULL;
 					gm->switchMode(select);
-					modeText->SetText("Select Mode");
+					nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
+					nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
+					nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
 				}
 				else {
 
 				}
 			};
-		modeBtn->Click() += [modeText, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm->currentMode == select) {
-					gm->switchMode(move);
-					modeText->SetText("Move Mode");
-					std::cout << "Move";
-				}
-				else if (gm->currentMode == move) {
-					gm->switchMode(attack);
-					modeText->SetText("Attack Mode");
-					std::cout << "Attack";
-				}
-				else if (gm->currentMode == attack) {
-					gm->switchMode(select);
-					modeText->SetText("Select Mode");
-					std::cout << "Select";
-				}
-			};
+
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -490,14 +504,16 @@ int NsMain(int argc, char** argv) {
 						gm->selectUnit(gridPositionX, gridPositionY);
 						if (gm->selected != NULL) {
 							std::cout << "\nNOT NULL";
-							std::string stringVar = "Health " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).maxHealth);
+							std::string stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).maxHealth);
 							healthText->SetText(stringVar.c_str());
-							stringVar = "Move Range " + std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
+							stringVar = std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
 							moveText->SetText(stringVar.c_str());
-							stringVar = "Attack Range " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
+							stringVar = std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
 							attackRangeText->SetText(stringVar.c_str());
-							stringVar = "Damage " + std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
+							stringVar = std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
 							attackText->SetText(stringVar.c_str());
+							stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).armor);
+							armorText->SetText(stringVar.c_str());
 							if (!gm->botSelected) {
 								if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
 									canMoveText->SetText("Moved True");
@@ -512,7 +528,9 @@ int NsMain(int argc, char** argv) {
 						bool moved = gm->moveSelected(gridPositionX, gridPositionY);
 						if (moved) {
 							canMoveText->SetText("Moved True");
-							modeText->SetText("Select");
+							selectBtn->SetWidth(180);
+							moveBtn->SetWidth(150);
+							attackBtn->SetWidth(150);
 						}
 					}
 					else {
@@ -520,7 +538,9 @@ int NsMain(int argc, char** argv) {
 						if (hit) {
 							SourceA.Play(gunA);
 							canMoveText->SetText("Moved True");
-							modeText->SetText("Select");
+							selectBtn->SetWidth(180);
+							moveBtn->SetWidth(150);
+							attackBtn->SetWidth(150);
 						}
 					}
 					if (gm->selected == NULL) {
@@ -528,6 +548,7 @@ int NsMain(int argc, char** argv) {
 						moveText->SetText("");
 						attackRangeText->SetText("");
 						attackText->SetText("");
+						armorText->SetText("");
 						canMoveText->SetText("");
 					}
 				}
