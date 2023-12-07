@@ -25,9 +25,12 @@
                     </ResourceDictionary>
                 </UserControl.Resources>
                 <Grid HorizontalAlignment="Center" Width="366">
+                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="164,0,0,10"/>
+                    <Button x:Name="actionBtn" Style="{StaticResource Button1}" Content="Switch Mode" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,10"/>
 
-                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-176"/>
-                    <Button x:Name="actionBtn" Style="{StaticResource Button1}" Content="Switch Mode" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-120"/>
+                    <Button x:Name="selectBtn" Style="{StaticResource Button1}" Content="Select Mode" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-96"/>
+                    <Button x:Name="moveBtn" Style="{StaticResource Button1}" Content="Move Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-141"/>
+                    <Button x:Name="attackBtn" Style="{StaticResource Button1}" Content="Attack Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-184"/>
                 </Grid>
             </UserControl>
 
@@ -42,7 +45,7 @@
                 </Path.RenderTransform>
             </Path>
 
-            <Path Data="{StaticResource DefenceIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="200,42,718,358" Stretch="Fill" Width="20" Height="20">
+            <Path Data="{StaticResource DefenceIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="46,90,734,340" Stretch="Fill" Width="20" Height="20">
                 <Path.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -53,7 +56,7 @@
                 </Path.RenderTransform>
             </Path>
 
-            <Path Data="{StaticResource MoveRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="32,100,718,358" Stretch="Fill" Width="20" Height="20">
+            <Path Data="{StaticResource MoveRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="141,69,639,361" Stretch="Fill" Width="20" Height="20">
                 <Path.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -64,7 +67,7 @@
                 </Path.RenderTransform>
             </Path>
 
-            <Path Data="{StaticResource AttackRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="200,100,718,358" Stretch="Fill" Width="20" Height="20">
+            <Path Data="{StaticResource AttackRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="141,97,639,333" Stretch="Fill" Width="20" Height="20">
                 <Path.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
