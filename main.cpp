@@ -31,6 +31,7 @@ extern "C" {
 #include <NsGui/CheckBox.h>
 #include <NsGui/TextBlock.h>
 #include <NsGui/Button.h>
+#include <NsGui/Grid.h>
 #include <NsGui/IRenderer.h>
 #include <NsGui/IView.h>
 #include <NsGui/ResourceDictionary.h>
@@ -316,6 +317,8 @@ int NsMain(int argc, char** argv) {
 		auto armorText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("armorText");
 		auto canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
 
+		auto playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
+
 		bool lightOn = true;
 
 		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
@@ -514,6 +517,7 @@ int NsMain(int argc, char** argv) {
 							attackText->SetText(stringVar.c_str());
 							stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).armor);
 							armorText->SetText(stringVar.c_str());
+							playerInfo->SetVisibility(Noesis::Visibility_Visible);
 							if (!gm->botSelected) {
 								if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
 									canMoveText->SetText("Moved True");
@@ -550,6 +554,7 @@ int NsMain(int argc, char** argv) {
 						attackText->SetText("");
 						armorText->SetText("");
 						canMoveText->SetText("");
+						playerInfo->SetVisibility(Noesis::Visibility_Hidden);
 					}
 				}
 			}

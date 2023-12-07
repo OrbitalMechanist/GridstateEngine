@@ -16,7 +16,7 @@
     </Page.Resources>
     <Viewbox>
         <Grid Height="450" Width="800">
-            <UserControl Margin="10,10,0,0" HorizontalAlignment="Left" Width="366" Height="230" VerticalAlignment="Top">
+            <UserControl Margin="10,10,0,0" HorizontalAlignment="Left" Width="800" Height="450" VerticalAlignment="Top">
                 <UserControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
@@ -24,63 +24,19 @@
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </UserControl.Resources>
-                <Grid HorizontalAlignment="Center" Width="366">
-                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="117,0,0,-52"/>
+                <Grid HorizontalAlignment="Center" Width="800">
+                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="0,0,5,20"/>
 
-                    <Button x:Name="selectBtn" Style="{StaticResource Button1}" Content="Select Mode" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-96"/>
-                    <Button x:Name="moveBtn" Style="{StaticResource Button1}" Content="Move Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-141"/>
-                    <Button x:Name="attackBtn" Style="{StaticResource Button1}" Content="Attack Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="-9,0,0,-184"/>
+                    <Button x:Name="selectBtn" Style="{StaticResource Button1}" Content="Select Mode" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="5,0,0,100"/>
+                    <Button x:Name="moveBtn" Style="{StaticResource Button1}" Content="Move Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="5,0,0,60"/>
+                    <Button x:Name="attackBtn" Style="{StaticResource Button1}" Content="Attack Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="5,0,0,20"/>
                 </Grid>
             </UserControl>
 
-            <Path Data="{StaticResource AttackIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="0,54,780,376" Stretch="Fill" Width="20" Height="20">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
-
-            <Path Data="{StaticResource DefenceIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="74,54,706,376" Stretch="Fill" Width="20" Height="20">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
-
-            <Path Data="{StaticResource MoveRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="0,93,780,337" Stretch="Fill" Width="20" Height="20">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
-
-            <Path Data="{StaticResource AttackRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="74,93,706,337" Stretch="Fill" Width="20" Height="20">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
-
             <!--Charactor Status-->
-            <Grid>
+            <Grid x:Name="PlayerInfo" Visibility="Hidden">
                 <!--Health bar-->
-                <Grid x:Name="PlayerInfo" Margin="-326,-44,326,44">
+                <Grid Margin="-326,-44,326,44">
                     <Rectangle Width="150" Height="30"  Fill="#FFB0B0B0" Opacity="0.7" Margin="288,60,287,368" />
                     <Rectangle Width="140" Height="20" Margin="288,60,287,368">
                         <Rectangle.Fill>
@@ -93,10 +49,54 @@
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                         <Rectangle.Clip>
-                            <RectangleGeometry x:Name="enemyHP" Rect="0,0,140,30" />
+                            <RectangleGeometry x:Name="healthBar" Rect="0,0,140,30" />
                         </Rectangle.Clip>
                     </Rectangle>
                 </Grid>
+
+                <Path Data="{StaticResource AttackIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="0,54,780,376" Stretch="Fill" Width="20" Height="20">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+
+                <Path Data="{StaticResource DefenceIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="74,54,706,376" Stretch="Fill" Width="20" Height="20">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+
+                <Path Data="{StaticResource MoveRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="0,93,780,337" Stretch="Fill" Width="20" Height="20">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+
+                <Path Data="{StaticResource AttackRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="74,93,706,337" Stretch="Fill" Width="20" Height="20">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
 
                 <!--Charactor proporty-->
                 <TextBlock x:Name="healthText" Margin="68,0,0,407" TextWrapping="Wrap" FontSize="15" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="24" TextAlignment="Left"><Run Text="7/7"/></TextBlock>
