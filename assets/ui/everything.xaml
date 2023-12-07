@@ -86,6 +86,24 @@
 
             <TextBlock x:Name="turnText" FontFamily="../fonts/#superlume" Margin="0,0,10,415" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="Player"/></TextBlock>
             <TextBlock x:Name="modeText" FontFamily="../fonts/#superlume" Margin="0,0,10,13" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right"><Run Text="Select Mode"/></TextBlock>
+
+            <Grid x:Name="PlayerInfo" Margin="-289,-39,289,39">
+                <Rectangle Width="200" Height="30"  Fill="#FFB0B0B0" Opacity="0.7" Margin="288,60,287,368" />
+                <Rectangle Width="190" Height="20" Margin="288,60,287,368">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0" Color="Black" />
+                            <GradientStop Offset="0.3" Color="Red" />
+                            <GradientStop Offset="0.5" Color="#FFFA6868" />
+                            <GradientStop Offset="0.8" Color="Red" />
+                            <GradientStop Offset="1" Color="Black" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                    <Rectangle.Clip>
+                        <RectangleGeometry x:Name="enemyHP" Rect="0,0,100,30" />
+                    </Rectangle.Clip>
+                </Rectangle>
+            </Grid>
         </Grid>
     </Viewbox>
 </Page>
