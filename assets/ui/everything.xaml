@@ -25,15 +25,55 @@
                     </ResourceDictionary>
                 </UserControl.Resources>
                 <Grid HorizontalAlignment="Center" Width="366">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="144*"/>
-                        <ColumnDefinition Width="49*"/>
-                        <ColumnDefinition Width="8*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="turnBtn" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-176"/>
-                    <Button x:Name="actionBtn" Content="Switch Mode" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-120"/>
+
+                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-176"/>
+                    <Button x:Name="actionBtn" Style="{StaticResource Button1}" Content="Switch Mode" HorizontalAlignment="Left" Height="36" VerticalAlignment="Bottom" Width="100" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="10,0,0,-120"/>
                 </Grid>
             </UserControl>
+
+            <Path Data="{StaticResource AttackIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="32,42,718,358" Stretch="Fill" Width="20" Height="20">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+
+            <Path Data="{StaticResource DefenceIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="200,42,718,358" Stretch="Fill" Width="20" Height="20">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+
+            <Path Data="{StaticResource MoveRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="32,100,718,358" Stretch="Fill" Width="20" Height="20">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+
+            <Path Data="{StaticResource AttackRangeIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="200,100,718,358" Stretch="Fill" Width="20" Height="20">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
 
             <TextBlock x:Name="healthText" FontFamily="../fonts/#superlume" Margin="10,0,0,402" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
             <TextBlock x:Name="moveText" FontFamily="../fonts/#superlume" Margin="10,66,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="338" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
