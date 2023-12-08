@@ -108,12 +108,24 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
-		renderer.loadTexture("assets/textures/grass.jpg", "grass");
 		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
+		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
+		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
+		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
+		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
+		renderer.loadTexture("assets/textures/grass 2.jpg", "grass");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
-		renderer.loadModel("assets/models/cone45.obj", "cone");
+		renderer.loadModel("assets/models/bushTree.fbx", "tree");
+		renderer.loadModel("assets/models/leafyTree.fbx", "pine_tree");
+		renderer.loadModel("assets/models/leafyTree2.fbx", "pine_tree2");
+		renderer.loadModel("assets/models/lightColorRock.fbx", "rock_light");
+		renderer.loadModel("assets/models/rocks.fbx", "rocks");
+		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
+		renderer.loadModel("assets/models/bush.fbx", "bush");
 		renderer.loadModel("assets/models/character.fbx", "character");
+		renderer.loadModel("assets/models/enemy.fbx", "enemy");
+
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -197,21 +209,10 @@ int NsMain(int argc, char** argv) {
 				Entity fresh = entityManager.createEntity();
 				trans.pos = { x, y };
 				stat.modelName = "cube";
-				if (swapTex) {
-					stat.textureName = "grass";
-				}
-				else {
-					stat.textureName = "surface";
-				}
+				stat.textureName = "grass";
 				stat.shaderName = "basic";
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
-				if (swapTex) {
-					swapTex = false;
-				}
-				else {
-					swapTex = true;
-				}
 			}
 		}
 
@@ -221,7 +222,7 @@ int NsMain(int argc, char** argv) {
 		HealthComponent hpComp;
 
 		Entity ak = entityManager.createEntity();
-		trans.pos = { 5, 5 };
+		trans.pos = { 4, 2 };
 		stat.posOffset.z += 0.6f;
 		stat.rotOffset.y = glm::radians(90.0f);
 		stat.modelName = "ak";
@@ -239,7 +240,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<HealthComponent>(ak, hpComp);
 
 		Entity ak2 = entityManager.createEntity();
-		trans.pos = { 5, 6 };
+		trans.pos = { 2, 2 };
 		moveComp.moved = false;
 		moveComp.moveRange = 1;
 		atkComp.damage = 3;
@@ -251,6 +252,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<MoveComponent>(ak2, moveComp);
 		entityManager.addComponent<AttackComponent>(ak2, atkComp);
 		entityManager.addComponent<HealthComponent>(ak2, hpComp);
+
 
 		// AI setup
 		MessageBus bus;
@@ -264,8 +266,27 @@ int NsMain(int argc, char** argv) {
 			aiSystem.spawnEnemy(trans, stat);
 		}
 		
-	
+		Entity rock = entityManager.createEntity();
+		trans.pos = { 3,3 };
+		hpComp.health = 4;
+		stat.modelName = "rock_big";
+		stat.textureName = "rock_texture";
+		stat.posOffset = { 0, 0, 0 };
+		stat.rotOffset.y = glm::radians(0.0f);
+		ObstacleComponent obComp;
+		entityManager.addComponent<TransformComponent>(rock, trans);
+		entityManager.addComponent<StaticMeshComponent>(rock, stat);
+		entityManager.addComponent<HealthComponent>(rock, hpComp);
+		entityManager.addComponent<ObstacleComponent>(rock, obComp);
 
+		Entity tree = entityManager.createEntity();
+		stat.modelName = "tree";
+		stat.textureName = "tree_texture";
+		trans.pos = { 5, 5 };
+		entityManager.addComponent <TransformComponent>(tree, trans);
+		entityManager.addComponent<StaticMeshComponent>(tree, stat);
+		entityManager.addComponent<ObstacleComponent>(tree, obComp);
+		entityManager.addComponent<HealthComponent>(tree, hpComp);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -526,6 +547,9 @@ int NsMain(int argc, char** argv) {
 									else {
 										canMoveText->SetText("Moved False");
 									}
+								}
+								else {
+									canMoveText->SetText("");
 								}
 							}
 						}

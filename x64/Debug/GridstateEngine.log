@@ -1,2 +1,12 @@
-﻿  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
+﻿  main.cpp
+C:\Work\Comp8551\GridstateEngine\main.cpp(495,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(495,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(502,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(502,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(536,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(537,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(596,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(596,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(496,11): warning C4101: 'clicked': unreferenced local variable
+  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied

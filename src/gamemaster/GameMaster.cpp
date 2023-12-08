@@ -51,6 +51,7 @@ bool GameMaster::moveSelected(int x, int y) {
 	if (selected != NULL && !botSelected) {
 		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		std::vector<Entity> entitiesWithAI = entityManager->getEntitiesWithComponent<AIComponent>();
+		std::vector<Entity> entitiesWithObstacle = entityManager->getEntitiesWithComponent<ObstacleComponent>();
 		auto moveComp = entityManager->getComponent<MoveComponent>(selected);
 		auto transComp = entityManager->getComponent<TransformComponent>(selected);
 		int moveAmount = moveComp.moveRange;
@@ -74,6 +75,12 @@ bool GameMaster::moveSelected(int x, int y) {
 							break;
 						}
 					}
+					for (auto entity : entitiesWithObstacle) {
+						if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y && entity != selected) {
+							noStack = false;
+							break;
+						}
+					}
 					if (noStack) {
 						entityManager->getComponent<MoveComponent>(selected).moved = true;
 						entityManager->getComponent<TransformComponent>(selected).pos = { x, y };
@@ -92,6 +99,7 @@ bool GameMaster::attackSelected(int x, int y) {
 	if (selected != NULL && !botSelected) {
 		std::vector<Entity> entitiesWithPlayer = entityManager->getEntitiesWithComponent<PlayerComponent>();
 		std::vector<Entity> entitiesWithAI = entityManager->getEntitiesWithComponent<AIComponent>();
+		std::vector<Entity> entitiesWithObstacle = entityManager->getEntitiesWithComponent<ObstacleComponent>();
 		auto unitAtk = entityManager->getComponent<AttackComponent>(selected);
 		auto transComp = entityManager->getComponent<TransformComponent>(selected);
 		int atkRange = unitAtk.range;
@@ -104,6 +112,13 @@ bool GameMaster::attackSelected(int x, int y) {
 			}
 			if (canAttack) {
 				for (auto entity : entitiesWithAI) {
+					if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y && entity != selected) {
+						foundEnemy = true;
+						enemyUnit = entity;
+						break;
+					}
+				}
+				for (auto entity : entitiesWithObstacle) {
 					if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y && entity != selected) {
 						foundEnemy = true;
 						enemyUnit = entity;

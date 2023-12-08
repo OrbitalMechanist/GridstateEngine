@@ -183,7 +183,15 @@ void AISystem::updateMap() {
         map[invertedY][x] = 2;
     }
 
-    /*std::cout << std::endl;
+    // slot taken by obstacle
+    for (Entity obstacleEntity : manager.getEntitiesWithComponent<ObstacleComponent>()) {
+        int x = manager.getComponent<TransformComponent>(obstacleEntity).pos.x;
+        int y = manager.getComponent<TransformComponent>(obstacleEntity).pos.y;
+        int invertedY = MAX_Y - y;
+        map[x][invertedY] = 2;
+    }
+
+   /* std::cout << std::endl;
     for (int i = 0; i < MAX_Y; ++i) {
         for (int j = 0; j < MAX_Y; ++j) {
            
