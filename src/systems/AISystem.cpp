@@ -26,7 +26,7 @@ void AISystem::handlePathfindingState(Entity entity) {
         updateMap();
 
         // Find Closest player
-        EnemyAI aiPath(manager);
+        EnemyAI aiPath(manager, *gm.audioManager);
         Entity player = aiPath.GetClosestPlayer(entity);
 
         // Get Position
@@ -59,8 +59,12 @@ void AISystem::handlePathfindingState(Entity entity) {
             manager.getComponent<TransformComponent>(entity).pos.x = newX;
             manager.getComponent<TransformComponent>(entity).pos.y = newY;
             updateMap();
+            if (aiPosX != newX && aiPosY != newY) {
+                glm::vec3 entityPos = { manager.getComponent<TransformComponent>(entity).pos.x, manager.getComponent<TransformComponent>(entity).pos.y, 0 };
+                manager.getComponent<AudioComponent>(entity).sourceB->SetPosition(entityPos);
+                manager.getComponent<AudioComponent>(entity).sourceB->Play(gm.audioManager->getSoundEffect("move"));
+            }
         }
-        
     }
     
 }
@@ -69,13 +73,13 @@ void AISystem::handlePathfindingState(Entity entity) {
 void AISystem::handleAttackState(Entity entity){
     if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
         // find attack target
-        EnemyAI aiAttack(manager);
+        EnemyAI aiAttack(manager, *gm.audioManager);
         Entity target = aiAttack.GetClosestPlayer(entity);
         if (target == NULL) {
             std::cout << "NO player exited " << std::endl;
         }
         else {
-            aiAttack.enemyPerform(entity, target);   
+            aiAttack.enemyPerform(entity, target);  
         }
     }
     hasAttackCount++;

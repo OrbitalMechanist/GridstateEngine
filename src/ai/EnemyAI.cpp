@@ -28,6 +28,12 @@ void EnemyAI::enemyPerform(Entity attacker, Entity target) {
 
         if (attackResult) {
            // std::cout << "AI unit attacks player!" << std::endl;
+            glm::vec3 attackerPos = { manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y, 0 };
+            manager.getComponent<AudioComponent>(attacker).sourceA->SetPosition(attackerPos);
+            manager.getComponent<AudioComponent>(attacker).sourceA->Play(audio.getSoundEffect("meleeHit"));
+            glm::vec3 targetPos = { manager.getComponent<TransformComponent>(target).pos.x, manager.getComponent<TransformComponent>(target).pos.y, 0 };
+            manager.getComponent<AudioComponent>(target).sourceA->SetPosition(targetPos);
+            manager.getComponent<AudioComponent>(target).sourceA->Play(audio.getSoundEffect("injured"));
         } else {
            // std::cout << "AI unit misses the attack!" << std::endl;
         }  

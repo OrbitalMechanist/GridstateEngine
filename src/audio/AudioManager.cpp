@@ -5,10 +5,13 @@ AudioManager::AudioManager()
 	// Sets up soundDevice
 	soundDevice = SoundDevice::get();
 	// Add sound effects
-	addSoundEffect("spellCast", "spellCast.wav");
 	addSoundEffect("spellHit", "spellHit.wav");
 	addSoundEffect("injured", "injured.wav");
-	addSoundEffect("meleeHit", "meleeHit.ogg");
+	addSoundEffect("meleeHit", "meleeHit.wav");
+	addSoundEffect("select", "select.wav");
+	addSoundEffect("invalid", "invalid.wav");
+	addSoundEffect("move", "move.wav");
+	addSoundEffect("buttonClick", "buttonClick.wav");
 }
 
 AudioManager::~AudioManager()

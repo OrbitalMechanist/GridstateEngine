@@ -18,6 +18,7 @@ public:
 	Turn currentTurn;
 	EntityManager* entityManager;
 	AudioManager* audioManager;
+	SoundSource* uiAudio;
 	Entity selected;
 	Mode currentMode;
 	bool botSelected;
