@@ -5,9 +5,7 @@ extern "C" {
 #include "graphics/Renderer.h"
 #include "Constants.h"
 //#include "mapbuilder/MapGrid.cpp"
-#include "audio/SoundDevice.h"
-#include "audio/SoundBuffer.h"
-#include "audio/SoundSource.h"
+#include "audio/AudioManager.h"
 
 #include "glm/gtx/intersect.hpp"
 
@@ -62,10 +60,11 @@ int NsMain(int argc, char** argv) {
 	int gunshotTimer = 0;
 
 	//Audio
-	SoundDevice* sounddevice = SoundDevice::get();
-
-	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
-	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
+	AudioManager* audioManager = new AudioManager();
+	audioManager->addSoundEffect("gunShot2", "gunshot2.wav");
+	audioManager->addSoundEffect("gunShot1", "gunshot1.aiff");
+	uint32_t gunA = audioManager->getSoundEffect("gunShot1");
+	uint32_t gunB = audioManager->getSoundEffect("gunShot2");
 
 	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
@@ -453,8 +452,8 @@ int NsMain(int argc, char** argv) {
 			}
 
 			//Audio Test
-			sounddevice->SetPosition(camPos);
-			sounddevice->SetOrientation(trueFwd, trueUp);
+			audioManager->setDevicePosition(camPos);
+			audioManager->setDeviceOrientation(trueFwd, trueUp);
 
 			//Send mouse events to NSGUI
 			double x, y;

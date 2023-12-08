@@ -11,8 +11,8 @@ public:
 	~AudioManager();
 	void setDevicePosition(glm::vec3 camPos);
 	void setDeviceOrientation(glm::vec3 trueFwd, glm::vec3 trueUp);
-	uint32_t* addSoundEffect(std::string key, std::string fileName);
-	uint32_t* getSoundEffect(std::string key);
+	uint32_t addSoundEffect(std::string key, std::string fileName);
+	uint32_t getSoundEffect(std::string key);
 
 private:
 	SoundDevice* soundDevice;
