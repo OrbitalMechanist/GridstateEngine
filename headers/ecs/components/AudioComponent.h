@@ -2,7 +2,7 @@
 #ifndef AUDIOCOMPONENT_H
 #define AUDIOCOMPONENT_H
 #include "audio/SoundSource.h"
-// attack damage and range
+// Audio Source
 struct AudioComponent {
     SoundSource source;
 };
