@@ -1,9 +1,14 @@
 #include "audio/AudioManager.h"
 
-// Sets up soundDevice
 AudioManager::AudioManager()
 {
+	// Sets up soundDevice
 	soundDevice = SoundDevice::get();
+	// Add sound effects
+	addSoundEffect("spellCast", "spellCast.wav");
+	addSoundEffect("spellHit", "spellHit.wav");
+	addSoundEffect("injured", "injured.wav");
+	addSoundEffect("meleeHit", "meleeHit.ogg");
 }
 
 AudioManager::~AudioManager()

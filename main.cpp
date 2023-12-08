@@ -61,10 +61,8 @@ int NsMain(int argc, char** argv) {
 
 	//Audio
 	AudioManager* audioManager = new AudioManager();
-	audioManager->addSoundEffect("gunShot2", "gunshot2.wav");
-	audioManager->addSoundEffect("gunShot1", "gunshot1.aiff");
-	uint32_t gunA = audioManager->getSoundEffect("gunShot1");
-	uint32_t gunB = audioManager->getSoundEffect("gunShot2");
+	uint32_t gunA = audioManager->getSoundEffect("spellHit");
+	uint32_t gunB = audioManager->getSoundEffect("spellCast");
 
 	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
 	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);

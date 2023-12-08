@@ -4,7 +4,8 @@
 #include "audio/SoundSource.h"
 // Audio Source
 struct AudioComponent {
-    SoundSource source;
+    SoundSource sourceA;
+    SoundSource sourceB;
 };
 
 #endif 
