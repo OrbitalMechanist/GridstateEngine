@@ -231,6 +231,7 @@
     <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h" />
     <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h" />
     <ClInclude Include="headers\Universe.h" />
+    <ClInclude Include="headers\ecs\components\ObstacleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
