@@ -127,8 +127,9 @@ bool GameMaster::attackSelected(int x, int y) {
 				}
 				if (foundEnemy) {
 					entityManager->getComponent<MoveComponent>(selected).moved = true;
-					if (entityManager->getComponent<HealthComponent>(enemyUnit).health > unitAtk.damage) {
-						entityManager->getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage;
+					auto unitDef = entityManager->getComponent<HealthComponent>(enemyUnit);
+					if (unitDef.health > unitAtk.damage - unitDef.armor) {
+						entityManager->getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage - unitDef.armor;
 					}
 					else {
 						entityManager->destroyEntity(enemyUnit);
