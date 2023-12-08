@@ -1,3 +1,8 @@
+/*
+* Credits:
+* https://www.youtube.com/watch?v=kWQM1iQ1W0E
+* For providing a basic OpenAL tutorial on setting up and playing sounds
+*/
 #pragma once
 #include <OpenAL\al.h>
 #include <OpenAL\alext.h>
