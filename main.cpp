@@ -60,14 +60,9 @@ int NsMain(int argc, char** argv) {
 	int gunshotTimer = 0;
 
 	//Audio
-	AudioManager* audioManager = new AudioManager();
-	uint32_t gunA = audioManager->getSoundEffect("spellHit");
-	uint32_t gunB = audioManager->getSoundEffect("spellCast");
-
-	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
-	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
-
-	
+	AudioManager audioManager;
+	uint32_t gunA = audioManager.getSoundEffect("spellHit");
+	uint32_t gunB = audioManager.getSoundEffect("spellCast");
 
 	try {
 		if (!glfwInit()) {
@@ -165,7 +160,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<AttackComponent>();
 		entityManager.registerComponentType<MoveComponent>();
 
-		GameMaster* gm = new GameMaster(&entityManager);
+		GameMaster* gm = new GameMaster(&entityManager, &audioManager);
 
 
 		Entity newEntity = entityManager.createEntity();
@@ -217,7 +212,7 @@ int NsMain(int argc, char** argv) {
 		MoveComponent moveComp;
 		AttackComponent atkComp;
 		HealthComponent hpComp;
-
+		AudioComponent audio;
 		Entity ak = entityManager.createEntity();
 		trans.pos = { 4, 2 };
 		stat.posOffset.z += 0.6f;
@@ -235,6 +230,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<MoveComponent>(ak, moveComp);
 		entityManager.addComponent<AttackComponent>(ak, atkComp);
 		entityManager.addComponent<HealthComponent>(ak, hpComp);
+		entityManager.addComponent<AudioComponent>(ak, audio);
 
 		Entity ak2 = entityManager.createEntity();
 		trans.pos = { 2, 2 };
@@ -249,7 +245,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<MoveComponent>(ak2, moveComp);
 		entityManager.addComponent<AttackComponent>(ak2, atkComp);
 		entityManager.addComponent<HealthComponent>(ak2, hpComp);
-
+		entityManager.addComponent<AudioComponent>(ak2, audio);
 
 		// AI setup
 		MessageBus bus;
@@ -275,6 +271,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<StaticMeshComponent>(rock, stat);
 		entityManager.addComponent<HealthComponent>(rock, hpComp);
 		entityManager.addComponent<ObstacleComponent>(rock, obComp);
+		entityManager.addComponent<AudioComponent>(rock, audio);
 
 		Entity tree = entityManager.createEntity();
 		stat.modelName = "tree";
@@ -284,6 +281,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.addComponent<StaticMeshComponent>(tree, stat);
 		entityManager.addComponent<ObstacleComponent>(tree, obComp);
 		entityManager.addComponent<HealthComponent>(tree, hpComp);
+		entityManager.addComponent<AudioComponent>(tree, audio);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -471,8 +469,8 @@ int NsMain(int argc, char** argv) {
 			}
 
 			//Audio Test
-			audioManager->setDevicePosition(camPos);
-			audioManager->setDeviceOrientation(trueFwd, trueUp);
+			audioManager.setDevicePosition(camPos);
+			audioManager.setDeviceOrientation(trueFwd, trueUp);
 
 			//Send mouse events to NSGUI
 			double x, y;
@@ -560,7 +558,6 @@ int NsMain(int argc, char** argv) {
 						else {
 							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
 							if (hit) {
-								SourceA.Play(gunA);
 								canMoveText->SetText("Moved True");
 								modeText->SetText("Select");
 							}

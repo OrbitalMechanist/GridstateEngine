@@ -97,6 +97,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     HealthComponent hp(entityID, 5, 2); // assume health starts at 5 , armor 2
     AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
     MoveComponent movement(1, false);
+    AudioComponent audio;
 
 
     //// add component
@@ -106,6 +107,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     manager.addComponent<MoveComponent>(aiEntity, movement);
     manager.addComponent<TransformComponent>(aiEntity, trans);
     manager.addComponent<StaticMeshComponent>(aiEntity, stat);
+    manager.addComponent<AudioComponent>(aiEntity, audio);
 }
 
 

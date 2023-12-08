@@ -1,6 +1,6 @@
 #include "gamemaster/GameMaster.h"
 
-GameMaster::GameMaster(EntityManager* e) : currentTurn(playerTurn), entityManager(e), currentMode(select), botSelected(false) {}
+GameMaster::GameMaster(EntityManager* e, AudioManager* a) : currentTurn(playerTurn), entityManager(e), audioManager(a), currentMode(select), botSelected(false) {}
 
 GameMaster::~GameMaster() {}
 
@@ -134,6 +134,11 @@ bool GameMaster::attackSelected(int x, int y) {
 					else {
 						entityManager->destroyEntity(enemyUnit);
 					}
+					glm::vec3 enemyPos = { entityManager->getComponent<TransformComponent>(enemyUnit).pos.x, 0,entityManager->getComponent<TransformComponent>(enemyUnit).pos.y};
+					entityManager->getComponent<AudioComponent>(enemyUnit).sourceA->SetPosition(enemyPos);
+					entityManager->getComponent<AudioComponent>(enemyUnit).sourceA->Play(audioManager->getSoundEffect("spellHit"));
+					entityManager->getComponent<AudioComponent>(enemyUnit).sourceB->SetPosition(enemyPos);
+					entityManager->getComponent<AudioComponent>(enemyUnit).sourceB->Play(audioManager->getSoundEffect("injured"));
 					selected = NULL;
 					currentMode = select;
 					return true;

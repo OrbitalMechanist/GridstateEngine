@@ -25,6 +25,7 @@
 #include "../components/AttackComponent.h"
 #include "../components/HealthComponent.h"
 #include "../components/ObstacleComponent.h"
+#include "../components/AudioComponent.h"
 
 constexpr size_t MaxEntities = 10000; 
 constexpr size_t MaxComponents = 32; 

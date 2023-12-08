@@ -84,7 +84,7 @@ template std::vector<Entity> EntityManager::getEntitiesWithComponent<MoveCompone
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<AttackComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<HealthComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<ObstacleComponent>();
-
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<AudioComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<TransformComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<StaticMeshComponent>();
 
@@ -102,7 +102,7 @@ template void EntityManager::registerComponentType<MoveComponent>();
 template void EntityManager::registerComponentType<AttackComponent>();
 template void EntityManager::registerComponentType<HealthComponent>();
 template void EntityManager::registerComponentType<ObstacleComponent>();
-
+template void EntityManager::registerComponentType<AudioComponent>();
 template void EntityManager::registerComponentType<StaticMeshComponent>();
 template void EntityManager::registerComponentType<TransformComponent>();
 
@@ -120,7 +120,7 @@ template MoveComponent& EntityManager::getComponent<MoveComponent>(Entity entity
 template AttackComponent& EntityManager::getComponent<AttackComponent>(Entity entity);
 template HealthComponent& EntityManager::getComponent<HealthComponent>(Entity entity);
 template ObstacleComponent& EntityManager::getComponent<ObstacleComponent>(Entity entity);
-
+template AudioComponent& EntityManager::getComponent<AudioComponent>(Entity entity);
 template StaticMeshComponent& EntityManager::getComponent<StaticMeshComponent>(Entity entity);
 template TransformComponent& EntityManager::getComponent<TransformComponent>(Entity entity);
 
@@ -158,7 +158,7 @@ template void EntityManager::addComponent<MoveComponent>(Entity entity, MoveComp
 template void EntityManager::addComponent<AttackComponent>(Entity entity, AttackComponent attackComponent);
 template void EntityManager::addComponent<HealthComponent>(Entity entity, HealthComponent healthComponent);
 template void EntityManager::addComponent<ObstacleComponent>(Entity entity, ObstacleComponent obstacleComponent);
-
+template void EntityManager::addComponent<AudioComponent>(Entity entity, AudioComponent audioComponent);
 template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
 template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);
 
