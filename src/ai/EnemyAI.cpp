@@ -11,7 +11,7 @@
 double EnemyAI::calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2) {
     int dx = pos2.first - pos1.first;
     int dy = pos2.second - pos1.second;
-    return abs(sqrt(dx * dx + dy * dy));
+    return std::hypot(dx, dy);
 }
 
 void EnemyAI::enemyPerform(Entity attacker, Entity target) {
@@ -28,6 +28,12 @@ void EnemyAI::enemyPerform(Entity attacker, Entity target) {
 
         if (attackResult) {
            // std::cout << "AI unit attacks player!" << std::endl;
+            glm::vec3 attackerPos = { manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y, 0 };
+            manager.getComponent<AudioComponent>(attacker).sourceA->SetPosition(attackerPos);
+            manager.getComponent<AudioComponent>(attacker).sourceA->Play(audio.getSoundEffect("meleeHit"));
+            glm::vec3 targetPos = { manager.getComponent<TransformComponent>(target).pos.x, manager.getComponent<TransformComponent>(target).pos.y, 0 };
+            manager.getComponent<AudioComponent>(target).sourceA->SetPosition(targetPos);
+            manager.getComponent<AudioComponent>(target).sourceA->Play(audio.getSoundEffect("injured"));
         } else {
            // std::cout << "AI unit misses the attack!" << std::endl;
         }  
@@ -87,12 +93,12 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
     std::vector<Entity> entitiesWithPlayer = manager.getEntitiesWithComponent<PlayerComponent>();
     
     // Closest Player Entity
-    Entity closestPlayer = manager.createEntity();
+    Entity closestPlayer = NULL;
     int closestDistance = -1;
+    std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y);
     for (Entity player : entitiesWithPlayer) {
         
         // Get this player position
-        std::pair<int, int> attackerPos = std::make_pair(manager.getComponent<TransformComponent>(attacker).pos.x, manager.getComponent<TransformComponent>(attacker).pos.y);
         std::pair<int, int> playerPos = std::make_pair(manager.getComponent<TransformComponent>(player).pos.x, manager.getComponent<TransformComponent>(player).pos.y);
       
         int currentDistance = calculateDistance(playerPos, attackerPos);
@@ -106,7 +112,7 @@ Entity EnemyAI::GetClosestPlayer(Entity attacker) {
         return NULL;
     }
     else {
-        //std::cout << "Distance " << closestDistance << std::endl;
+       // std::cout << "Distance " << closestDistance << std::endl;
     }
     return closestPlayer;
 }

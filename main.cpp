@@ -5,9 +5,7 @@ extern "C" {
 #include "graphics/Renderer.h"
 #include "Constants.h"
 //#include "mapbuilder/MapGrid.cpp"
-#include "audio/SoundDevice.h"
-#include "audio/SoundBuffer.h"
-#include "audio/SoundSource.h"
+#include "audio/AudioManager.h"
 
 #include "glm/gtx/intersect.hpp"
 
@@ -67,15 +65,9 @@ int NsMain(int argc, char** argv) {
 	int gunshotTimer = 0;
 
 	//Audio
-	SoundDevice* sounddevice = SoundDevice::get();
-
-	uint32_t gunA = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot2.wav");
-	uint32_t gunB = SoundBuffer::get()->addSoundEffect("assets/audio/gunshot1.aiff");
-
-	SoundSource SourceA(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
-	SoundSource SourceB(1.f, 1.f, { 0.0f,0.0f,0.0f }, { 0,0,0 }, false, true);
-
-	
+	AudioManager audioManager;
+	uint32_t gunA = audioManager.getSoundEffect("spellHit");
+	uint32_t gunB = audioManager.getSoundEffect("spellCast");
 
 	try {
 		if (!glfwInit()) {
@@ -113,12 +105,24 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
-		renderer.loadTexture("assets/textures/grass.jpg", "grass");
 		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
+		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
+		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
+		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
+		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
+		renderer.loadTexture("assets/textures/grass 2.jpg", "grass");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
-		renderer.loadModel("assets/models/cone45.obj", "cone");
+		renderer.loadModel("assets/models/bushTree.fbx", "tree");
+		renderer.loadModel("assets/models/leafyTree.fbx", "pine_tree");
+		renderer.loadModel("assets/models/leafyTree2.fbx", "pine_tree2");
+		renderer.loadModel("assets/models/lightColorRock.fbx", "rock_light");
+		renderer.loadModel("assets/models/rocks.fbx", "rocks");
+		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
+		renderer.loadModel("assets/models/bush.fbx", "bush");
 		renderer.loadModel("assets/models/character.fbx", "character");
+		renderer.loadModel("assets/models/enemy.fbx", "enemy");
+
 
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
@@ -160,8 +164,9 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<HealthComponent>();
 		entityManager.registerComponentType<AttackComponent>();
 		entityManager.registerComponentType<MoveComponent>();
+		entityManager.registerComponentType<NameComponent>();
 
-		GameMaster* gm = new GameMaster(&entityManager);
+		GameMaster* gm = new GameMaster(&entityManager, &audioManager);
 
 
 		Entity newEntity = entityManager.createEntity();
@@ -179,19 +184,7 @@ int NsMain(int argc, char** argv) {
 		stat.materialName = "surfaceMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
-
-
-		Entity character = entityManager.createEntity();
-		trans.pos = { 4,4 };
-		stat.modelName = "character";
-		stat.textureName = "surface";
-		stat.textureName = "tree_texture";
-		stat.shaderName = "basic";
-		//stat.materialName = "surfaceMaterial";
-
-		entityManager.addComponent<TransformComponent>(character, trans);
-		entityManager.addComponent<StaticMeshComponent>(character, stat);
-
+		//stat.materialName = "surfaceMaterial"
 
 		stat.modelName = "cube";
 		bool swapTex = false;
@@ -202,21 +195,10 @@ int NsMain(int argc, char** argv) {
 				Entity fresh = entityManager.createEntity();
 				trans.pos = { x, y };
 				stat.modelName = "cube";
-				if (swapTex) {
-					stat.textureName = "grass";
-				}
-				else {
-					stat.textureName = "surface";
-				}
+				stat.textureName = "grass";
 				stat.shaderName = "basic";
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
-				if (swapTex) {
-					swapTex = false;
-				}
-				else {
-					swapTex = true;
-				}
 			}
 		}
 
@@ -224,59 +206,110 @@ int NsMain(int argc, char** argv) {
 		MoveComponent moveComp;
 		AttackComponent atkComp;
 		HealthComponent hpComp;
+		ObstacleComponent obComp;
+		AudioComponent audio;
+		NameComponent allyNameComp;
+		//NameComponent enemyNameComp;
 
+		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
+							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
+							  "Tree", "Tree", "Bush", "Bush", "Bush", "Bush", "Bush" };
+		glm::ivec2 positions[] = { {0,3}, {2,1}, {1,4}, {2,4}, {3,4}, {5,4}, {1,6},
+								   {3,7}, {3,8}, {6,7}, {6,2}, {9,5}, {1,8}, {8,8},
+								   {9,2}, {0,4}, {3,2}, {4,9}, {6,3}, {9,7} };
+		std::string tex[] = { "tree_texture", "tree_texture", "rock_texture", "rock_texture","rock_texture",
+							   "rock_texture", "rock_texture", "rock_texture", "rock_texture","rock_texture",
+							   "rock_texture", "rock_texture", "tree_texture", "tree_texture","tree_texture",
+							   "bush_texture","bush_texture","bush_texture", "bush_texture", "bush_texture",
+							   "bush_texture"};
+		std::string modelName[] = { "character","character","rock_big","rock_big","rock_big",
+									"rock_big","rock_big","rock_big","rock_big","rock_big",
+									"rock_big","rock_big", "tree","tree","tree","bush",
+									"bush", "bush", "bush", "bush" };
+		int damage[] = { 1, 2 };
+		int atkRanges[] = { 3,2 };
+		int moveRanges[] = { 2,1 };
+		int health[] = { 5, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 1, 1, 1, 1, 1 };
 
-		//TODO: player1
-		Entity ak = entityManager.createEntity();
-		trans.pos = { 5, 5 };
-		stat.posOffset.z += 0.6f;
-		stat.rotOffset.y = glm::radians(90.0f);
-		stat.modelName = "ak";
-		stat.textureName = "ak_texture";
-		atkComp.damage = 2;
-		atkComp.range = 3;
+		//stat.posOffset.z += 0f;
+		int playerCount = 0;
 		moveComp.moved = false;
-		moveComp.moveRange = 2;
-		hpComp.health = 5;
-		hpComp.maxHealth = 5;
-		entityManager.addComponent<TransformComponent>(ak, trans);
-		entityManager.addComponent<StaticMeshComponent>(ak, stat);
-		entityManager.addComponent<PlayerComponent>(ak, playComp);
-		entityManager.addComponent<MoveComponent>(ak, moveComp);
-		entityManager.addComponent<AttackComponent>(ak, atkComp);
-		entityManager.addComponent<HealthComponent>(ak, hpComp);
-
-
-		//TODO: player2
-		Entity ak2 = entityManager.createEntity();
-		trans.pos = { 5, 6 };
-		moveComp.moved = false;
-		moveComp.moveRange = 1;
-		atkComp.damage = 3;
-		hpComp.health = 7;
-		hpComp.maxHealth = 7;
-		atkComp.range = 2;
-		entityManager.addComponent<TransformComponent>(ak2, trans);
-		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
-		entityManager.addComponent<PlayerComponent>(ak2, playComp);
-		entityManager.addComponent<MoveComponent>(ak2, moveComp);
-		entityManager.addComponent<AttackComponent>(ak2, atkComp);
-		entityManager.addComponent<HealthComponent>(ak2, hpComp);
+		for (int i = 0; i < 20; i++) {
+			Entity newEntity = entityManager.createEntity();
+			trans.pos = positions[i];
+			stat.modelName = modelName[i];
+			stat.textureName = tex[i];
+			hpComp.health = health[i];
+			entityManager.addComponent<TransformComponent>(newEntity, trans);
+			entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
+			entityManager.addComponent<AudioComponent>(newEntity, audio);
+			if (entityName[i] == "Player") {
+				atkComp.damage = damage[playerCount];
+				atkComp.range = atkRanges[playerCount];
+				moveComp.moveRange = moveRanges[playerCount];
+				allyNameComp.name = "Ally Wizard";
+				entityManager.addComponent<AttackComponent>(newEntity, atkComp);
+				entityManager.addComponent<MoveComponent>(newEntity, moveComp);
+				entityManager.addComponent<PlayerComponent>(newEntity, playComp);
+				entityManager.addComponent<NameComponent>(newEntity, allyNameComp);
+			}
+			else {
+				entityManager.addComponent<ObstacleComponent>(newEntity, obComp);
+			}
+		}
 
 		// AI setup
 		MessageBus bus;
 		AISystem aiSystem(entityManager, bus, *gm);
-		const int numOfEnemy = 2;
+		glm::vec2 aiPos[] = { {1,9}, {6,8}, {10,3} };
+		const int numOfEnemy = 3;
 		// Generate Enemy
 		for (int i = 0; i < numOfEnemy; i++) {
-			trans.pos = { 7 + i, 7 };
-			stat.modelName = "ak";  // replace this with actual model
-			stat.textureName = "ak_texture";
+			trans.pos = aiPos[i];
+			stat.modelName = "enemy";  // replace this with actual model
+			stat.textureName = "tree_texture";
 			aiSystem.spawnEnemy(trans, stat);
 		}
 		
 		UIController ui("everything.xaml", gm, entityManager);
 
+
+		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
+		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
+
+		Noesis::GUI::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg)
+			{
+				const std::string levelText[] = { "Trace", "Debug", "Info", "Warning", "Error" };
+				if (level < 3) {
+					std::cout << "Noesis " << levelText[level] << " : " << msg << std::endl;
+				}
+				else {
+					std::cerr << "Noesis " << levelText[level] << " : " << msg << std::endl;
+				}
+			});
+
+		Noesis::GUI::Init();
+
+		//We aren't really *basing* our engine entirely on the Application Framework but we will use
+		//some of its features, at least for now.
+
+		NoesisApp::Launcher::RegisterAppComponents();
+
+		Noesis::Ptr<NoesisApp::LocalXamlProvider> xamlProvider = Noesis::MakePtr<NoesisApp::LocalXamlProvider>("./assets/ui");
+		Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider = Noesis::MakePtr<NoesisApp::LocalFontProvider>("./assets/fonts");
+
+		NoesisApp::SetThemeProviders(xamlProvider, fontProvider);
+
+		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
+
+		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("everything.xaml");
+
+		Noesis::Ptr<Noesis::IView> nsguiView = Noesis::GUI::CreateView(uiElement);
+		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
 		//End Noesis setup (actually ending noesis happens at the very end)
 
 		auto nsguiView = ui.GetNsguiView();
@@ -304,6 +337,39 @@ int NsMain(int argc, char** argv) {
 
 		//ui.BtnHandlers();
 
+		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm->currentTurn == playerTurn) {
+					turnText->SetText("Enemy Turn");
+					gm->selected = NULL;
+					gm->switchMode(select);
+					modeText->SetText("Select Mode");
+					gm->endTurn();
+				}
+				else if (gm->currentTurn == enemyTurn) {
+					turnText->SetText("Player Turn");
+					gm->endTurn();
+				}
+				else {
+
+				}
+
+			};
+		modeBtn->Click() += [modeText, gm](Noesis::BaseComponent* sender,
+			const Noesis::RoutedEventArgs& args) mutable {
+				if (gm->currentMode == select) {
+					gm->switchMode(move);
+					modeText->SetText("Move Mode");
+				}
+				else if (gm->currentMode == move) {
+					gm->switchMode(attack);
+					modeText->SetText("Attack Mode");
+				}
+				else if (gm->currentMode == attack) {
+					gm->switchMode(select);
+					modeText->SetText("Select Mode");
+				}
+			};
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -387,8 +453,8 @@ int NsMain(int argc, char** argv) {
 			}
 
 			//Audio Test
-			sounddevice->SetPosition(camPos);
-			sounddevice->SetOrientation(trueFwd, trueUp);
+			audioManager.setDevicePosition(camPos);
+			audioManager.setDeviceOrientation(trueFwd, trueUp);
 
 			//Send mouse events to NSGUI
 			double x, y;
@@ -452,6 +518,9 @@ int NsMain(int argc, char** argv) {
 										//canMoveText->SetText("Moved False");
 									}
 								}
+								else {
+									canMoveText->SetText("");
+								}
 							}
 						}
 						else if (gm->currentMode == move) {
@@ -464,7 +533,6 @@ int NsMain(int argc, char** argv) {
 						else {
 							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
 							if (hit) {
-								SourceA.Play(gunA);
 								//canMoveText->SetText("Moved True");
 								ui.HighlightSelectMode();
 							}

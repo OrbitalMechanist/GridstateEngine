@@ -7,6 +7,11 @@
 #include "gamemaster/GameMaster.h"
 #include <mutex>
 #include <NsGui/TextBlock.h>
+#include <thread>
+#include <vector>
+#include <cassert>
+#include <iostream>
+#include <string>
 #ifndef AISYSTEM_H
 #define AISYSTEM_H
 
@@ -23,16 +28,22 @@ public:
 
 private:
     // states handler functions
-    void handleIdleState(Entity et);
+   // void handleIdleState(Entity et);
     void handlePathfindingState(Entity et);
     void handleAttackState(Entity et);
-    void handleTakeCoverState(Entity et);
+   // void handleTakeCoverState(Entity et);
     int entityID = 0;
     int hasAttackCount = 0; // use this to check if all enemy has finished
-    std::mutex mtx;
+
     const int MAX_Y = 11; // size of map
     int map[11][11] = {}; // gameMap
     void updateMap();
+    void processAIEntity(Entity entity);
+    void updateAI(std::vector<Entity>& entities);
+    bool isUpdate = false;
+    std::mutex mtx;
+    std::mutex mtx2;
+    std::mutex mapMtx;
 };
 
 
