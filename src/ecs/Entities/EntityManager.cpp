@@ -76,6 +76,8 @@ std::vector<Entity> EntityManager::getEntitiesWithComponent() {
     }
     return matchingEntities;
 }
+
+// There should be a better way to do this later down the line, likley along with messaging system rework -Joe
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<AIComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<GridPositionComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<MapComponent>();
@@ -87,6 +89,7 @@ template std::vector<Entity> EntityManager::getEntitiesWithComponent<ObstacleCom
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<AudioComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<TransformComponent>();
 template std::vector<Entity> EntityManager::getEntitiesWithComponent<StaticMeshComponent>();
+template std::vector<Entity> EntityManager::getEntitiesWithComponent<NameComponent>();
 
 // add a new component type
 template<typename T>
@@ -105,6 +108,7 @@ template void EntityManager::registerComponentType<ObstacleComponent>();
 template void EntityManager::registerComponentType<AudioComponent>();
 template void EntityManager::registerComponentType<StaticMeshComponent>();
 template void EntityManager::registerComponentType<TransformComponent>();
+template void EntityManager::registerComponentType<NameComponent>();
 
 // getComponent:
 template<typename T>
@@ -123,6 +127,7 @@ template ObstacleComponent& EntityManager::getComponent<ObstacleComponent>(Entit
 template AudioComponent& EntityManager::getComponent<AudioComponent>(Entity entity);
 template StaticMeshComponent& EntityManager::getComponent<StaticMeshComponent>(Entity entity);
 template TransformComponent& EntityManager::getComponent<TransformComponent>(Entity entity);
+template NameComponent& EntityManager::getComponent<NameComponent>(Entity entity);
 
 
 template<typename T>
@@ -161,4 +166,5 @@ template void EntityManager::addComponent<ObstacleComponent>(Entity entity, Obst
 template void EntityManager::addComponent<AudioComponent>(Entity entity, AudioComponent audioComponent);
 template void EntityManager::addComponent<TransformComponent>(Entity entity, TransformComponent transformcomponent);
 template void EntityManager::addComponent<StaticMeshComponent>(Entity entity, StaticMeshComponent smcomp);
+template void EntityManager::addComponent<NameComponent>(Entity entity, NameComponent name);
 

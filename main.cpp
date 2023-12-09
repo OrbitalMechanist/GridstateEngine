@@ -159,6 +159,7 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<HealthComponent>();
 		entityManager.registerComponentType<AttackComponent>();
 		entityManager.registerComponentType<MoveComponent>();
+		entityManager.registerComponentType<NameComponent>();
 
 		GameMaster* gm = new GameMaster(&entityManager, &audioManager);
 
@@ -202,6 +203,8 @@ int NsMain(int argc, char** argv) {
 		HealthComponent hpComp;
 		ObstacleComponent obComp;
 		AudioComponent audio;
+		NameComponent allyNameComp;
+		//NameComponent enemyNameComp;
 
 		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
 							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
@@ -240,9 +243,11 @@ int NsMain(int argc, char** argv) {
 				atkComp.damage = damage[playerCount];
 				atkComp.range = atkRanges[playerCount];
 				moveComp.moveRange = moveRanges[playerCount];
+				allyNameComp.name = "Ally Wizard";
 				entityManager.addComponent<AttackComponent>(newEntity, atkComp);
 				entityManager.addComponent<MoveComponent>(newEntity, moveComp);
 				entityManager.addComponent<PlayerComponent>(newEntity, playComp);
+				entityManager.addComponent<NameComponent>(newEntity, allyNameComp);
 			}
 			else {
 				entityManager.addComponent<ObstacleComponent>(newEntity, obComp);
