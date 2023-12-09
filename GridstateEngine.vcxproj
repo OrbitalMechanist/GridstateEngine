@@ -204,6 +204,7 @@
     <ClInclude Include="headers\ecs\components\HealthComponent.h" />
     <ClInclude Include="headers\ecs\components\MapComponent.h" />
     <ClInclude Include="headers\ecs\components\MoveComponent.h" />
+    <ClInclude Include="headers\ecs\components\NameComponent.h" />
     <ClInclude Include="headers\ecs\components\PlayerComponent.h" />
     <ClInclude Include="headers\ecs\components\StaticMeshComponent.h" />
     <ClInclude Include="headers\ecs\components\TransformComponent.h" />

@@ -87,7 +87,7 @@ void AISystem::handleAttackState(Entity entity){
 }
 
 
-// Spawn Enemy
+// Spawn Enemy, this is here for testing and should be replaced with a general UnitFactory later
 void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
 
     // create new aiEntity
@@ -102,6 +102,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
     MoveComponent movement(1, false);
     AudioComponent audio;
+    NameComponent name("Enemy Wizard");
 
 
     //// add component
@@ -112,6 +113,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     manager.addComponent<TransformComponent>(aiEntity, trans);
     manager.addComponent<StaticMeshComponent>(aiEntity, stat);
     manager.addComponent<AudioComponent>(aiEntity, audio);
+    manager.addComponent<NameComponent>(aiEntity, name);
 }
 
 

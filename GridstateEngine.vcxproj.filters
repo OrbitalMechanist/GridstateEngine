@@ -214,6 +214,9 @@
     <ClInclude Include="headers\ecs\components\ObstacleComponent.h">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ecs\components\NameComponent.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
