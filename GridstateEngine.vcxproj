@@ -182,6 +182,7 @@
     <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp" />
     <ClCompile Include="src\systems\AISystem.cpp" />
     <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp" />
+    <ClCompile Include="src\ui\UIController.cpp" />
     <ClCompile Include="src\Universe.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +228,7 @@
     <ClInclude Include="headers\systems\MessagingSystem\Message.h" />
     <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h" />
     <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h" />
+    <ClInclude Include="headers\ui\UIController.h" />
     <ClInclude Include="headers\Universe.h" />
   </ItemGroup>
   <ItemGroup>

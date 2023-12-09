@@ -71,6 +71,7 @@
     <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
       <Filter>Source Files\Systems\MessagingSystem</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\UIController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -202,6 +203,7 @@
     <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
       <Filter>Header Files\Systems\MessagingSystem</Filter>
     </ClInclude>
+    <ClInclude Include="headers\ui\UIController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />

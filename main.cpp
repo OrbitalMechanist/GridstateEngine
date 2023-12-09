@@ -49,6 +49,10 @@ extern "C" {
 
 // AI inlucde 
 #include "../headers/systems/AISystem.h"
+
+// UI
+#include "../headers/ui/UIController.h"
+
 /*
 	This file is just for testing, to be removed once we have our graphical engine ready.
 	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
@@ -271,45 +275,11 @@ int NsMain(int argc, char** argv) {
 			aiSystem.spawnEnemy(trans, stat);
 		}
 		
-	
+		UIController ui("everything.xaml", gm);
 
-
-		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
-		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
-
-		Noesis::GUI::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg)
-			{
-				const std::string levelText[] = { "Trace", "Debug", "Info", "Warning", "Error" };
-				if (level < 3) {
-					std::cout << "Noesis " << levelText[level] << " : " << msg << std::endl;
-				}
-				else {
-					std::cerr << "Noesis " << levelText[level] << " : " << msg << std::endl;
-				}
-			});
-
-		Noesis::GUI::Init();
-
-		//We aren't really *basing* our engine entirely on the Application Framework but we will use
-		//some of its features, at least for now.
-
-		NoesisApp::Launcher::RegisterAppComponents();
-
-		Noesis::Ptr<NoesisApp::LocalXamlProvider> xamlProvider = Noesis::MakePtr<NoesisApp::LocalXamlProvider>("./assets/ui");
-		Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider = Noesis::MakePtr<NoesisApp::LocalFontProvider>("./assets/fonts");
-
-		NoesisApp::SetThemeProviders(xamlProvider, fontProvider);
-
-		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
-
-		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("everything.xaml");
-
-		Noesis::Ptr<Noesis::IView> nsguiView = Noesis::GUI::CreateView(uiElement);
-		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
 		//End Noesis setup (actually ending noesis happens at the very end)
+
+		auto nsguiView = ui.GetNsguiView();
 
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float prevTime = 0;
@@ -321,21 +291,20 @@ int NsMain(int argc, char** argv) {
 		//Important note: FindName will probably still succeed and return the element even if
 		//you give it the wrong type, but the parameters you could get/set would not necessarily
 		//correspond to what the element actually has and thus not work as expected.
-		auto turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
-		auto turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
+		auto turnBtn = ui.GetturnBtn();
+		auto selectBtn = ui.GetSelectBtn();
+		auto moveBtn = ui.GetMoveBtn();
+		auto attackBtn = ui.GetAttackBtn();
 
-		auto selectBtn = nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn");
-		auto moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn");
-		auto attackBtn = nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn");
+		auto turnText = ui.GetTurnText();
+		auto healthText = ui.GetHealthText();
+		auto moveText = ui.GetMoveText();
+		auto attackRangeText = ui.GetAttackRangeText();
+		auto attackText = ui.GetAttackText();
+		auto armorText = ui.GetArmorText();
+		auto canMoveText = ui.GetCanMoveText();
 
-		auto healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
-		auto moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");
-		auto attackRangeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackRangeText");
-		auto attackText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackText");
-		auto armorText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("armorText");
-		auto canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
-
-		auto playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
+		auto playerInfo = ui.GetPlayerInfo();
 
 		bool lightOn = true;
 
@@ -346,52 +315,7 @@ int NsMain(int argc, char** argv) {
 		bool isPlayerTurn = true;
 		//void* gmPtr = &gm;
 
-		selectBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				gm->switchMode(select);
-				std::cout << "Select";
-				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
-				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
-			};
-
-		moveBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				gm->switchMode(move);
-				std::cout << "Move";
-				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
-				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(180);
-				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
-			};
-
-		attackBtn->Click() += [nsguiView, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				gm->switchMode(attack);
-				std::cout << "Attack";
-				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
-				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(180);
-			};
-
-		turnBtn->Click() += [nsguiView, turnText, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm->currentTurn == playerTurn) {
-					turnText->SetText("Enemy Turn");
-					gm->endTurn();
-				}
-				else if (gm->currentTurn == enemyTurn) {
-					turnText->SetText("Player Turn");
-					gm->endTurn();
-					gm->selected = NULL;
-					gm->switchMode(select);
-					nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
-					nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-					nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
-				}
-				else {
-
-				}
-			};
+		//ui.BtnHandlers();
 
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
@@ -532,6 +456,7 @@ int NsMain(int argc, char** argv) {
 								std::cout << "\nNOT NULL";
 								std::string stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).maxHealth);
 								healthText->SetText(stringVar.c_str());
+								
 								stringVar = std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
 								moveText->SetText(stringVar.c_str());
 								stringVar = std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
@@ -618,14 +543,15 @@ int NsMain(int argc, char** argv) {
 
 		} //End of operation loop. Everything after this is cleanup.
 
-		//NSGUI stuff should be manually shut down before exiting the program.
-		nsguiView->GetRenderer()->Shutdown();
-		//All Noesis::Ptr objects must be reset to free them because they are, in fact, pointers.
-		nsguiView.Reset();
-		xamlProvider.Reset();
-		fontProvider.Reset();
-		uiElement.Reset();
-		Noesis::GUI::Shutdown();
+		ui.UIReset();
+		////NSGUI stuff should be manually shut down before exiting the program.
+		//nsguiView->GetRenderer()->Shutdown();
+		////All Noesis::Ptr objects must be reset to free them because they are, in fact, pointers.
+		//nsguiView.Reset();
+		//xamlProvider.Reset();
+		//fontProvider.Reset();
+		//uiElement.Reset();
+		//Noesis::GUI::Shutdown();
 
 		glfwTerminate();
 		return 0;
