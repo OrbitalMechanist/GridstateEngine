@@ -178,19 +178,7 @@ int NsMain(int argc, char** argv) {
 		stat.materialName = "surfaceMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
-
-
-		Entity character = entityManager.createEntity();
-		trans.pos = { 4,4 };
-		stat.modelName = "character";
-		stat.textureName = "surface";
-		stat.textureName = "tree_texture";
-		stat.shaderName = "basic";
-		//stat.materialName = "surfaceMaterial";
-
-		entityManager.addComponent<TransformComponent>(character, trans);
-		entityManager.addComponent<StaticMeshComponent>(character, stat);
-
+		//stat.materialName = "surfaceMaterial"
 
 		stat.modelName = "cube";
 		bool swapTex = false;
@@ -212,76 +200,67 @@ int NsMain(int argc, char** argv) {
 		MoveComponent moveComp;
 		AttackComponent atkComp;
 		HealthComponent hpComp;
+		ObstacleComponent obComp;
 		AudioComponent audio;
-		Entity ak = entityManager.createEntity();
-		trans.pos = { 4, 2 };
-		stat.posOffset.z += 0.6f;
-		stat.rotOffset.y = glm::radians(90.0f);
-		stat.modelName = "ak";
-		stat.textureName = "ak_texture";
-		atkComp.damage = 2;
-		atkComp.range = 3;
-		moveComp.moved = false;
-		moveComp.moveRange = 2;
-		hpComp.health = 5;
-		entityManager.addComponent<TransformComponent>(ak, trans);
-		entityManager.addComponent<StaticMeshComponent>(ak, stat);
-		entityManager.addComponent<PlayerComponent>(ak, playComp);
-		entityManager.addComponent<MoveComponent>(ak, moveComp);
-		entityManager.addComponent<AttackComponent>(ak, atkComp);
-		entityManager.addComponent<HealthComponent>(ak, hpComp);
-		entityManager.addComponent<AudioComponent>(ak, audio);
 
-		Entity ak2 = entityManager.createEntity();
-		trans.pos = { 2, 2 };
+		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
+							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
+							  "Tree", "Tree", "Bush", "Bush", "Bush", "Bush", "Bush" };
+		glm::ivec2 positions[] = { {0,3}, {2,1}, {1,4}, {2,4}, {3,4}, {5,4}, {1,6},
+								   {3,7}, {3,8}, {6,7}, {6,2}, {9,5}, {1,8}, {8,8},
+								   {9,2}, {0,4}, {3,2}, {4,9}, {6,3}, {9,7} };
+		std::string tex[] = { "tree_texture", "tree_texture", "rock_texture", "rock_texture","rock_texture",
+							   "rock_texture", "rock_texture", "rock_texture", "rock_texture","rock_texture",
+							   "rock_texture", "rock_texture", "tree_texture", "tree_texture","tree_texture",
+							   "bush_texture","bush_texture","bush_texture", "bush_texture", "bush_texture",
+							   "bush_texture"};
+		std::string modelName[] = { "character","character","rock_big","rock_big","rock_big",
+									"rock_big","rock_big","rock_big","rock_big","rock_big",
+									"rock_big","rock_big", "tree","tree","tree","bush",
+									"bush", "bush", "bush", "bush" };
+		int damage[] = { 1, 2 };
+		int atkRanges[] = { 3,2 };
+		int moveRanges[] = { 2,1 };
+		int health[] = { 5, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 1, 1, 1, 1, 1 };
+
+		//stat.posOffset.z += 0f;
+		int playerCount = 0;
 		moveComp.moved = false;
-		moveComp.moveRange = 1;
-		atkComp.damage = 3;
-		hpComp.health = 7;
-		atkComp.range = 2;
-		entityManager.addComponent<TransformComponent>(ak2, trans);
-		entityManager.addComponent<StaticMeshComponent>(ak2, stat);
-		entityManager.addComponent<PlayerComponent>(ak2, playComp);
-		entityManager.addComponent<MoveComponent>(ak2, moveComp);
-		entityManager.addComponent<AttackComponent>(ak2, atkComp);
-		entityManager.addComponent<HealthComponent>(ak2, hpComp);
-		entityManager.addComponent<AudioComponent>(ak2, audio);
+		for (int i = 0; i < 20; i++) {
+			Entity newEntity = entityManager.createEntity();
+			trans.pos = positions[i];
+			stat.modelName = modelName[i];
+			stat.textureName = tex[i];
+			hpComp.health = health[i];
+			entityManager.addComponent<TransformComponent>(newEntity, trans);
+			entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
+			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
+			entityManager.addComponent<AudioComponent>(newEntity, audio);
+			if (entityName[i] == "Player") {
+				atkComp.damage = damage[playerCount];
+				atkComp.range = atkRanges[playerCount];
+				moveComp.moveRange = moveRanges[playerCount];
+				entityManager.addComponent<AttackComponent>(newEntity, atkComp);
+				entityManager.addComponent<MoveComponent>(newEntity, moveComp);
+				entityManager.addComponent<PlayerComponent>(newEntity, playComp);
+			}
+			else {
+				entityManager.addComponent<ObstacleComponent>(newEntity, obComp);
+			}
+		}
 
 		// AI setup
 		MessageBus bus;
 		AISystem aiSystem(entityManager, bus, *gm);
-		const int numOfEnemy = 2;
+		glm::vec2 aiPos[] = { {1,9}, {6,8}, {10,3} };
+		const int numOfEnemy = 3;
 		// Generate Enemy
 		for (int i = 0; i < numOfEnemy; i++) {
-			trans.pos = { 7 + i, 7 };
-			stat.modelName = "ak";  // replace this with actual model
-			stat.textureName = "ak_texture";
+			trans.pos = aiPos[i];
+			stat.modelName = "enemy";  // replace this with actual model
+			stat.textureName = "tree_texture";
 			aiSystem.spawnEnemy(trans, stat);
 		}
-		
-		Entity rock = entityManager.createEntity();
-		trans.pos = { 3,3 };
-		hpComp.health = 4;
-		stat.modelName = "rock_big";
-		stat.textureName = "rock_texture";
-		stat.posOffset = { 0, 0, 0 };
-		stat.rotOffset.y = glm::radians(0.0f);
-		ObstacleComponent obComp;
-		entityManager.addComponent<TransformComponent>(rock, trans);
-		entityManager.addComponent<StaticMeshComponent>(rock, stat);
-		entityManager.addComponent<HealthComponent>(rock, hpComp);
-		entityManager.addComponent<ObstacleComponent>(rock, obComp);
-		entityManager.addComponent<AudioComponent>(rock, audio);
-
-		Entity tree = entityManager.createEntity();
-		stat.modelName = "tree";
-		stat.textureName = "tree_texture";
-		trans.pos = { 5, 5 };
-		entityManager.addComponent <TransformComponent>(tree, trans);
-		entityManager.addComponent<StaticMeshComponent>(tree, stat);
-		entityManager.addComponent<ObstacleComponent>(tree, obComp);
-		entityManager.addComponent<HealthComponent>(tree, hpComp);
-		entityManager.addComponent<AudioComponent>(tree, audio);
 
 		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
 		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
@@ -355,35 +334,33 @@ int NsMain(int argc, char** argv) {
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentTurn == playerTurn) {
 					turnText->SetText("Enemy Turn");
+					gm->selected = NULL;
+					gm->switchMode(select);
+					modeText->SetText("Select Mode");
 					gm->endTurn();
 				}
 				else if (gm->currentTurn == enemyTurn) {
 					turnText->SetText("Player Turn");
 					gm->endTurn();
-					gm->selected = NULL;
-					gm->switchMode(select);
-					modeText->SetText("Select Mode");
 				}
 				else {
 
 				}
+
 			};
 		modeBtn->Click() += [modeText, gm](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
 				if (gm->currentMode == select) {
 					gm->switchMode(move);
 					modeText->SetText("Move Mode");
-					std::cout << "Move";
 				}
 				else if (gm->currentMode == move) {
 					gm->switchMode(attack);
 					modeText->SetText("Attack Mode");
-					std::cout << "Attack";
 				}
 				else if (gm->currentMode == attack) {
 					gm->switchMode(select);
 					modeText->SetText("Select Mode");
-					std::cout << "Select";
 				}
 			};
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
