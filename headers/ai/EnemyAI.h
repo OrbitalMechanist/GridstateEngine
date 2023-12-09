@@ -7,6 +7,7 @@
 #include <ctime>
 #include <cmath>
 #include "ecs/entity/EntityManager.h"
+#include "audio/AudioManager.h"
 #include "ecs/components/GridPositionComponent.h"
 #include "ecs/components/AttackComponent.h"
 #include "ecs/components/HealthComponent.h"
@@ -18,8 +19,9 @@
 
 class EnemyAI {
 	EntityManager& manager;
+	AudioManager& audio;
 public:
-	EnemyAI(EntityManager& manager) : manager(manager) {};
+	EnemyAI(EntityManager& manager, AudioManager& audio) : manager(manager), audio(audio) {};
 	Entity GetClosestPlayer(Entity attacker); // attack the closest player
 	double calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2);
 	void enemyPerform(Entity attacker, Entity target);

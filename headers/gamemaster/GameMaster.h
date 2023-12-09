@@ -1,5 +1,6 @@
 #pragma once
 #include "ecs/entity/EntityManager.h"
+#include "audio/AudioManager.h"
 
 enum Turn {
 	enemyTurn,
@@ -16,11 +17,13 @@ class GameMaster {
 public:
 	Turn currentTurn;
 	EntityManager* entityManager;
+	AudioManager* audioManager;
+	SoundSource* uiAudio;
 	Entity selected;
 	Mode currentMode;
 	bool botSelected;
 
-	GameMaster(EntityManager* e);
+	GameMaster(EntityManager* e, AudioManager* a);
 
 	~GameMaster();
 

@@ -3,63 +3,30 @@
 
 void AISystem::update(Noesis::TextBlock *turnText) {
     std::vector<Entity> entitiesWithAI = manager.getEntitiesWithComponent<AIComponent>();
-    for (auto entity : entitiesWithAI) {
-        std::lock_guard<std::mutex> guard(mtx);
-        auto& aicomponent = manager.getComponent<AIComponent>(entity);
-        // states
-        switch (aicomponent.state) {
-            case AIState::Idle:
-                // idle
-                handleIdleState(entity);
-                break;
-            case AIState::Pathfinding:
-                // pathfinding
-                handlePathfindingState(entity);
-                break;
-            case AIState::Attack:
-                // attack
-                handleAttackState(entity);
-                break;
-            case AIState::TakeCover:
-                // take cover
-                handleTakeCoverState(entity);
-                break;
-        }
+    if (gm.currentTurn == enemyTurn) {
+        std::vector<Entity> entitiesWithAI = manager.getEntitiesWithComponent<AIComponent>();
+        if(!isUpdate){
+            isUpdate = true;
+            updateAI(entitiesWithAI);
+        }    
     }
     if (gm.currentTurn == enemyTurn && hasAttackCount == entitiesWithAI.size()) {
         hasAttackCount = 0; // reset for next turn
         turnText->SetText("Player Turn");
+        isUpdate = false;
         gm.endTurn();
-        std::cout << "Enemy turn end" << std::endl;
-    }
-
-
-}
-
-// idle state handler
-void AISystem::handleIdleState(Entity entity) {
-    // swtich to pathfinding when enemy's turn started
-    if (gm.currentTurn == enemyTurn) {
-        std::cout << "Idle state" << std::endl;
-        AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
-
-        
-
-        // Switch to pathfinding State
-        aiComponent.state = AIState::Pathfinding;
     }
 }
 
 // Pathfinding state handler
 void AISystem::handlePathfindingState(Entity entity) {
-    std::cout << "Pathfinding state" << std::endl;
-    AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
+    std::lock_guard<std::mutex> lock(mtx2);
     if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
        
         updateMap();
 
         // Find Closest player
-        EnemyAI aiPath(manager);
+        EnemyAI aiPath(manager, *gm.audioManager);
         Entity player = aiPath.GetClosestPlayer(entity);
 
         // Get Position
@@ -70,63 +37,55 @@ void AISystem::handlePathfindingState(Entity entity) {
         std::pair aiPosition = std::make_pair(aiPosX, aiPosY);
         std::pair playerPosition = std::make_pair(playerPosX, playerPosY);
 
-        /*std::cout << "AIPOS: " << manager.getComponent<TransformComponent>(entity).pos.x << " : " << manager.getComponent<TransformComponent>(entity).pos.y << std::endl;
-         std::cout << "player: " << manager.getComponent<TransformComponent>(player).pos.x << " : " << manager.getComponent<TransformComponent>(player).pos.y << std::endl;*/
-
          // pathfinding
         Pathfinding path;
         map[aiPosX][aiPosY] = 1;
-        map[playerPosX][playerPosY] = 1;
+        map[playerPosX][playerPosY] = 1; 
         path.aStarSearch(map, aiPosition, playerPosition);
-        map[aiPosX][aiPosY] = 0;
-        map[playerPosX][playerPosY] = 2;
-        path.printDirVec();
+        //path.printDirVec();
+        
 
         // Move
         int walkRange = manager.getComponent<MoveComponent>(entity).moveRange;
-        if (path.getNewPosition(walkRange).first != NULL && path.getNewPosition(walkRange).second != NULL) {
+       
+        
+        std::pair<int, int> newPos = path.getNewPosition(walkRange);
+        
+        int newX = newPos.first;
+        int newY = newPos.second;
 
-            int newX = path.getNewPosition(walkRange).first;
-            int newY = MAX_Y - path.getNewPosition(walkRange).second;
-
+        if (newX != -1 &&  newY != -1) {
+            newY = MAX_Y - newY;
             manager.getComponent<TransformComponent>(entity).pos.x = newX;
             manager.getComponent<TransformComponent>(entity).pos.y = newY;
-
-
+            updateMap();
+            if (aiPosX != newX && aiPosY != newY) {
+                glm::vec3 entityPos = { manager.getComponent<TransformComponent>(entity).pos.x, manager.getComponent<TransformComponent>(entity).pos.y, 0 };
+                manager.getComponent<AudioComponent>(entity).sourceB->SetPosition(entityPos);
+                manager.getComponent<AudioComponent>(entity).sourceB->Play(gm.audioManager->getSoundEffect("move"));
+            }
         }
-   
     }
-    // Switch to Attack State
-    aiComponent.state = AIState::Attack;
+    
 }
 
 // Attack state handler
 void AISystem::handleAttackState(Entity entity){
-   // std::cout << "Attack state" << std::endl;
-    AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
     if (manager.getEntitiesWithComponent<PlayerComponent>().size() > 0) {
         // find attack target
-        EnemyAI aiAttack(manager);
+        EnemyAI aiAttack(manager, *gm.audioManager);
         Entity target = aiAttack.GetClosestPlayer(entity);
         if (target == NULL) {
             std::cout << "NO player exited " << std::endl;
         }
         else {
-            aiAttack.enemyPerform(entity, target);
-            std::cout << "Current Health: " << manager.getComponent<HealthComponent>(target).health << std::endl;
+            aiAttack.enemyPerform(entity, target);  
         }
     }
-    
     hasAttackCount++;
-    aiComponent.state = AIState::Idle;
+  
 }
 
-// Takecover state handler 
-void AISystem::handleTakeCoverState(Entity entity){
-    std::cout << "Takecover state" << std::endl;
-    AIComponent& aiComponent = manager.getComponent<AIComponent>(entity);
-    aiComponent.state = AIState::Idle;
-}
 
 // Spawn Enemy
 void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
@@ -142,37 +101,35 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     HealthComponent hp(entityID, 5, 2); // assume health starts at 5 , armor 2
     AttackComponent att(1, 2, 1); // damage range and attackModifier = 1
     MoveComponent movement(1, false);
+    AudioComponent audio;
 
 
     //// add component
-
     manager.addComponent<AIComponent>(aiEntity, ai);
     manager.addComponent<HealthComponent>(aiEntity, hp);
     manager.addComponent<AttackComponent>(aiEntity, att);
     manager.addComponent<MoveComponent>(aiEntity, movement);
     manager.addComponent<TransformComponent>(aiEntity, trans);
     manager.addComponent<StaticMeshComponent>(aiEntity, stat);
+    manager.addComponent<AudioComponent>(aiEntity, audio);
 }
 
 
 // not a efficient way - if have time, improve this
 void AISystem::updateMap() {
+    std::lock_guard<std::mutex> lock(mapMtx);
     for (int i = 0; i < MAX_Y; ++i) {
         for (int j = 0; j < MAX_Y; ++j) {
             map[i][j] = 1;
-            //std::cout << map[i][j] << " ";
         }
-        //std::cout << std::endl;
     }
 
     // slot taken by Enemy
-    for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {
-        
+    for (Entity aiEntity : manager.getEntitiesWithComponent<AIComponent>()) {   
         int x = manager.getComponent<TransformComponent>(aiEntity).pos.x;
         int y = manager.getComponent<TransformComponent>(aiEntity).pos.y;
         int invertedY = MAX_Y - y;  
-        //std::cout << x << " : " << y << std::endl;
-        map[invertedY][x] = 0;
+        map[x][invertedY] = 0;
     }
 
     // slot taken by player
@@ -180,10 +137,18 @@ void AISystem::updateMap() {
         int x = manager.getComponent<TransformComponent>(playerEntity).pos.x;
         int y = manager.getComponent<TransformComponent>(playerEntity).pos.y;
         int invertedY = MAX_Y - y;
-        map[invertedY][x] = 2;
+        map[x][invertedY] = 0;
     }
 
-    /*std::cout << std::endl;
+    // slot taken by obstacle
+    for (Entity obstacleEntity : manager.getEntitiesWithComponent<ObstacleComponent>()) {
+        int x = manager.getComponent<TransformComponent>(obstacleEntity).pos.x;
+        int y = manager.getComponent<TransformComponent>(obstacleEntity).pos.y;
+        int invertedY = MAX_Y - y;
+        map[x][invertedY] = 2;
+    }
+
+   /* std::cout << std::endl;
     for (int i = 0; i < MAX_Y; ++i) {
         for (int j = 0; j < MAX_Y; ++j) {
            
@@ -192,4 +157,29 @@ void AISystem::updateMap() {
         std::cout << std::endl;
         
     }*/
+}
+
+void AISystem::processAIEntity(Entity entity) {
+    std::lock_guard<std::mutex> lock(mtx);
+    auto& aicomponent = manager.getComponent<AIComponent>(entity);
+    
+    handlePathfindingState(entity);
+    handleAttackState(entity);
+   
+    
+}
+
+void AISystem::updateAI(std::vector<Entity>& entities) {
+    std::vector<std::thread> threads;
+
+    for (Entity& entity : entities) {
+        
+        threads.emplace_back(&AISystem::processAIEntity, this, std::ref(entity));
+    }
+
+    for (std::thread& t : threads) {
+        if (t.joinable()) {
+            t.join();
+        }
+    }
 }
