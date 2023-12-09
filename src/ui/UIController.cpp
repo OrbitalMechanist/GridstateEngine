@@ -88,13 +88,16 @@ Noesis::Grid* UIController::GetPlayerInfo()
 	return playerInfo;
 }
 
-void UIController::SetHealthBar(float hp)
+void UIController::SetHealthBar(int hp, int maxHp)
 {
 	/*if (nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar"))
 	{
 		Noesis::Rect newRect(0, ((_maxPlayerHP - _playerHP) / _maxPlayerHP) * 100, 100, 100);
 		nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("palyerHP")->SetRect(newRect);
 	}*/
+	//Rect = "0,0,140,30"
+	Noesis::Rect newRect(0, 0, 140 * hp / maxHp, 30);
+	healthBar->SetRect(newRect);
 }
 
 void UIController::HighlightSelectMode()
@@ -120,9 +123,13 @@ void UIController::HighlightAttackMode()
 
 void UIController::DisplayInfoPanel(Entity obj)
 {
-	std::string stringVar = std::to_string(entityManager.getComponent<HealthComponent>(obj).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(obj).maxHealth);
-	healthText->SetText(stringVar.c_str());
+	int hp = entityManager.getComponent<HealthComponent>(obj).health;
+	int maxHp = entityManager.getComponent<HealthComponent>(obj).maxHealth;
 
+	SetHealthBar(hp, maxHp);
+
+	std::string stringVar = std::to_string(hp) + " / " + std::to_string(maxHp);
+	healthText->SetText(stringVar.c_str());
 	stringVar = std::to_string(entityManager.getComponent<MoveComponent>(obj).moveRange);
 	moveText->SetText(stringVar.c_str());
 	stringVar = std::to_string(entityManager.getComponent<AttackComponent>(obj).range);
@@ -244,4 +251,5 @@ void UIController::TextBlockInit()
 void UIController::PlayerInfoInit()
 {
 	playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
+	healthBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar");
 }

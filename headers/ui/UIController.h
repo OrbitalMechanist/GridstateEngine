@@ -34,7 +34,7 @@ public:
 	Noesis::TextBlock* GetCanMoveText();
 	Noesis::Grid* GetPlayerInfo();
 
-	void SetHealthBar(float hp);
+	void SetHealthBar(int hp, int maxHp);
 	void HighlightSelectMode();
 	void HighlightMoveMode();
 	void HighlightAttackMode();
@@ -52,6 +52,7 @@ private:
 	Noesis::Button *turnBtn, *selectBtn, *moveBtn, *attackBtn;
 	Noesis::TextBlock *turnText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
 	Noesis::Grid* playerInfo;
+	Noesis::RectangleGeometry* healthBar;
 
 	void NoesisGUIInit(std::string xaml);
 	void BtnInit();
