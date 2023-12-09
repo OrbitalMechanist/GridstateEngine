@@ -71,7 +71,9 @@
     <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
       <Filter>Source Files\Systems\MessagingSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\UIController.cpp" />
+    <ClCompile Include="src\ui\UIController.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Universe.h">
@@ -203,7 +205,9 @@
     <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
       <Filter>Header Files\Systems\MessagingSystem</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ui\UIController.h" />
+    <ClInclude Include="headers\ui\UIController.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
@@ -314,6 +318,12 @@
     </Filter>
     <Filter Include="Header Files\Systems\MessagingSystem">
       <UniqueIdentifier>{df64ce2b-48b7-46cc-be4c-4018258e4f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{ec407746-a9f6-47e1-b40e-206dd13583bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{24bd98bf-34f3-405a-a0a6-a4a242cda510}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 #include "../headers/ui/UIController.h"
 
-UIController::UIController(std::string xaml, GameMaster* gameMaster)
+UIController::UIController(std::string xaml, GameMaster* gameMaster, EntityManager entityManager)
 {
 	gm = gameMaster;
+	this->entityManager = entityManager;
 	NoesisGUIInit(xaml);
 	BtnInit();
 	TextBlockInit();
@@ -96,33 +97,74 @@ void UIController::SetHealthBar(float hp)
 	}*/
 }
 
+void UIController::HighlightSelectMode()
+{
+	selectBtn->SetWidth(180);
+	moveBtn->SetWidth(150);
+	attackBtn->SetWidth(150);
+}
+
+void UIController::HighlightMoveMode()
+{
+	selectBtn->SetWidth(150);
+	moveBtn->SetWidth(180);
+	attackBtn->SetWidth(150);
+}
+
+void UIController::HighlightAttackMode()
+{
+	selectBtn->SetWidth(150);
+	moveBtn->SetWidth(150);
+	attackBtn->SetWidth(180);
+}
+
+void UIController::DisplayInfoPanel(Entity obj)
+{
+	std::string stringVar = std::to_string(entityManager.getComponent<HealthComponent>(obj).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(obj).maxHealth);
+	healthText->SetText(stringVar.c_str());
+
+	stringVar = std::to_string(entityManager.getComponent<MoveComponent>(obj).moveRange);
+	moveText->SetText(stringVar.c_str());
+	stringVar = std::to_string(entityManager.getComponent<AttackComponent>(obj).range);
+	attackRangeText->SetText(stringVar.c_str());
+	stringVar = std::to_string(entityManager.getComponent<AttackComponent>(obj).damage);
+	attackText->SetText(stringVar.c_str());
+	stringVar = std::to_string(entityManager.getComponent<HealthComponent>(obj).armor);
+	armorText->SetText(stringVar.c_str());
+	playerInfo->SetVisibility(Noesis::Visibility_Visible);
+}
+
+void UIController::HideInfoPanel()
+{
+	healthText->SetText("");
+	moveText->SetText("");
+	attackRangeText->SetText("");
+	attackText->SetText("");
+	canMoveText->SetText("");
+	playerInfo->SetVisibility(Noesis::Visibility_Hidden);
+}
+
 void UIController::BtnHandlersInit()
 {
 	selectBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(select);
 			std::cout << "Select";
-			nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
-			nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-			nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
+			HighlightSelectMode();
 		};
 
 	moveBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(move);
 			std::cout << "Move";
-			nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
-			nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(180);
-			nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
+			HighlightMoveMode();
 		};
 
 	attackBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(attack);
 			std::cout << "Attack";
-			nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(150);
-			nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-			nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(180);
+			HighlightAttackMode();
 		};
 
 	turnBtn->Click() += [this](Noesis::BaseComponent* sender,
@@ -136,9 +178,7 @@ void UIController::BtnHandlersInit()
 				gm->endTurn();
 				gm->selected = NULL;
 				gm->switchMode(select);
-				nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn")->SetWidth(180);
-				nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn")->SetWidth(150);
-				nsguiView->GetContent()->FindName<Noesis::Button>("attackBtn")->SetWidth(150);
+				HighlightSelectMode();
 			}
 			else {
 

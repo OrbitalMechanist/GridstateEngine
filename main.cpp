@@ -275,7 +275,7 @@ int NsMain(int argc, char** argv) {
 			aiSystem.spawnEnemy(trans, stat);
 		}
 		
-		UIController ui("everything.xaml", gm);
+		UIController ui("everything.xaml", gm, entityManager);
 
 		//End Noesis setup (actually ending noesis happens at the very end)
 
@@ -292,19 +292,6 @@ int NsMain(int argc, char** argv) {
 		//you give it the wrong type, but the parameters you could get/set would not necessarily
 		//correspond to what the element actually has and thus not work as expected.
 		auto turnBtn = ui.GetturnBtn();
-		auto selectBtn = ui.GetSelectBtn();
-		auto moveBtn = ui.GetMoveBtn();
-		auto attackBtn = ui.GetAttackBtn();
-
-		auto turnText = ui.GetTurnText();
-		auto healthText = ui.GetHealthText();
-		auto moveText = ui.GetMoveText();
-		auto attackRangeText = ui.GetAttackRangeText();
-		auto attackText = ui.GetAttackText();
-		auto armorText = ui.GetArmorText();
-		auto canMoveText = ui.GetCanMoveText();
-
-		auto playerInfo = ui.GetPlayerInfo();
 
 		bool lightOn = true;
 
@@ -454,25 +441,15 @@ int NsMain(int argc, char** argv) {
 							gm->selectUnit(gridPositionX, gridPositionY);
 							if (gm->selected != NULL) {
 								std::cout << "\nNOT NULL";
-								std::string stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).health) + " / " + std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).maxHealth);
-								healthText->SetText(stringVar.c_str());
 								
-								stringVar = std::to_string(entityManager.getComponent<MoveComponent>(gm->selected).moveRange);
-								moveText->SetText(stringVar.c_str());
-								stringVar = std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).range);
-								attackRangeText->SetText(stringVar.c_str());
-								stringVar = std::to_string(entityManager.getComponent<AttackComponent>(gm->selected).damage);
-								attackText->SetText(stringVar.c_str());
-								stringVar = std::to_string(entityManager.getComponent<HealthComponent>(gm->selected).armor);
-								armorText->SetText(stringVar.c_str());
-								playerInfo->SetVisibility(Noesis::Visibility_Visible);
+								ui.DisplayInfoPanel(gm->selected);
 								
 								if (!gm->botSelected) {
 									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-										canMoveText->SetText("Moved True");
+										//canMoveText->SetText("Moved True");
 									}
 									else {
-										canMoveText->SetText("Moved False");
+										//canMoveText->SetText("Moved False");
 									}
 								}
 							}
@@ -480,29 +457,20 @@ int NsMain(int argc, char** argv) {
 						else if (gm->currentMode == move) {
 							bool moved = gm->moveSelected(gridPositionX, gridPositionY);
 							if (moved) {
-								canMoveText->SetText("Moved True");
-								selectBtn->SetWidth(180);
-								moveBtn->SetWidth(150);
-								attackBtn->SetWidth(150);
+								//canMoveText->SetText("Moved True");
+								ui.HighlightSelectMode();
 							}
 						}
 						else {
 							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
 							if (hit) {
 								SourceA.Play(gunA);
-								canMoveText->SetText("Moved True");
-								selectBtn->SetWidth(180);
-								moveBtn->SetWidth(150);
-								attackBtn->SetWidth(150);
+								//canMoveText->SetText("Moved True");
+								ui.HighlightSelectMode();
 							}
 						}
 						if (gm->selected == NULL) {
-							healthText->SetText("");
-							moveText->SetText("");
-							attackRangeText->SetText("");
-							attackText->SetText("");
-							canMoveText->SetText("");
-							playerInfo->SetVisibility(Noesis::Visibility_Hidden);
+							ui.HideInfoPanel();
 						}
 					}
 				}

@@ -18,7 +18,7 @@ using namespace Noesis;
 class UIController
 {
 public:
-	UIController(std::string xaml, GameMaster* gm);
+	UIController(std::string xaml, GameMaster* gm, EntityManager entityManager);
 	const Noesis::Ptr<Noesis::IView> GetNsguiView();
 	void UIReset();
 	Noesis::Button* GetturnBtn();
@@ -35,6 +35,11 @@ public:
 	Noesis::Grid* GetPlayerInfo();
 
 	void SetHealthBar(float hp);
+	void HighlightSelectMode();
+	void HighlightMoveMode();
+	void HighlightAttackMode();
+	void DisplayInfoPanel(Entity obj);
+	void HideInfoPanel();
 
 private:
 	Noesis::Ptr<Noesis::IView> nsguiView;
@@ -42,6 +47,7 @@ private:
 	Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider;
 	Noesis::Ptr<Noesis::UserControl> uiElement;
 	GameMaster* gm;
+	EntityManager entityManager;
 
 	Noesis::Button *turnBtn, *selectBtn, *moveBtn, *attackBtn;
 	Noesis::TextBlock *turnText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
