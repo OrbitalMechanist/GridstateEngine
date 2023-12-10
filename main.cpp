@@ -20,8 +20,6 @@ extern "C" {
 #include <functional>
 
 //Noesis stuff, not all of this may be needed
-#define NS_LICENSE_NAME "Yunaan"
-#define NS_LICENSE_KEY "aUm+v2UEvr8OruLsSdY8RDX82J70l50/EZrDDIIoDtocqYXH"
 #include <NsRender/RenderContext.h>
 #include <NsCore/HighResTimer.h>
 #include <NsGui/IntegrationAPI.h>
@@ -273,43 +271,6 @@ int NsMain(int argc, char** argv) {
 		}
 		
 		UIController ui("everything.xaml", gm, entityManager);
-
-
-		//NoesisGUI setup, seems to need to happen after the GLFW system is done setting up
-		Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
-
-		Noesis::GUI::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg)
-			{
-				const std::string levelText[] = { "Trace", "Debug", "Info", "Warning", "Error" };
-				if (level < 3) {
-					std::cout << "Noesis " << levelText[level] << " : " << msg << std::endl;
-				}
-				else {
-					std::cerr << "Noesis " << levelText[level] << " : " << msg << std::endl;
-				}
-			});
-
-		Noesis::GUI::Init();
-
-		//We aren't really *basing* our engine entirely on the Application Framework but we will use
-		//some of its features, at least for now.
-
-		NoesisApp::Launcher::RegisterAppComponents();
-
-		Noesis::Ptr<NoesisApp::LocalXamlProvider> xamlProvider = Noesis::MakePtr<NoesisApp::LocalXamlProvider>("./assets/ui");
-		Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider = Noesis::MakePtr<NoesisApp::LocalFontProvider>("./assets/fonts");
-
-		NoesisApp::SetThemeProviders(xamlProvider, fontProvider);
-
-		Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
-
-		Noesis::Ptr<Noesis::UserControl> uiElement = Noesis::GUI::LoadXaml<Noesis::UserControl>("everything.xaml");
-
-		Noesis::Ptr<Noesis::IView> nsguiView = Noesis::GUI::CreateView(uiElement);
-		nsguiView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-		nsguiView->SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		nsguiView->GetRenderer()->Init(NoesisApp::GLFactory::CreateDevice(false));
 		//End Noesis setup (actually ending noesis happens at the very end)
 
 		auto nsguiView = ui.GetNsguiView();
@@ -335,41 +296,6 @@ int NsMain(int argc, char** argv) {
 		bool isPlayerTurn = true;
 		//void* gmPtr = &gm;
 
-		//ui.BtnHandlers();
-
-		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm->currentTurn == playerTurn) {
-					turnText->SetText("Enemy Turn");
-					gm->selected = NULL;
-					gm->switchMode(select);
-					modeText->SetText("Select Mode");
-					gm->endTurn();
-				}
-				else if (gm->currentTurn == enemyTurn) {
-					turnText->SetText("Player Turn");
-					gm->endTurn();
-				}
-				else {
-
-				}
-
-			};
-		modeBtn->Click() += [modeText, gm](Noesis::BaseComponent* sender,
-			const Noesis::RoutedEventArgs& args) mutable {
-				if (gm->currentMode == select) {
-					gm->switchMode(move);
-					modeText->SetText("Move Mode");
-				}
-				else if (gm->currentMode == move) {
-					gm->switchMode(attack);
-					modeText->SetText("Attack Mode");
-				}
-				else if (gm->currentMode == attack) {
-					gm->switchMode(select);
-					modeText->SetText("Select Mode");
-				}
-			};
 		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
 		//This is for finding out if it was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -519,7 +445,7 @@ int NsMain(int argc, char** argv) {
 									}
 								}
 								else {
-									canMoveText->SetText("");
+									//canMoveText->SetText("");
 								}
 							}
 						}

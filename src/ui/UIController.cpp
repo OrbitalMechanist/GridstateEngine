@@ -1,5 +1,8 @@
 #include "../headers/ui/UIController.h"
 
+#define NS_LICENSE_NAME "Yunaan"
+#define NS_LICENSE_KEY "aUm+v2UEvr8OruLsSdY8RDX82J70l50/EZrDDIIoDtocqYXH"
+
 UIController::UIController(std::string xaml, GameMaster* gameMaster, EntityManager entityManager)
 {
 	gm = gameMaster;
@@ -177,15 +180,16 @@ void UIController::BtnHandlersInit()
 	turnBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			if (gm->currentTurn == playerTurn) {
-				turnText->SetText("Enemy Turn");
+				//turnText->SetText("Enemy Turn");
+				gm->selected = NULL;
+				gm->switchMode(select);
+				//modeText->SetText("Select Mode");
+				HighlightSelectMode();
 				gm->endTurn();
 			}
 			else if (gm->currentTurn == enemyTurn) {
-				turnText->SetText("Player Turn");
+				//turnText->SetText("Player Turn");
 				gm->endTurn();
-				gm->selected = NULL;
-				gm->switchMode(select);
-				HighlightSelectMode();
 			}
 			else {
 
