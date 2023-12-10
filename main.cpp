@@ -238,6 +238,8 @@ int NsMain(int argc, char** argv) {
 			stat.modelName = modelName[i];
 			stat.textureName = tex[i];
 			hpComp.health = health[i];
+			hpComp.armor = 2;
+			hpComp.maxHealth = health[i];
 			entityManager.addComponent<TransformComponent>(newEntity, trans);
 			entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
 			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
