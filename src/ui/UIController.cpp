@@ -86,19 +86,13 @@ Noesis::Grid* UIController::GetPlayerInfo()
 	return playerInfo;
 }
 
-//Noesis::Ellipse* UIController::GetMoveIcon()
-//{
-//	return movedIcon;
-//}
+Noesis::Image* UIController::GetMoveIcon()
+{
+	return movedIcon;
+}
 
 void UIController::SetHealthBar(int hp, int maxHp)
 {
-	/*if (nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar"))
-	{
-		Noesis::Rect newRect(0, ((_maxPlayerHP - _playerHP) / _maxPlayerHP) * 100, 100, 100);
-		nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("palyerHP")->SetRect(newRect);
-	}*/
-	//Rect = "0,0,140,30"
 	Noesis::Rect newRect(0, 0, 140 * hp / maxHp, 30);
 	healthBar->SetRect(newRect);
 }
@@ -273,5 +267,5 @@ void UIController::PlayerInfoInit()
 {
 	playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
 	healthBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar");
-	//movedIcon = nsguiView->GetContent()->FindName<Noesis::Image>("MoveIcon");
+	movedIcon = nsguiView->GetContent()->FindName<Noesis::Image>("MoveIcon");
 }

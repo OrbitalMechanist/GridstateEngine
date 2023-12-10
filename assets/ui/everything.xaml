@@ -25,7 +25,7 @@
                     </ResourceDictionary>
                 </UserControl.Resources>
                 <Grid HorizontalAlignment="Center" Width="800">
-                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="0,0,5,20"/>
+                    <Button x:Name="turnBtn" Style="{StaticResource Button1}" Content="End Turn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="0,0,20,20"/>
 
                     <Button x:Name="selectBtn" Style="{StaticResource Button1}" Content="Select Mode" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="180" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="5,0,0,100"/>
                     <Button x:Name="moveBtn" Style="{StaticResource Button1}" Content="Move Mode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Foreground="{DynamicResource Brush.Foreground}" Background="{DynamicResource Brush.Primary}" BorderBrush="{DynamicResource Brush.Primary}" Margin="5,0,0,60"/>
@@ -35,7 +35,7 @@
 
             <!--Charactor Status-->
             <!--<Grid x:Name="PlayerInfo" Margin="10,10,-10,-10" Visibility="Hidden">-->
-            <Grid x:Name="PlayerInfo" Margin="10,10,-10,-10">
+            <Grid x:Name="PlayerInfo" Margin="10,10,-10,-10" Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="526*"/>
                     <ColumnDefinition Width="275*"/>
