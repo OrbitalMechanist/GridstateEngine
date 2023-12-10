@@ -40,6 +40,8 @@ public:
 	void HighlightAttackMode();
 	void DisplayInfoPanel(Entity obj);
 	void HideInfoPanel();
+	void DisplayMoveIcon();
+	void HideMoveIcon();
 	void SetMoveIcon(bool flag);
 
 private:

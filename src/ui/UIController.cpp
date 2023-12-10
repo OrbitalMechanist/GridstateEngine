@@ -157,6 +157,16 @@ void UIController::HideInfoPanel()
 	playerInfo->SetVisibility(Noesis::Visibility_Hidden);
 }
 
+void UIController::DisplayMoveIcon()
+{
+	movedIcon->SetVisibility(Noesis::Visibility_Visible);
+}
+
+void UIController::HideMoveIcon()
+{
+	movedIcon->SetVisibility(Noesis::Visibility_Hidden);
+}
+
 void UIController::SetMoveIcon(bool flag)
 {
 	if (flag)
