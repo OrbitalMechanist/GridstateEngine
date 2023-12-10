@@ -163,11 +163,13 @@ bool GameMaster::attackSelected(int x, int y) {
 				if (foundEnemy) {
 					entityManager->getComponent<MoveComponent>(selected).moved = true;
 					auto unitDef = entityManager->getComponent<HealthComponent>(enemyUnit);
-					if (unitDef.health > unitAtk.damage - unitDef.armor) {
-						entityManager->getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage - unitDef.armor;
-					}
-					else {
-						entityManager->destroyEntity(enemyUnit);
+					if (unitAtk.damage - unitDef.armor > 0) {
+						if (unitDef.health > unitAtk.damage - unitDef.armor) {
+							entityManager->getComponent<HealthComponent>(enemyUnit).health -= unitAtk.damage - unitDef.armor;
+						}
+						else {
+							entityManager->destroyEntity(enemyUnit);
+						}
 					}
 					glm::vec3 enemyPos = { entityManager->getComponent<TransformComponent>(enemyUnit).pos.x, entityManager->getComponent<TransformComponent>(enemyUnit).pos.y, 0};
 					entityManager->getComponent<AudioComponent>(enemyUnit).sourceA->SetPosition(enemyPos);
