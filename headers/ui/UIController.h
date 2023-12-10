@@ -50,7 +50,7 @@ private:
 	EntityManager entityManager;
 
 	Noesis::Button *turnBtn, *selectBtn, *moveBtn, *attackBtn;
-	Noesis::TextBlock *turnText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
+	Noesis::TextBlock *nameText, *turnText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
 	Noesis::Grid* playerInfo;
 	Noesis::RectangleGeometry* healthBar;
 

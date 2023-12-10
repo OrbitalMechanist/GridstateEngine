@@ -133,6 +133,8 @@ void UIController::DisplayInfoPanel(Entity obj)
 
 	std::string stringVar = std::to_string(hp) + " / " + std::to_string(maxHp);
 	healthText->SetText(stringVar.c_str());
+	stringVar = entityManager.getComponent<NameComponent>(obj).name;
+	nameText->SetText(stringVar.c_str());
 	stringVar = std::to_string(entityManager.getComponent<MoveComponent>(obj).moveRange);
 	moveText->SetText(stringVar.c_str());
 	stringVar = std::to_string(entityManager.getComponent<AttackComponent>(obj).range);
@@ -146,6 +148,7 @@ void UIController::DisplayInfoPanel(Entity obj)
 
 void UIController::HideInfoPanel()
 {
+	nameText->SetText("");
 	healthText->SetText("");
 	moveText->SetText("");
 	attackRangeText->SetText("");
@@ -243,6 +246,7 @@ void UIController::BtnInit()
 
 void UIController::TextBlockInit()
 {
+	nameText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("nameText");
 	turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
 	healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
 	moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");

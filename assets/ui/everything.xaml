@@ -34,7 +34,7 @@
             </UserControl>
 
             <!--Charactor Status-->
-            <Grid x:Name="PlayerInfo" Visibility="Hidden">
+            <Grid x:Name="PlayerInfo">
                 <!--Health bar-->
                 <Grid Margin="-326,-44,326,44">
                     <Rectangle Width="150" Height="30"  Fill="#FFB0B0B0" Opacity="0.7" Margin="288,60,287,368" />
@@ -99,6 +99,7 @@
                 </Path>
 
                 <!--Charactor proporty-->
+                <TextBlock x:Name="nameText" FontFamily="../fonts/#superlume" Margin="5,5,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="177" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" TextAlignment="Left"><Run Text="PLAYER"/></TextBlock>
                 <TextBlock x:Name="healthText" Margin="68,0,0,407" TextWrapping="Wrap" FontSize="15" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="24" TextAlignment="Left"><Run Text="7/7"/></TextBlock>
                 <TextBlock x:Name="attackText" FontFamily="../fonts/#superlume" Margin="25,0,0,376" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="24" TextAlignment="Left"><Run Text="2"/></TextBlock>
                 <TextBlock x:Name="armorText" FontFamily="../fonts/#superlume" Margin="99,0,0,378" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="24" TextAlignment="Left"><Run Text="2"/></TextBlock>
