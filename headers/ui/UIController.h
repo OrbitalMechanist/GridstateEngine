@@ -32,6 +32,7 @@ public:
 	Noesis::TextBlock* GetArmorText();
 	Noesis::TextBlock* GetCanMoveText();
 	Noesis::Grid* GetPlayerInfo();
+	Noesis::Ellipse* GetMoveIcon();
 
 	void SetHealthBar(int hp, int maxHp);
 	void HighlightSelectMode();
@@ -39,6 +40,7 @@ public:
 	void HighlightAttackMode();
 	void DisplayInfoPanel(Entity obj);
 	void HideInfoPanel();
+	void SetMoveIcon(bool flag);
 
 private:
 	Noesis::Ptr<Noesis::IView> nsguiView;
@@ -52,6 +54,7 @@ private:
 	Noesis::TextBlock *nameText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
 	Noesis::Grid* playerInfo;
 	Noesis::RectangleGeometry* healthBar;
+	Noesis::Ellipse* movedIcon;
 
 	void NoesisGUIInit(std::string xaml);
 	void BtnInit();

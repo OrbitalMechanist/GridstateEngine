@@ -86,6 +86,11 @@ Noesis::Grid* UIController::GetPlayerInfo()
 	return playerInfo;
 }
 
+Noesis::Ellipse* UIController::GetMoveIcon()
+{
+	return movedIcon;
+}
+
 void UIController::SetHealthBar(int hp, int maxHp)
 {
 	/*if (nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar"))
@@ -152,6 +157,22 @@ void UIController::HideInfoPanel()
 	playerInfo->SetVisibility(Noesis::Visibility_Hidden);
 }
 
+void UIController::SetMoveIcon(bool flag)
+{
+	if (flag)
+	{
+		Noesis::Color color(255, 0, 0, 255);
+		Noesis::Ptr<Noesis::SolidColorBrush> newBrush = Noesis::MakePtr<Noesis::SolidColorBrush>(color);
+		movedIcon->SetFill(newBrush);
+	}
+	else
+	{
+		Noesis::Color color(0, 255, 0, 255);
+		Noesis::Ptr<Noesis::SolidColorBrush> newBrush = Noesis::MakePtr<Noesis::SolidColorBrush>(color);
+		movedIcon->SetFill(newBrush);
+	}
+}
+
 void UIController::BtnHandlersInit()
 {
 	selectBtn->Click() += [this](Noesis::BaseComponent* sender,
@@ -181,6 +202,7 @@ void UIController::BtnHandlersInit()
 				gm->selected = NULL;
 				gm->switchMode(select);
 				HighlightSelectMode();
+				SetMoveIcon(false);
 				gm->endTurn();
 			}
 			else if (gm->currentTurn == enemyTurn) {
@@ -251,4 +273,5 @@ void UIController::PlayerInfoInit()
 {
 	playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
 	healthBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar");
+	movedIcon = nsguiView->GetContent()->FindName<Noesis::Ellipse>("MoveIcon");
 }

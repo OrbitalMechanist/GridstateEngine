@@ -441,9 +441,11 @@ int NsMain(int argc, char** argv) {
 								if (!gm->botSelected) {
 									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
 										//canMoveText->SetText("Moved True");
+										ui.SetMoveIcon(true);
 									}
 									else {
 										//canMoveText->SetText("Moved False");
+										ui.SetMoveIcon(false);
 									}
 								}
 								else {

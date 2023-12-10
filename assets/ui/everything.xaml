@@ -34,7 +34,8 @@
             </UserControl>
 
             <!--Charactor Status-->
-            <Grid x:Name="PlayerInfo" Margin="10,10,-10,-10" Visibility="Hidden">
+            <!--<Grid x:Name="PlayerInfo" Margin="10,10,-10,-10" Visibility="Hidden">-->
+            <Grid x:Name="PlayerInfo" Margin="10,10,-10,-10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="526*"/>
                     <ColumnDefinition Width="275*"/>
@@ -56,6 +57,8 @@
                             <RectangleGeometry x:Name="healthBar" Rect="0,0,140,30" />
                         </Rectangle.Clip>
                     </Rectangle>
+
+                    <Ellipse x:Name="MoveIcon" Width="20" Height="20" Fill="#FF3AC815" Margin="481,61,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Grid>
 
                 <Path Data="{StaticResource AttackIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="-1,91,0,0" Stretch="Fill" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top">
