@@ -31,7 +31,6 @@ public:
 	Noesis::TextBlock* GetAttackRangeText();
 	Noesis::TextBlock* GetAttackText();
 	Noesis::TextBlock* GetArmorText();
-	Noesis::TextBlock* GetCanMoveText();
 	Noesis::Grid* GetPlayerInfo();
 	Noesis::Image* GetMoveIcon();
 
@@ -41,7 +40,6 @@ public:
 	void HighlightAttackMode();
 	void DisplayInfoPanel(Entity obj);
 	void HideInfoPanel();
-	void DisplayMoveIcon();
 	void HideMoveIcon();
 	void SetMoveIcon(bool flag);
 
@@ -55,10 +53,10 @@ private:
 	EntityManager entityManager;
 
 	Noesis::Button *turnBtn, *selectBtn, *moveBtn, *attackBtn;
-	Noesis::TextBlock *nameText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
+	Noesis::TextBlock *nameText, *healthText, *moveText, *attackRangeText, *attackText, *armorText;
 	Noesis::Grid* playerInfo;
 	Noesis::RectangleGeometry* healthBar;
-	Noesis::Image* movedIcon;
+	Noesis::Image *movedIcon, *movedIcon1;
 
 	void NoesisGUIInit(std::string xaml);
 	void BtnInit();

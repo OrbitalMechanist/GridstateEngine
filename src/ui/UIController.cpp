@@ -76,11 +76,6 @@ Noesis::TextBlock* UIController::GetArmorText()
 	return armorText;
 }
 
-Noesis::TextBlock* UIController::GetCanMoveText()
-{
-	return canMoveText;
-}
-
 Noesis::Grid* UIController::GetPlayerInfo()
 {
 	return playerInfo;
@@ -147,23 +142,27 @@ void UIController::HideInfoPanel()
 	moveText->SetText("");
 	attackRangeText->SetText("");
 	attackText->SetText("");
-	canMoveText->SetText("");
 	playerInfo->SetVisibility(Noesis::Visibility_Hidden);
-}
-
-void UIController::DisplayMoveIcon()
-{
-	movedIcon->SetVisibility(Noesis::Visibility_Visible);
 }
 
 void UIController::HideMoveIcon()
 {
 	movedIcon->SetVisibility(Noesis::Visibility_Hidden);
+	movedIcon1->SetVisibility(Noesis::Visibility_Hidden);
 }
 
 void UIController::SetMoveIcon(bool flag)
 {
-
+	if (flag)
+	{
+		movedIcon1->SetVisibility(Noesis::Visibility_Visible);
+		movedIcon->SetVisibility(Noesis::Visibility_Hidden);
+	}
+	else
+	{
+		movedIcon1->SetVisibility(Noesis::Visibility_Hidden);
+		movedIcon->SetVisibility(Noesis::Visibility_Visible);
+	}
 }
 
 void UIController::BtnHandlersInit()
@@ -260,7 +259,6 @@ void UIController::TextBlockInit()
 	attackRangeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackRangeText");
 	attackText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackText");
 	armorText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("armorText");
-	canMoveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("canMoveText");
 }
 
 void UIController::PlayerInfoInit()
@@ -268,4 +266,5 @@ void UIController::PlayerInfoInit()
 	playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
 	healthBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar");
 	movedIcon = nsguiView->GetContent()->FindName<Noesis::Image>("MoveIcon");
+	movedIcon1 = nsguiView->GetContent()->FindName<Noesis::Image>("MoveIcon1");
 }

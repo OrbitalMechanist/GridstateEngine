@@ -58,8 +58,8 @@
                         </Rectangle.Clip>
                     </Rectangle>
 
-                    <!--<Ellipse x:Name="MoveIcon" Width="20" Height="20" Fill="#FF3AC815" Margin="481,61,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />-->
                     <Image x:Name="MoveIcon" Source="../images/movedIcon1.png" Width="80" Height="80" Margin="454,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Image x:Name="MoveIcon1" Source="../images/movedIcon2.png" Width="80" Height="80" Margin="454,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 </Grid>
 
                 <Path Data="{StaticResource AttackIconGeometry}" Fill="{StaticResource Brush.Foreground}" RenderTransformOrigin="0.5,0.5" Margin="-1,91,0,0" Stretch="Fill" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -114,13 +114,7 @@
                 <TextBlock x:Name="moveText" FontFamily="../fonts/#superlume" Margin="24,124,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" TextAlignment="Left"><Run Text="3"/></TextBlock>
                 <TextBlock x:Name="attackRangeText" FontFamily="../fonts/#superlume" Margin="98,127,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="44" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" TextAlignment="Left"><Run Text="2"/></TextBlock>
 
-                <!--<TextBlock x:Name="healthText" FontFamily="../fonts/#superlume" Margin="10,0,0,402" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>-->
-                <!--<TextBlock x:Name="moveText" FontFamily="../fonts/#superlume" Margin="10,66,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="338" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
-                <TextBlock x:Name="attackRangeText" FontFamily="../fonts/#superlume" Margin="11,112,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>
-                <TextBlock x:Name="attackText" FontFamily="../fonts/#superlume" Margin="10,156,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>-->
-
-                <TextBlock x:Name="canMoveText" FontFamily="../fonts/#superlume" Margin="11,199,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left" Visibility="Hidden"><Run Text=""/></TextBlock>
-            </Grid>
+                </Grid>
         </Grid>
     </Viewbox>
 </Page>
