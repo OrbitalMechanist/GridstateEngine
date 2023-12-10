@@ -10,6 +10,7 @@
 #include <NsApp/Launcher.h>
 #include <NsApp/LocalXamlProvider.h>
 #include <NsApp/LocalFontProvider.h>
+#include <NsApp/LocalTextureProvider.h>
 #include <NsApp/ThemeProviders.h>
 #include <NsRender/GLFactory.h>
 
@@ -46,6 +47,7 @@ private:
 	Noesis::Ptr<Noesis::IView> nsguiView;
 	Noesis::Ptr<NoesisApp::LocalXamlProvider> xamlProvider;
 	Noesis::Ptr<NoesisApp::LocalFontProvider> fontProvider;
+	Noesis::Ptr<NoesisApp::LocalTextureProvider> textureProvider;
 	Noesis::Ptr<Noesis::UserControl> uiElement;
 	GameMaster* gm;
 	EntityManager entityManager;
@@ -54,7 +56,7 @@ private:
 	Noesis::TextBlock *nameText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
 	Noesis::Grid* playerInfo;
 	Noesis::RectangleGeometry* healthBar;
-	Noesis::Ellipse* movedIcon;
+	//Noesis::Image* movedIcon;
 
 	void NoesisGUIInit(std::string xaml);
 	void BtnInit();

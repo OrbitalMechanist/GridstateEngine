@@ -86,10 +86,10 @@ Noesis::Grid* UIController::GetPlayerInfo()
 	return playerInfo;
 }
 
-Noesis::Ellipse* UIController::GetMoveIcon()
-{
-	return movedIcon;
-}
+//Noesis::Ellipse* UIController::GetMoveIcon()
+//{
+//	return movedIcon;
+//}
 
 void UIController::SetHealthBar(int hp, int maxHp)
 {
@@ -159,18 +159,7 @@ void UIController::HideInfoPanel()
 
 void UIController::SetMoveIcon(bool flag)
 {
-	if (flag)
-	{
-		Noesis::Color color(255, 0, 0, 255);
-		Noesis::Ptr<Noesis::SolidColorBrush> newBrush = Noesis::MakePtr<Noesis::SolidColorBrush>(color);
-		movedIcon->SetFill(newBrush);
-	}
-	else
-	{
-		Noesis::Color color(0, 255, 0, 255);
-		Noesis::Ptr<Noesis::SolidColorBrush> newBrush = Noesis::MakePtr<Noesis::SolidColorBrush>(color);
-		movedIcon->SetFill(newBrush);
-	}
+
 }
 
 void UIController::BtnHandlersInit()
@@ -236,8 +225,9 @@ void UIController::NoesisGUIInit(std::string xaml)
 
 	xamlProvider = Noesis::MakePtr<NoesisApp::LocalXamlProvider>("./assets/ui");
 	fontProvider = Noesis::MakePtr<NoesisApp::LocalFontProvider>("./assets/fonts");
+	textureProvider = Noesis::MakePtr<NoesisApp::LocalTextureProvider>("./assets/textures");
 
-	NoesisApp::SetThemeProviders(xamlProvider, fontProvider);
+	NoesisApp::SetThemeProviders(xamlProvider, fontProvider, textureProvider);
 
 	Noesis::GUI::LoadApplicationResources("Theme/NoesisTheme.DarkBlue.xaml");
 
@@ -273,5 +263,5 @@ void UIController::PlayerInfoInit()
 {
 	playerInfo = nsguiView->GetContent()->FindName<Noesis::Grid>("PlayerInfo");
 	healthBar = nsguiView->GetContent()->FindName<Noesis::RectangleGeometry>("healthBar");
-	movedIcon = nsguiView->GetContent()->FindName<Noesis::Ellipse>("MoveIcon");
+	//movedIcon = nsguiView->GetContent()->FindName<Noesis::Image>("MoveIcon");
 }
