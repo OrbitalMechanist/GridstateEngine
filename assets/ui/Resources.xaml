@@ -74,10 +74,8 @@
                         <noesis:SetFocusAction/>
                     </b:EventTrigger>
                     <b:EventTrigger EventName="GotFocus">
-                        <b:PlaySoundAction Source="AudioSlide.mp3" Volume="0.2"/>
                     </b:EventTrigger>
                     <b:EventTrigger EventName="Click">
-                        <b:PlaySoundAction Source="AudioClick.mp3" Volume="0.3"/>
                     </b:EventTrigger>
                 </noesis:StyleTriggerCollection>
             </Setter.Value>

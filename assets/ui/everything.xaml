@@ -34,7 +34,7 @@
             </UserControl>
 
             <!--Charactor Status-->
-            <Grid x:Name="PlayerInfo">
+            <Grid x:Name="PlayerInfo" Visibility="Hidden">
                 <!--Health bar-->
                 <Grid Margin="-326,-44,326,44">
                     <Rectangle Width="150" Height="30"  Fill="#FFB0B0B0" Opacity="0.7" Margin="288,60,287,368" />
