@@ -25,7 +25,6 @@ public:
 	Noesis::Button* GetSelectBtn();
 	Noesis::Button* GetMoveBtn();
 	Noesis::Button* GetAttackBtn();
-	Noesis::TextBlock* GetTurnText();
 	Noesis::TextBlock* GetHealthText();
 	Noesis::TextBlock* GetMoveText();
 	Noesis::TextBlock* GetAttackRangeText();
@@ -50,7 +49,7 @@ private:
 	EntityManager entityManager;
 
 	Noesis::Button *turnBtn, *selectBtn, *moveBtn, *attackBtn;
-	Noesis::TextBlock *nameText, *turnText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
+	Noesis::TextBlock *nameText, *healthText, *moveText, *attackRangeText, *attackText, *armorText, *canMoveText;
 	Noesis::Grid* playerInfo;
 	Noesis::RectangleGeometry* healthBar;
 

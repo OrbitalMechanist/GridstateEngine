@@ -116,7 +116,6 @@
                 <TextBlock x:Name="attackText" FontFamily="../fonts/#superlume" Margin="10,156,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left"><Run Text=""/></TextBlock>-->
 
                 <TextBlock x:Name="canMoveText" FontFamily="../fonts/#superlume" Margin="11,199,0,0" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" TextAlignment="Left" Visibility="Hidden"><Run Text=""/></TextBlock>
-                <TextBlock x:Name="turnText" FontFamily="../fonts/#superlume" Margin="0,0,10,415" TextWrapping="Wrap" FontSize="24" Foreground="{DynamicResource Brush.Primary.Shade100}" Width="337" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="26" TextAlignment="Right" Visibility="Hidden" Grid.ColumnSpan="2"><Run Text="Player"/></TextBlock>
             </Grid>
         </Grid>
     </Viewbox>

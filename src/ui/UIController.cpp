@@ -51,11 +51,6 @@ Noesis::Button* UIController::GetAttackBtn()
 	return attackBtn;
 }
 
-Noesis::TextBlock* UIController::GetTurnText()
-{
-	return turnText;
-}
-
 Noesis::TextBlock* UIController::GetHealthText()
 {
 	return healthText;
@@ -183,15 +178,12 @@ void UIController::BtnHandlersInit()
 	turnBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			if (gm->currentTurn == playerTurn) {
-				//turnText->SetText("Enemy Turn");
 				gm->selected = NULL;
 				gm->switchMode(select);
-				//modeText->SetText("Select Mode");
 				HighlightSelectMode();
 				gm->endTurn();
 			}
 			else if (gm->currentTurn == enemyTurn) {
-				//turnText->SetText("Player Turn");
 				gm->endTurn();
 			}
 			else {
@@ -247,7 +239,6 @@ void UIController::BtnInit()
 void UIController::TextBlockInit()
 {
 	nameText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("nameText");
-	turnText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText");
 	healthText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("healthText");
 	moveText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("moveText");
 	attackRangeText = nsguiView->GetContent()->FindName<Noesis::TextBlock>("attackRangeText");

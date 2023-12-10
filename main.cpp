@@ -456,6 +456,7 @@ int NsMain(int argc, char** argv) {
 							if (moved) {
 								//canMoveText->SetText("Moved True");
 								ui.HighlightSelectMode();
+								gm->currentMode = select;
 							}
 						}
 						else {
@@ -463,6 +464,7 @@ int NsMain(int argc, char** argv) {
 							if (hit) {
 								//canMoveText->SetText("Moved True");
 								ui.HighlightSelectMode();
+								gm->currentMode = select;
 							}
 						}
 						if (gm->selected == NULL) {
@@ -501,7 +503,7 @@ int NsMain(int argc, char** argv) {
 			glfwPollEvents();
 
 			// AI test
-			aiSystem.update(nsguiView->GetContent()->FindName<Noesis::TextBlock>("turnText"));
+			aiSystem.update();
 
 
 

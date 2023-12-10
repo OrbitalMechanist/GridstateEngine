@@ -1,7 +1,7 @@
 #include "../headers/Systems/AISystem.h"
 
 
-void AISystem::update(Noesis::TextBlock *turnText) {
+void AISystem::update() {
     std::vector<Entity> entitiesWithAI = manager.getEntitiesWithComponent<AIComponent>();
     if (gm.currentTurn == enemyTurn) {
         std::vector<Entity> entitiesWithAI = manager.getEntitiesWithComponent<AIComponent>();
@@ -12,7 +12,6 @@ void AISystem::update(Noesis::TextBlock *turnText) {
     }
     if (gm.currentTurn == enemyTurn && hasAttackCount == entitiesWithAI.size()) {
         hasAttackCount = 0; // reset for next turn
-        turnText->SetText("Player Turn");
         isUpdate = false;
         gm.endTurn();
     }

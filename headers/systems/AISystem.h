@@ -23,7 +23,7 @@ class AISystem {
 public:
     AISystem(EntityManager& manager, MessageBus& bus, GameMaster& gm) : manager(manager), bus(bus), gm(gm) {};
     // Update function to be called every game loop iteration.
-    void update(Noesis::TextBlock *turnText);
+    void update();
     void spawnEnemy(TransformComponent trans, StaticMeshComponent stat);
 
 private:
