@@ -441,14 +441,17 @@ int NsMain(int argc, char** argv) {
 								if (!gm->botSelected) {
 									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
 										//canMoveText->SetText("Moved True");
+										ui.DisplayMoveIcon();
 										ui.SetMoveIcon(true);
 									}
 									else {
 										//canMoveText->SetText("Moved False");
+										ui.DisplayMoveIcon();
 										ui.SetMoveIcon(false);
 									}
 								}
 								else {
+									ui.HideMoveIcon();
 									//canMoveText->SetText("");
 								}
 							}
@@ -457,6 +460,8 @@ int NsMain(int argc, char** argv) {
 							bool moved = gm->moveSelected(gridPositionX, gridPositionY);
 							if (moved) {
 								//canMoveText->SetText("Moved True");
+								ui.DisplayMoveIcon();
+								ui.SetMoveIcon(true);
 								ui.HighlightSelectMode();
 								gm->currentMode = select;
 							}
@@ -465,6 +470,8 @@ int NsMain(int argc, char** argv) {
 							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
 							if (hit) {
 								//canMoveText->SetText("Moved True");
+								ui.DisplayMoveIcon();
+								ui.SetMoveIcon(true);
 								ui.HighlightSelectMode();
 								gm->currentMode = select;
 							}
