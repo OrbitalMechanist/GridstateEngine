@@ -27,6 +27,7 @@ void UIController::UIReset()
 	nsguiView.Reset();
 	xamlProvider.Reset();
 	fontProvider.Reset();
+	textureProvider.Reset();
 	uiElement.Reset();
 	Noesis::GUI::Shutdown();
 }
@@ -245,6 +246,10 @@ void UIController::NoesisGUIInit(std::string xaml)
 
 void UIController::BtnInit()
 {
+	//This is how we get the XAML elements in the UI to change them, or get their state.
+	//Important note: FindName will probably still succeed and return the element even if
+	//you give it the wrong type, but the parameters you could get/set would not necessarily
+	//correspond to what the element actually has and thus not work as expected.
 	turnBtn = nsguiView->GetContent()->FindName<Noesis::Button>("turnBtn");
 	selectBtn = nsguiView->GetContent()->FindName<Noesis::Button>("selectBtn");
 	moveBtn = nsguiView->GetContent()->FindName<Noesis::Button>("moveBtn");

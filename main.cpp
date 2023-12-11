@@ -185,6 +185,7 @@ int NsMain(int argc, char** argv) {
 		//stat.materialName = "surfaceMaterial"
 
 		stat.modelName = "cube";
+		stat.posOffset = { 0.0f, 0.0f, -0.5f };
 		bool swapTex = false;
 
 		//World setup
@@ -283,13 +284,7 @@ int NsMain(int argc, char** argv) {
 		int prevWidth = WINDOW_WIDTH;
 		int	prevHeight = WINDOW_HEIGHT;
 
-		//This is how we get the XAML elements in the UI to change them, or get their state.
-		//Important note: FindName will probably still succeed and return the element even if
-		//you give it the wrong type, but the parameters you could get/set would not necessarily
-		//correspond to what the element actually has and thus not work as expected.
 		auto turnBtn = ui.GetturnBtn();
-
-		bool lightOn = true;
 
 		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
 		//causes problems
@@ -298,8 +293,7 @@ int NsMain(int argc, char** argv) {
 		bool isPlayerTurn = true;
 		//void* gmPtr = &gm;
 
-		//Without using its rather limited callbacks, GLFW will only let you know if a button is currently down or up.
-		//This is for finding out if it was released on this frame.
+		//This is for finding out if LMB was released on this frame.
 		bool lmbDownPrevFrame = false;
 
 		while (!glfwWindowShouldClose(window)) {
@@ -328,8 +322,6 @@ int NsMain(int argc, char** argv) {
 			renderer.setCameraPosition(camPos);
 			renderer.setCameraRotation(camRot);
 
-			//entityManager.getComponent<StaticMeshComponent>(ak).rotOffset.z += deltaTime;
-
 			universe.update(deltaTime);
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -349,7 +341,7 @@ int NsMain(int argc, char** argv) {
 			movementRotation = glm::rotate(movementRotation, camRot.x, { 1.0f, 0.0f, 0.0f });
 			movementRotation = glm::rotate(movementRotation, camRot.y, { 0.0f, 1.0f, 0.0f });
 
-			//The camera point down by default, so the initial forward is -Z
+			//The camera points down by default, so the initial forward is -Z
 			glm::vec4 trueFwd = movementRotation * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 			glm::vec4 trueRight = movementRotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			glm::vec4 trueUp = movementRotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
@@ -509,15 +501,13 @@ int NsMain(int argc, char** argv) {
 
 		} //End of operation loop. Everything after this is cleanup.
 
+		//NSGUI stuff should be manually shut down before exiting the program.
+		//All Noesis::Ptr objects must be reset to free them because they are, in fact, pointers.
+		nsguiView.Reset();
+		//Most of the resetting happens in here.
 		ui.UIReset();
-		////NSGUI stuff should be manually shut down before exiting the program.
-		//nsguiView->GetRenderer()->Shutdown();
-		////All Noesis::Ptr objects must be reset to free them because they are, in fact, pointers.
-		//nsguiView.Reset();
-		//xamlProvider.Reset();
-		//fontProvider.Reset();
-		//uiElement.Reset();
-		//Noesis::GUI::Shutdown();
+
+		Noesis::GUI::Shutdown();
 
 		glfwTerminate();
 		return 0;
