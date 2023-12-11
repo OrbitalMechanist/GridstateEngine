@@ -197,6 +197,7 @@ int NsMain(int argc, char** argv) {
 			}
 		}
 
+		//Initalize all components
 		PlayerComponent playComp(0);
 		MoveComponent moveComp;
 		AttackComponent atkComp;
@@ -206,52 +207,84 @@ int NsMain(int argc, char** argv) {
 		NameComponent allyNameComp;
 		//NameComponent enemyNameComp;
 
+		//Array containing all the entities names 
 		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
 							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
 							  "Tree", "Tree", "Bush", "Bush", "Bush", "Bush", "Bush" };
+		//Array containing all the positions of the entities in same order as entityName
 		glm::ivec2 positions[] = { {0,3}, {2,1}, {1,4}, {2,4}, {3,4}, {5,4}, {1,6},
 								   {3,7}, {3,8}, {6,7}, {6,2}, {9,5}, {1,8}, {8,8},
 								   {9,2}, {0,4}, {3,2}, {4,9}, {6,3}, {9,7} };
+		//Array containing all the textures of the entities in same order as entityName
 		std::string tex[] = { "tree_texture", "tree_texture", "rock_texture", "rock_texture","rock_texture",
 							   "rock_texture", "rock_texture", "rock_texture", "rock_texture","rock_texture",
 							   "rock_texture", "rock_texture", "tree_texture", "tree_texture","tree_texture",
 							   "bush_texture","bush_texture","bush_texture", "bush_texture", "bush_texture",
 							   "bush_texture"};
+		//Array containing all the models of the entities in same order as entityName
 		std::string modelName[] = { "character","character","rock_big","rock_big","rock_big",
 									"rock_big","rock_big","rock_big","rock_big","rock_big",
 									"rock_big","rock_big", "tree","tree","tree","bush",
 									"bush", "bush", "bush", "bush" };
-		int damage[] = { 1, 2 };
+		//Array with damage of the 2 players
+		int damage[] = { 3, 4 };
+		//Array with attack ranges of the 2 players
 		int atkRanges[] = { 3,2 };
+		//Array with the move ranges of the 2 players
 		int moveRanges[] = { 2,1 };
+		//Array holding all the health of the entities in same order as entityName
 		int health[] = { 5, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 1, 1, 1, 1, 1 };
+		//Array holding all the armor of the 2 players
+		int armor[] = { 1, 2 };
 
 		//stat.posOffset.z += 0f;
+		//Independent counting variable for player entities array specific variables
 		int playerCount = 0;
+		//Move component moved is intially false for all players
 		moveComp.moved = false;
+
+		//Ceates every entity with the arrays above in a for loop
 		for (int i = 0; i < 20; i++) {
 			Entity newEntity = entityManager.createEntity();
+			//Position of entity
 			trans.pos = positions[i];
+			//Model and texture of the entity
 			stat.modelName = modelName[i];
 			stat.textureName = tex[i];
+			//Health of the entity
 			hpComp.health = health[i];
+
+			//Adds all components that are the same for player and objects into the manager
 			entityManager.addComponent<TransformComponent>(newEntity, trans);
 			entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
-			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
 			entityManager.addComponent<AudioComponent>(newEntity, audio);
+
+			//Adds player specific components
 			if (entityName[i] == "Player") {
+				//Player damage component
 				atkComp.damage = damage[playerCount];
 				atkComp.range = atkRanges[playerCount];
+				//Player move range component
 				moveComp.moveRange = moveRanges[playerCount];
+				//Name of the player entity
 				allyNameComp.name = "Ally Wizard";
+				//Armor of the player entity
+				hpComp.armor = armor[playerCount];
+				//Adds player specific components to the entity into the manager
 				entityManager.addComponent<AttackComponent>(newEntity, atkComp);
 				entityManager.addComponent<MoveComponent>(newEntity, moveComp);
 				entityManager.addComponent<PlayerComponent>(newEntity, playComp);
 				entityManager.addComponent<NameComponent>(newEntity, allyNameComp);
+				//Increments player specific array count
+				playerCount++;
 			}
 			else {
+				//If not player its an obstacle so add obstacle component
 				entityManager.addComponent<ObstacleComponent>(newEntity, obComp);
 			}
+			//Adds hp + armour to the hpcomp if player and only hp if obstacle
+			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
+			hpComp.armor = 0;
 		}
 
 		// AI setup
@@ -335,8 +368,10 @@ int NsMain(int argc, char** argv) {
 		//void* gmPtr = &gm;
 
 
+		// Adds functionality to turn button on click
 		turnBtn->Click() += [turnText, gm, modeText](Noesis::BaseComponent* sender,
 			const Noesis::RoutedEventArgs& args) mutable {
+				//If the current turn in gm is player end turn
 				if (gm->currentTurn == playerTurn) {
 					turnText->SetText("Enemy Turn");
 					gm->selected = NULL;
@@ -344,6 +379,7 @@ int NsMain(int argc, char** argv) {
 					modeText->SetText("Select Mode");
 					gm->endTurn();
 				}
+				// Else set turn to player
 				else if (gm->currentTurn == enemyTurn) {
 					turnText->SetText("Player Turn");
 					gm->endTurn();

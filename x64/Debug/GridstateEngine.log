@@ -1,8 +1,12 @@
-﻿  EnemyAI.cpp
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\EnemyAI.cpp(98,29): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Pathfinding.cpp
-E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\src\ai\Pathfinding.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  AISystem.cpp
-  Generating Code...
-  GridstateEngine.vcxproj -> E:\BCIT\BTech\BTech_3rd\COMP_8055_Engine\Project\GridstateEngine\x64\Debug\GridstateEngine.exe
+﻿  main.cpp
+C:\Work\Comp8551\GridstateEngine\main.cpp(464,28): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(464,25): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(471,36): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(471,33): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(505,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(506,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(564,34): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(564,31): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Work\Comp8551\GridstateEngine\main.cpp(465,11): warning C4101: 'clicked': unreferenced local variable
+  GridstateEngine.vcxproj -> C:\Work\Comp8551\GridstateEngine\x64\Debug\GridstateEngine.exe
   0 File(s) copied
