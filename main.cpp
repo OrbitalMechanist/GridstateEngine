@@ -104,11 +104,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
 		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
-		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
-		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
-		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
-		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
-		renderer.loadTexture("assets/textures/grass 2.jpg", "grass");
+		renderer.loadTexture("assets/textures/white.png", "white");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/bushTree.fbx", "tree");
@@ -119,6 +115,7 @@ int NsMain(int argc, char** argv) {
 		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
 		renderer.loadModel("assets/models/bush.fbx", "bush");
 		renderer.loadModel("assets/models/character.fbx", "character");
+		renderer.loadModel("assets/models/cursor.obj", "cursor");
 		renderer.loadModel("assets/models/enemy.fbx", "enemy");
 
 
@@ -171,11 +168,23 @@ int NsMain(int argc, char** argv) {
 		Entity entity2 = entityManager.createEntity();
 
 		TransformComponent trans;
-		trans.pos = { 1, 5 };
+		trans.pos = { 15, 0 };
 
 		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
+		renderer.createMaterial("cursorMaterial", glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 
 		StaticMeshComponent stat;
+		stat.modelName = "cursor";
+		stat.textureName = "white";
+		stat.shaderName = "basic";
+		stat.materialName = "cursorMaterial";
+		stat.posOffset = { 0.0f, 0.0f, 0.5f };
+
+		Entity cursorEnt = entityManager.createEntity();
+		entityManager.addComponent<TransformComponent>(cursorEnt, trans);
+		entityManager.addComponent<StaticMeshComponent>(cursorEnt, stat);
+
+
 		stat.modelName = "ak";
 		stat.textureName = "stone";
 		stat.shaderName = "basic";
@@ -376,13 +385,45 @@ int NsMain(int argc, char** argv) {
 			audioManager.setDevicePosition(camPos);
 			audioManager.setDeviceOrientation(trueFwd, trueUp);
 
-			//Send mouse events to NSGUI
+			//Mouse stuff, including sending to NSGUI
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
 			nsguiView->MouseMove(x, y);
 			Entity clicked;
 			GLint viewport[4];
 			glGetIntegerv(GL_VIEWPORT, viewport);
+
+			//Find Grid Position of mouse
+			glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+			cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+			cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+
+			glm::mat4 view = glm::inverse(cam);
+
+			glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+				cWidth / (float)cHeight, 0.1f, 100.0f);
+
+			glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+				view,
+				projection,
+				glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+
+			auto v = normalize(farPlaneClickPos - camPos);
+
+			glm::vec3 posOnPlane{ 0, 0, 0 };
+			glm::vec3 planeOrig{ 0, 0, 0 };
+			glm::vec3 planeNorm{ 0, 0, 1 };
+			float res = 0;
+			glm::intersectRayPlane(camPos, v, planeOrig,
+				planeNorm, res);
+			posOnPlane = camPos + v * res;
+
+			int gridPositionX = std::round(posOnPlane.x);
+			int gridPositionY = std::round(posOnPlane.y);
+
+			//Set grid cursor position
+			entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
+
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
 				if (!lmbDownPrevFrame) {
 					lmbDownPrevFrame = true;
@@ -392,37 +433,6 @@ int NsMain(int argc, char** argv) {
 						Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{static_cast<float>(x), static_cast<float>(y)});
 
 					if (uiHitTest.visualHit == nullptr) {
-
-						glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
-						cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
-						cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
-
-						glm::mat4 view = glm::inverse(cam);
-
-						glm::mat4 projection = glm::perspective(glm::radians(60.0f),
-							cWidth / (float)cHeight, 0.1f, 100.0f);
-
-						glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
-							view,
-							projection,
-							glm::vec4(0.0f, 0.0f, cWidth, cHeight));
-						std::cout << "\n" << farPlaneClickPos.x << " : "
-							<< farPlaneClickPos.y << " : " << farPlaneClickPos.z << std::endl;
-
-						auto v = normalize(farPlaneClickPos - camPos);
-
-						glm::vec3 posOnPlane{ 0, 0, 0 };
-						glm::vec3 planeOrig{ 0, 0, 0 };
-						glm::vec3 planeNorm{ 0, 0, 1 };
-						float res = 0;
-						glm::intersectRayPlane(camPos, v, planeOrig,
-							planeNorm, res);
-						posOnPlane = camPos + v * res;
-						std::cout << posOnPlane.x << ", " << posOnPlane.y << ", " << posOnPlane.z << std::endl;
-
-						int gridPositionX = std::round(posOnPlane.x);
-						int gridPositionY = std::round(posOnPlane.y);
-
 						if (gm->currentMode == select) {
 							gm->selectUnit(gridPositionX, gridPositionY);
 							if (gm->selected != NULL) {
