@@ -13,7 +13,6 @@ extern "C" {
 
 #include "ecs/entity/EntityManager.h"
 
-
 #include "Universe.h"
 
 #include <chrono>
@@ -234,7 +233,7 @@ int NsMain(int argc, char** argv) {
 								   {3,7}, {3,8}, {6,7}, {6,2}, {9,5}, {1,8}, {8,8},
 								   {9,2}, {0,4}, {3,2}, {4,9}, {6,3}, {9,7} };
 		//Array containing all the textures of the entities in same order as entityName
-		std::string tex[] = { "tree_texture", "tree_texture", "rock_texture", "rock_texture","rock_texture",
+		std::string tex[] = { "red_blue_texture", "red_blue_texture", "rock_texture", "rock_texture","rock_texture",
 							   "rock_texture", "rock_texture", "rock_texture", "rock_texture","rock_texture",
 							   "rock_texture", "rock_texture", "tree_texture", "tree_texture","tree_texture",
 							   "bush_texture","bush_texture","bush_texture", "bush_texture", "bush_texture",
@@ -316,7 +315,7 @@ int NsMain(int argc, char** argv) {
 		for (int i = 0; i < numOfEnemy; i++) {
 			trans.pos = aiPos[i];
 			stat.modelName = "enemy";  // replace this with actual model
-			stat.textureName = "tree_texture";
+			stat.textureName = "red_blue_texture";
 			aiSystem.spawnEnemy(trans, stat);
 		}
 		
