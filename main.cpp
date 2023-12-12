@@ -271,6 +271,7 @@ int NsMain(int argc, char** argv) {
 			stat.textureName = tex[i];
 			//Health of the entity
 			hpComp.health = health[i];
+			hpComp.maxHealth = health[i];
 
 			//Adds all components that are the same for player and objects into the manager
 			entityManager.addComponent<TransformComponent>(newEntity, trans);
