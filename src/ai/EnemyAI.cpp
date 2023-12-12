@@ -49,7 +49,6 @@ bool EnemyAI::performAttack(Entity attacker, Entity target) {
     if (manager.getComponent<AttackComponent>(attacker).damage >= manager.getComponent<HealthComponent>(target).armor) {
         // If the attack hits, calculate damage
         int damageDealt = manager.getComponent<AttackComponent>(attacker).damage - manager.getComponent<HealthComponent>(target).armor;
-        std::cout << manager.getComponent<AttackComponent>(attacker).damage << " : " << manager.getComponent<HealthComponent>(target).armor;
         if (manager.getComponent<HealthComponent>(target).health > damageDealt) {
             manager.getComponent<HealthComponent>(target).health -= damageDealt;
         }
