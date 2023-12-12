@@ -1,6 +1,7 @@
 C:\Work\Comp8551\GridstateEngine\main.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\main.obj
 C:\Work\Comp8551\GridstateEngine\src\ai\EnemyAI.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\EnemyAI.obj
 C:\Work\Comp8551\GridstateEngine\src\ai\Pathfinding.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\Pathfinding.obj
+C:\Work\Comp8551\GridstateEngine\src\audio\AudioManager.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\AudioManager.obj
 C:\Work\Comp8551\GridstateEngine\src\audio\SoundBuffer.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\SoundBuffer.obj
 C:\Work\Comp8551\GridstateEngine\src\audio\SoundDevice.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\SoundDevice.obj
 C:\Work\Comp8551\GridstateEngine\src\audio\SoundSource.cpp;C:\Work\Comp8551\GridstateEngine\x64\Debug\SoundSource.obj

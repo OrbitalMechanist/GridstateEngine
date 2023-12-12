@@ -44,28 +44,16 @@ void EnemyAI::enemyPerform(Entity attacker, Entity target) {
 }
 
 bool EnemyAI::performAttack(Entity attacker, Entity target) {
-    // Generate a random number between 1 and 4 (1d4 roll)
-    int attackRoll = rand() % 4 + 1;
-
-    // Calculate total attack value by adding the attack roll and attack modifier
-    int attackModifier = manager.getComponent<AttackComponent>(attacker).attackModifier;
-    int totalAttack = attackRoll + attackModifier;
 
     // Check if the total attack value is greater than or equal to the target's armor
-    if (totalAttack >= manager.getComponent<HealthComponent>(attacker).armor) {
+    if (manager.getComponent<AttackComponent>(attacker).damage >= manager.getComponent<HealthComponent>(target).armor) {
         // If the attack hits, calculate damage
-        int damageDealt = manager.getComponent<AttackComponent>(attacker).damage;
-
-        // Reduce target's health by the damage dealt
-        int currentHealth = manager.getComponent<HealthComponent>(target).health;
-        int updateHealth = currentHealth - damageDealt; // change this one later using GMS
-
-        if (updateHealth <= 0) {
-            manager.getComponent<HealthComponent>(target).health = 0;
-            manager.destroyEntity(target);
+        int damageDealt = manager.getComponent<AttackComponent>(attacker).damage - manager.getComponent<HealthComponent>(target).armor;
+        if (manager.getComponent<HealthComponent>(target).health > damageDealt) {
+            manager.getComponent<HealthComponent>(target).health -= damageDealt;
         }
         else {
-            manager.getComponent<HealthComponent>(target).health = updateHealth;
+            manager.destroyEntity(target);
         }
 
         //std::cout << "Attack hits! Damage dealt: " << damageDealt << std::endl;
