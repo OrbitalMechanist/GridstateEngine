@@ -1,24 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\Universe.cpp">
+    <ClCompile Include="src\gamemaster\GameMaster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\AISystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mapgridbuilder\filePairReader.cpp">
-      <Filter>Source Files\MapGridBuilder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mapgridbuilder\MapGrid.cpp">
-      <Filter>Source Files\MapGridBuilder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp">
-      <Filter>Source Files\MapGridBuilder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\glad.c">
-      <Filter>Source Files\Graphics</Filter>
+    <ClCompile Include="src\Universe.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\Mesh.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -41,11 +31,8 @@
     <ClCompile Include="src\graphics\Vertex.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\Entities\EntityManager.cpp">
-      <Filter>Source Files\ECS\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\GameObjList.cpp">
-      <Filter>Source Files\ECS</Filter>
+    <ClCompile Include="src\audio\AudioManager.cpp">
+      <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\audio\SoundBuffer.cpp">
       <Filter>Source Files\Audio</Filter>
@@ -56,110 +43,57 @@
     <ClCompile Include="src\audio\SoundSource.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\ai\EnemyAI.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
     <ClCompile Include="src\ai\Pathfinding.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\GameObj.cpp">
-      <Filter>Source Files\ECS</Filter>
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
-    <ClCompile Include="src\gamemaster\GameMaster.cpp">
-      <Filter>Source Files\GameMaster</Filter>
+    <ClCompile Include="src\ecs\GameObjList.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
     </ClCompile>
-    <ClCompile Include="src\ai\EnemyAI.cpp">
-      <Filter>Source Files\AI</Filter>
+    <ClCompile Include="src\ecs\Entities\EntityManager.cpp">
+      <Filter>Source Files\Entity Component System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapgridbuilder\MapGrid.cpp">
+      <Filter>Source Files\Map Grid Builder %28Defunct%29</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapgridbuilder\MapGridBuilder.cpp">
+      <Filter>Source Files\Map Grid Builder %28Defunct%29</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\MessageSystem\MessageSystem.cpp">
-      <Filter>Source Files\Systems\MessagingSystem</Filter>
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\AISystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapgridbuilder\filePairReader.cpp">
+      <Filter>Source Files\Map Grid Builder %28Defunct%29</Filter>
     </ClCompile>
     <ClCompile Include="src\ui\UIController.cpp">
       <Filter>Source Files\UI</Filter>
-    <ClCompile Include="src\audio\AudioManager.cpp">
-      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\glad.c">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\Universe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="headers\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ai\AIState.h">
-      <Filter>Header Files\AI</Filter>
+    <ClInclude Include="headers\gamemaster\GameMaster.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ai\Pathfinding.h">
-      <Filter>Header Files\AI</Filter>
+    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\audio\SoundBuffer.h">
-      <Filter>Header Files\Audio</Filter>
+    <ClInclude Include="headers\Universe.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\audio\SoundDevice.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\audio\SoundSource.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\GameObjList.h">
-      <Filter>Header Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\ActionPointsComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\AIComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\AttackComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\CoverComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\DefenseComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\GridPositionComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\HealthComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\MapComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\MoveComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\PlayerComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\StaticMeshComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\components\TransformComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\entity\Entity.h">
-      <Filter>Header Files\ECS\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\ecs\entity\EntityManager.h">
-      <Filter>Header Files\ECS\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\GLTypes.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\Light.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\LightLayout.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\Mesh.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\Renderer.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\graphics\RenderObject.h">
+    <ClInclude Include="headers\graphics\Vertex.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="headers\graphics\ShaderProgram.h">
@@ -171,172 +105,212 @@
     <ClInclude Include="headers\graphics\ShadowMap.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="headers\graphics\Renderer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\graphics\RenderObject.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="headers\graphics\UniformLayout.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\graphics\Vertex.h">
+    <ClInclude Include="headers\graphics\Mesh.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\mapgridbuilder\filePairReader.h">
-      <Filter>Header Files\MapGridBuilder</Filter>
+    <ClInclude Include="headers\graphics\LightLayout.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\mapgridbuilder\MapGrid.h">
-      <Filter>Header Files\MapGridBuilder</Filter>
+    <ClInclude Include="headers\graphics\Light.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h">
-      <Filter>Header Files\MapGridBuilder</Filter>
+    <ClInclude Include="headers\graphics\GLTypes.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="headers\systems\AISystem.h">
-      <Filter>Header Files\Systems</Filter>
+    <ClInclude Include="headers\audio\SoundSource.h">
+      <Filter>Header Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ecs\GameObj.h">
-      <Filter>Header Files\ECS</Filter>
+    <ClInclude Include="headers\audio\SoundDevice.h">
+      <Filter>Header Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="headers\gamemaster\GameMaster.h">
-      <Filter>Header Files\GameMaster</Filter>
+    <ClInclude Include="headers\audio\SoundBuffer.h">
+      <Filter>Header Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ai\EnemyAI.h">
-      <Filter>Header Files\AI</Filter>
+    <ClInclude Include="headers\ecs\components\ActionPointsComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
     </ClInclude>
-    <ClInclude Include="headers\systems\MessagingSystem\Message.h">
-      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    <ClInclude Include="headers\ecs\components\AIComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
     </ClInclude>
-    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h">
-      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    <ClInclude Include="headers\ecs\components\AttackComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
     </ClInclude>
-    <ClInclude Include="headers\systems\MessagingSystem\TestHeader.h">
-      <Filter>Header Files\Systems\MessagingSystem</Filter>
+    <ClInclude Include="headers\ecs\components\AudioComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ui\UIController.h">
-      <Filter>Header Files\UI</Filter>
+    <ClInclude Include="headers\ecs\components\CoverComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\DefenseComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\HealthComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\GridPositionComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\MapComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\MoveComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\NameComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\ObstacleComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\StaticMeshComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\PlayerComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\components\TransformComponent.h">
+      <Filter>Header Files\ECS Components</Filter>
+    </ClInclude>
     <ClInclude Include="headers\audio\AudioManager.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ecs\components\AudioComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
+    <ClInclude Include="headers\ai\EnemyAI.h">
+      <Filter>Header Files\ECS Components</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ecs\components\ObstacleComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
+    <ClInclude Include="headers\ai\AIState.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="headers\ecs\components\NameComponent.h">
-      <Filter>Header Files\ECS\Components</Filter>
+    <ClInclude Include="headers\systems\AISystem.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ai\Pathfinding.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\GameObj.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\GameObjList.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\entity\Entity.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ecs\entity\EntityManager.h">
+      <Filter>Header Files\Entity Component System</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\MapGridBuilder.h">
+      <Filter>Header Files\Map Grid Builder %28Defunct%29</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\MapGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\mapgridbuilder\filePairReader.h">
+      <Filter>Header Files\Map Grid Builder %28Defunct%29</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\Message.h">
+      <Filter>Header Files\Systems\Messaging %28Defunct%29</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\systems\MessagingSystem\MessageSystem.h">
+      <Filter>Header Files\Systems\Messaging %28Defunct%29</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ui\UIController.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" />
     <None Include="README.md" />
-    <None Include="shaders\basic.vert">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="shaders\basic.frag">
-      <Filter>shaders</Filter>
+      <Filter>Shader Files</Filter>
     </None>
-    <None Include="shaders\secondary.frag">
-      <Filter>shaders</Filter>
+    <None Include="shaders\basic.vert">
+      <Filter>Shader Files</Filter>
     </None>
     <None Include="shaders\secondary.vert">
-      <Filter>shaders</Filter>
+      <Filter>Shader Files</Filter>
     </None>
-    <None Include="shaders\SYSTEM_cubeShadow.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\SYSTEM_cubeShadow.geom">
-      <Filter>shaders</Filter>
+    <None Include="shaders\secondary.frag">
+      <Filter>Shader Files</Filter>
     </None>
     <None Include="shaders\SYSTEM_shadow.vert">
-      <Filter>shaders</Filter>
+      <Filter>Shader Files</Filter>
     </None>
     <None Include="shaders\SYSTEM_shadow.frag">
-      <Filter>shaders</Filter>
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\SYSTEM_cubeShadow.geom">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\SYSTEM_cubeShadow.frag">
+      <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="assets\ui\test.xaml" />
     <Filter Include="Header Files">
-      <UniqueIdentifier>{c29d165b-8dbe-4d85-8b66-38f1f9113a3c}</UniqueIdentifier>
+      <UniqueIdentifier>{5f4dcf46-e55c-42c9-8b37-045e4aa01fb3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{6629a117-41da-40d2-bb66-64d8f2e5b645}</UniqueIdentifier>
+      <UniqueIdentifier>{3a60850b-f27b-4e92-b29a-c28f3d9de1a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{42a4fa87-784f-43f3-8bcb-fcb8ee17a545}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders">
-      <UniqueIdentifier>{17203f12-655f-497d-bcd7-229da2722fa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\UI">
-      <UniqueIdentifier>{fd8c082c-2bf2-47d9-b56b-2cea32348696}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders\System Shaders">
-      <UniqueIdentifier>{28c74d13-79fe-4f80-9d3a-be9ef2bf1746}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{a1a419e2-3f3a-4ad1-b4c1-2fb65dbdfb0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{87c57735-7051-4aee-8ce3-0b57490d0087}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ECS">
-      <UniqueIdentifier>{c49c7471-bc4e-4a00-8d11-e26e836aa99a}</UniqueIdentifier>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{259de2d5-1a91-4a76-b5a3-8682ba654157}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{0cb41afb-a05a-4b25-8c2f-b13548930aa1}</UniqueIdentifier>
+      <UniqueIdentifier>{69ab024d-6c62-45a6-b13d-b7efb55b9139}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MapGridBuilder">
-      <UniqueIdentifier>{9c608bbc-a2cf-4915-9e1c-3ddcbebed3d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Systems">
-      <UniqueIdentifier>{3cdabc7f-7417-47f0-b31c-63b888d16a5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ECS\Entities">
-      <UniqueIdentifier>{fabd8d35-5c7d-4eb8-81f1-b593c1960183}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\AI">
-      <UniqueIdentifier>{22fcd197-852d-433b-8f5f-8480063752d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{eca7a2a7-7a37-41ec-99f9-b1b1bb64e857}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ECS">
-      <UniqueIdentifier>{14af6c25-e44c-436d-a12c-612926980a0e}</UniqueIdentifier>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{8630860a-08fa-418c-9eaa-23c5675c7d3f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\AI">
-      <UniqueIdentifier>{950fcb57-a872-4a65-94f1-448f9e7a630a}</UniqueIdentifier>
+      <UniqueIdentifier>{44d9f99f-f28c-4d16-a527-15fd002c0277}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Graphics">
-      <UniqueIdentifier>{c4330da0-5b3a-4135-9f5f-f1f2da83e252}</UniqueIdentifier>
+    <Filter Include="Source Files\Entity Component System">
+      <UniqueIdentifier>{201ce5f0-26b3-47e8-849b-a965708abd4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MapGridBuilder">
-      <UniqueIdentifier>{b5207d7d-68eb-45ed-ae97-d77e94867b12}</UniqueIdentifier>
+    <Filter Include="Source Files\Map Grid Builder %28Defunct%29">
+      <UniqueIdentifier>{9324a953-55cb-4ba4-a25a-277819b5c4d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Systems">
-      <UniqueIdentifier>{d0953533-f81a-49a9-a1ec-cf3b089f6670}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ECS\Components">
-      <UniqueIdentifier>{944c75fb-80ca-4ae4-8127-4a8a8c2ce3ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ECS\Entities">
-      <UniqueIdentifier>{d8b9f649-dcf6-494b-98f6-125b799908f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameMaster">
-      <UniqueIdentifier>{748936d5-46e1-4029-bcff-b78cc098a1c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameMaster">
-      <UniqueIdentifier>{74ddb87e-f2e3-477d-a0e5-93a03fc2e677}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Systems\MessagingSystem">
-      <UniqueIdentifier>{443536c8-92af-4e63-9c85-d6d7c17d9647}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Systems\MessagingSystem">
-      <UniqueIdentifier>{df64ce2b-48b7-46cc-be4c-4018258e4f25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UI">
-      <UniqueIdentifier>{ec407746-a9f6-47e1-b40e-206dd13583bf}</UniqueIdentifier>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{42c1d16a-9e6a-4e8c-ba31-4454fb6acbcc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{24bd98bf-34f3-405a-a0a6-a4a242cda510}</UniqueIdentifier>
+      <UniqueIdentifier>{ec28d908-7ada-4f19-92bd-c6b5b0e425ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{80d7989d-d8c6-4f10-9994-215ca0805254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{2d226b5e-a4ea-408c-b5e6-1f52160e4422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS Components">
+      <UniqueIdentifier>{c86f90ac-cb00-4e73-a746-b539254dc536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{dd33e3a8-d5de-4fa1-87ef-89a96b8dc297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity Component System">
+      <UniqueIdentifier>{436027ef-d162-488b-b5cd-a8e40d948b49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map Grid Builder %28Defunct%29">
+      <UniqueIdentifier>{3fb9a989-9776-4306-9464-cacdb935ce6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{5b93ada9-66b7-4c41-9007-18475d650a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\Messaging %28Defunct%29">
+      <UniqueIdentifier>{d6bdbf96-b7f9-4383-9d2b-d2d62ce220e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{1c90eae0-1167-4c3d-ad60-a1763a65e154}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

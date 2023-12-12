@@ -118,6 +118,7 @@ vec3 calcSpecular(float power, vec3 lightColor, vec3 toLight){
 	vec3 halfwayDir = normalize(viewDir + toLight);
 
 	//behaviour when raising to power of 0 is undefined.
+	//AMD does the reasonable thing and outputs 1; everything else just breaks.
     return pow(max(0.0f, dot(halfwayDir, v_norm)), material.shininess == 0 ? 1 : material.shininess) 
 		* material.specular * lightColor * power;
 }

@@ -98,6 +98,9 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+#Allow OBJs in Models folder
+!assets/models/*.obj
+
 # Chutzpah Test files
 _Chutzpah*
 
