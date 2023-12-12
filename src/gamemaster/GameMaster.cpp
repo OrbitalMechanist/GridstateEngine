@@ -94,7 +94,7 @@ bool GameMaster::moveSelected(int x, int y) {
 				//If can move check if theres an another unit on the space.
 				if (canMove) {
 					for (auto entity : entitiesWithPlayer) {
-						if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y && entity != selected) {
+						if (entityManager->getComponent<TransformComponent>(entity).pos.x == x && entityManager->getComponent<TransformComponent>(entity).pos.y == y && entity == selected) {
 							noStack = false;
 							break;
 						}

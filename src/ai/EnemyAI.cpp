@@ -11,7 +11,9 @@
 double EnemyAI::calculateDistance(std::pair<int, int> pos1, std::pair<int, int> pos2) {
     int dx = pos2.first - pos1.first;
     int dy = pos2.second - pos1.second;
-    return std::hypot(dx, dy);
+    double distance = static_cast<int>(std::hypot(dx, dy)); // allow diagonal attack
+
+    return distance;
 }
 
 void EnemyAI::enemyPerform(Entity attacker, Entity target) {
