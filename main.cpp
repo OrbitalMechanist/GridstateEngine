@@ -105,6 +105,11 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
 		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
 		renderer.loadTexture("assets/textures/white.png", "white");
+		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
+		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
+		renderer.loadTexture("assets/textures/grass 2.jpg", "grass");
+		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
+		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
 
 		renderer.loadModel("assets/models/ak74.fbx", "ak");
 		renderer.loadModel("assets/models/bushTree.fbx", "tree");
@@ -194,7 +199,6 @@ int NsMain(int argc, char** argv) {
 		//stat.materialName = "surfaceMaterial"
 
 		stat.modelName = "cube";
-		stat.posOffset = { 0.0f, 0.0f, -0.5f };
 		bool swapTex = false;
 
 		//World setup
@@ -205,6 +209,7 @@ int NsMain(int argc, char** argv) {
 				stat.modelName = "cube";
 				stat.textureName = "grass";
 				stat.shaderName = "basic";
+				//stat.posOffset = { 0.0f, 0.0f, -0.5f };
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
 			}
@@ -218,6 +223,8 @@ int NsMain(int argc, char** argv) {
 		AudioComponent audio;
 		NameComponent allyNameComp;
 		//NameComponent enemyNameComp;
+
+
 
 		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
 							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
@@ -255,6 +262,7 @@ int NsMain(int argc, char** argv) {
 			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
 			entityManager.addComponent<AudioComponent>(newEntity, audio);
 			if (entityName[i] == "Player") {
+				stat.posOffset.z = 0.05f;
 				atkComp.damage = damage[playerCount];
 				atkComp.range = atkRanges[playerCount];
 				moveComp.moveRange = moveRanges[playerCount];
