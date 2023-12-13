@@ -30,13 +30,10 @@ void ShaderProgram::queryUniformLocations() {
 	uniforms.viewPos = tmp;
 	tmp = glGetUniformLocation(glReference, "material.diffuse");
 	uniforms.material = tmp;
-	//std::cout << "Diffuse: " << tmp << std::endl;
 	/**tmp = glGetUniformLocation(glReference, "material.specular");
 	uniforms.material = tmp;
-	std::cout << "Specular: " << tmp << std::endl;
 	tmp = glGetUniformLocation(glReference, "material.shininess");
-	uniforms.material = tmp;
-	std::cout << "Shininess: " << tmp << std::endl;*/
+	uniforms.material = tmp;*/
 	tmp = glGetUniformLocation(glReference, "shadowMaps[0]");
 	uniforms.shadowMapFirstElement = tmp;
 	tmp = glGetUniformLocation(glReference, "shadowCubemaps[0]");
@@ -49,16 +46,6 @@ void ShaderProgram::queryUniformLocations() {
 	uniforms.cubeShadowLightPos = tmp;
 	tmp = glGetUniformLocation(glReference, "cubeShadowDistanceLimit");
 	uniforms.cubeShadowDistanceLimit = tmp;
-
-	/*
-	std::cout << "mvp: " << uniforms.mvp << " difTex: " << uniforms.diffuseTex
-		<< " normMat: " << uniforms.normMat << " modMat: " << uniforms.modelMat
-		<< " ambient: " << uniforms.ambientLight << " view: " << uniforms.viewPos
-		<< " mat: " << uniforms.material << " shadows: " << uniforms.shadowMapFirstElement
-		<< " cube: " << uniforms.shadowCubemapFirstElement << " lsm: " << uniforms.lightSpaceMatrixFirstElement
-		<< " shadowFaces: " << uniforms.cubeShadowFacesFirstElement
-		<< " cslp: " << uniforms.cubeShadowLightPos << " csdl: " << uniforms.cubeShadowDistanceLimit << std::endl;
-	*/
 }
 
 const UniformLayout& ShaderProgram::referenceUniforms() {

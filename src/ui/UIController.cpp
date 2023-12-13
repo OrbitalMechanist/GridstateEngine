@@ -171,21 +171,18 @@ void UIController::BtnHandlersInit()
 	selectBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(select);
-			std::cout << "Select";
 			HighlightSelectMode();
 		};
 
 	moveBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(move);
-			std::cout << "Move";
 			HighlightMoveMode();
 		};
 
 	attackBtn->Click() += [this](Noesis::BaseComponent* sender,
 		const Noesis::RoutedEventArgs& args) mutable {
 			gm->switchMode(attack);
-			std::cout << "Attack";
 			HighlightAttackMode();
 		};
 
