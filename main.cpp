@@ -382,107 +382,109 @@ int NsMain(int argc, char** argv) {
 			//Audio Test
 			audioManager.setDevicePosition(camPos);
 			audioManager.setDeviceOrientation(trueFwd, trueUp);
+			if (!(cWidth <= 0 || cHeight <= 0)) {
+				//Mouse stuff, including sending to NSGUI
+				double x, y;
+				glfwGetCursorPos(window, &x, &y);
+				nsguiView->MouseMove(x, y);
+				Entity clicked;
+				GLint viewport[4];
+				glGetIntegerv(GL_VIEWPORT, viewport);
 
-			//Mouse stuff, including sending to NSGUI
-			double x, y;
-			glfwGetCursorPos(window, &x, &y);
-			nsguiView->MouseMove(x, y);
-			Entity clicked;
-			GLint viewport[4];
-			glGetIntegerv(GL_VIEWPORT, viewport);
+				//Find Grid Position of mouse
+				glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+				cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+				cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
 
-			//Find Grid Position of mouse
-			glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
-			cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
-			cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+				glm::mat4 view = glm::inverse(cam);
 
-			glm::mat4 view = glm::inverse(cam);
+				glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+					cWidth / (float)cHeight, 0.1f, 100.0f);
 
-			glm::mat4 projection = glm::perspective(glm::radians(60.0f),
-				cWidth / (float)cHeight, 0.1f, 100.0f);
+				glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+					view,
+					projection,
+					glm::vec4(0.0f, 0.0f, cWidth, cHeight));
 
-			glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
-				view,
-				projection,
-				glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+				auto v = normalize(farPlaneClickPos - camPos);
 
-			auto v = normalize(farPlaneClickPos - camPos);
+				glm::vec3 posOnPlane{ 0, 0, 0 };
+				glm::vec3 planeOrig{ 0, 0, 0 };
+				glm::vec3 planeNorm{ 0, 0, 1 };
+				float res = 0;
+				glm::intersectRayPlane(camPos, v, planeOrig,
+					planeNorm, res);
+				posOnPlane = camPos + v * res;
 
-			glm::vec3 posOnPlane{ 0, 0, 0 };
-			glm::vec3 planeOrig{ 0, 0, 0 };
-			glm::vec3 planeNorm{ 0, 0, 1 };
-			float res = 0;
-			glm::intersectRayPlane(camPos, v, planeOrig,
-				planeNorm, res);
-			posOnPlane = camPos + v * res;
+				int gridPositionX = std::round(posOnPlane.x);
+				int gridPositionY = std::round(posOnPlane.y);
 
-			int gridPositionX = std::round(posOnPlane.x);
-			int gridPositionY = std::round(posOnPlane.y);
+				//Set grid cursor position
+				entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
 
-			//Set grid cursor position
-			entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
+				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+					if (!lmbDownPrevFrame) {
+						lmbDownPrevFrame = true;
+						nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
 
-			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-				if (!lmbDownPrevFrame) {
-					lmbDownPrevFrame = true;
-					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+						Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
+							Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{ static_cast<float>(x), static_cast<float>(y) });
+						//If it hits UI don't click into game world
+						if (uiHitTest.visualHit == nullptr) {
+							//Select mode functionality and UI
+							if (gm->currentMode == select) {
+								gm->selectUnit(gridPositionX, gridPositionY);
+								if (gm->selected != NULL) {
+									ui.DisplayInfoPanel(gm->selected);
 
-					Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
-						Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{static_cast<float>(x), static_cast<float>(y)});
-					//If it hits UI don't click into game world
-					if (uiHitTest.visualHit == nullptr) {
-						//Select mode functionality and UI
-						if (gm->currentMode == select) {
-							gm->selectUnit(gridPositionX, gridPositionY);
-							if (gm->selected != NULL) {
-								ui.DisplayInfoPanel(gm->selected);
-								
-								if (!gm->botSelected) {
-									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-										ui.SetMoveIcon(true);
+									if (!gm->botSelected) {
+										if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
+											ui.SetMoveIcon(true);
+										}
+										else {
+											ui.SetMoveIcon(false);
+										}
 									}
 									else {
-										ui.SetMoveIcon(false);
+										ui.HideMoveIcon();
 									}
 								}
-								else {
-									ui.HideMoveIcon();
+							}
+							//Move mode functionality and UI
+							else if (gm->currentMode == move) {
+								bool moved = gm->moveSelected(gridPositionX, gridPositionY);
+								if (moved) {
+									ui.SetMoveIcon(true);
+									ui.HighlightSelectMode();
+									gm->currentMode = select;
 								}
 							}
-						}
-						//Move mode functionality and UI
-						else if (gm->currentMode == move) {
-							bool moved = gm->moveSelected(gridPositionX, gridPositionY);
-							if (moved) {
-								ui.SetMoveIcon(true);
-								ui.HighlightSelectMode();
-								gm->currentMode = select;
+							//Attack mode functionality and UI
+							else {
+								bool hit = gm->attackSelected(gridPositionX, gridPositionY);
+								if (hit) {
+									ui.SetMoveIcon(true);
+									ui.HighlightSelectMode();
+									gm->currentMode = select;
+								}
 							}
-						}
-						//Attack mode functionality and UI
-						else {
-							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
-							if (hit) {
-								ui.SetMoveIcon(true);
-								ui.HighlightSelectMode();
-								gm->currentMode = select;
+							if (gm->selected == NULL) {
+								ui.HideInfoPanel();
 							}
-						}
-						if (gm->selected == NULL) {
-							ui.HideInfoPanel();
 						}
 					}
 				}
-			}
-			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
-				if (lmbDownPrevFrame) {
-					lmbDownPrevFrame = false;
-					nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
+				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
+					if (lmbDownPrevFrame) {
+						lmbDownPrevFrame = false;
+						nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
+					}
 				}
 			}
-
+			
+			
 			prevTime = time;
-
+			
 			//NSGUI rendering stuff
 			bool nsguiTreeDirty = nsguiView->GetRenderer()->UpdateRenderTree();
 			if (nsguiTreeDirty) {
@@ -499,10 +501,10 @@ int NsMain(int argc, char** argv) {
 			//Back to NSGUI. This needs to happen whether the UI actually changed or not
 			//because UI has to go on top of the scene in the otput framebuffer.
 			nsguiView->GetRenderer()->Render();
-
+			
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-
+			
 			// AI test
 			aiSystem.update();
 
