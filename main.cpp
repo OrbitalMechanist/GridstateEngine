@@ -36,9 +36,7 @@ extern "C" {
 #include <NsApp/LocalXamlProvider.h>
 #include <NsApp/LocalFontProvider.h>
 #include <NsApp/ThemeProviders.h>
-
 #include <NsGui/VisualTreeHelper.h>
-
 #include <NsRender/GLFactory.h>
 #include <NsRender/GLRenderDeviceApi.h>
 
@@ -93,59 +91,41 @@ int NsMain(int argc, char** argv) {
 
 		Renderer renderer = Renderer(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
-		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
-		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
+		//Texture loading
 		renderer.loadTexture("assets/textures/tree_texture.png", "tree_texture");
 		renderer.loadTexture("assets/textures/white.png", "white");
-		renderer.loadTexture("assets/textures/light_rock_texture.jpg", "light_rock_texture");
 		renderer.loadTexture("assets/textures/red_blue_texture.jpg", "red_blue_texture");
-		renderer.loadTexture("assets/textures/grass 2.jpg", "grass");
+		renderer.loadTexture("assets/textures/grass.jpg", "grass");
 		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
 		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
 
-		renderer.loadModel("assets/models/ak74.fbx", "ak");
+		//Model loading
 		renderer.loadModel("assets/models/bushTree.fbx", "tree");
-		renderer.loadModel("assets/models/leafyTree.fbx", "pine_tree");
-		renderer.loadModel("assets/models/leafyTree2.fbx", "pine_tree2");
-		renderer.loadModel("assets/models/lightColorRock.fbx", "rock_light");
-		renderer.loadModel("assets/models/rocks.fbx", "rocks");
 		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
 		renderer.loadModel("assets/models/bush.fbx", "bush");
 		renderer.loadModel("assets/models/character.fbx", "character");
 		renderer.loadModel("assets/models/cursor.obj", "cursor");
 		renderer.loadModel("assets/models/enemy.fbx", "enemy");
 
-
+		//Shader loading
 		renderer.loadShaderProgram("shaders/basic.vert", "", "shaders/basic.frag", "basic");
 		renderer.loadShaderProgram("shaders/secondary.vert", "", "shaders/secondary.frag", "secondary");
 
+		//Background color
 		renderer.setBackgroundColor({ 0.1f, 0.075f, 0.1f, 1.0f });
 
+		//Initial camera position
 		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
 		glm::vec3 camPos{ 5.0f, 5.0f, 10.0f };
 
+		//Ambient Light
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
-		renderer.setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
-
-		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
-			{ 1.0f, 1.0f, 0.65f }, 1.0f, glm::radians(90.0f), 10.0f, 10.0f);
-
-		renderer.setLightState("basic", 5, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, -1.0f, -0.2f), { 0.6f, 0.6f, 1.0f }, 1.0f,
-			0, -1, -1);
-
+		//Light acting as sun
 		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
 			0, -1, -1);
 
-		renderer.setLightState("basic", 3, 3, { 10.0f, 0.0f, 0.0f }, glm::vec3(0.0f, 1.0f, 0.0f), { 1.0f, 1.0f, 1.0f }, 1.0f,
-			glm::radians(20.0f), 100.0f, 11.0f);
-
-		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
-			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
-
-		//gameobject testing stuff
+		//Game Objects Initalized and Components registered
 
 		EntityManager entityManager;
 
@@ -159,18 +139,17 @@ int NsMain(int argc, char** argv) {
 		entityManager.registerComponentType<MoveComponent>();
 		entityManager.registerComponentType<NameComponent>();
 
+		// Game master to handle gameplay
 		GameMaster* gm = new GameMaster(&entityManager, &audioManager);
 
-
-		Entity newEntity = entityManager.createEntity();
-		Entity entity2 = entityManager.createEntity();
-
+		// Transform Component initialized
 		TransformComponent trans;
 		trans.pos = { 15, 0 };
 
 		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 		renderer.createMaterial("cursorMaterial", glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 
+		// Static Mesh component for models, textures and offsets of entities
 		StaticMeshComponent stat;
 		stat.modelName = "cursor";
 		stat.textureName = "white";
@@ -178,19 +157,16 @@ int NsMain(int argc, char** argv) {
 		stat.materialName = "cursorMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.5f };
 
+		// Cursor entity
 		Entity cursorEnt = entityManager.createEntity();
 		entityManager.addComponent<TransformComponent>(cursorEnt, trans);
 		entityManager.addComponent<StaticMeshComponent>(cursorEnt, stat);
 
-
-		stat.modelName = "ak";
-		stat.textureName = "stone";
 		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
-		stat.posOffset = { 0.0f, 0.0f, 0.0f };\
+		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
 		stat.modelName = "cube";
-		bool swapTex = false;
 
 		//World setup
 		for (int x = 0; x <= 10; x++) {
@@ -200,13 +176,12 @@ int NsMain(int argc, char** argv) {
 				stat.modelName = "cube";
 				stat.textureName = "grass";
 				stat.shaderName = "basic";
-				//stat.posOffset = { 0.0f, 0.0f, -0.5f };
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
 			}
 		}
 
-		//Initalize all components
+		//Initalize all components for entities
 		PlayerComponent playComp(0);
 		MoveComponent moveComp;
 		AttackComponent atkComp;
@@ -214,7 +189,6 @@ int NsMain(int argc, char** argv) {
 		ObstacleComponent obComp;
 		AudioComponent audio;
 		NameComponent allyNameComp;
-		//NameComponent enemyNameComp;
 
 		//Array containing all the entities names 
 		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
@@ -306,7 +280,7 @@ int NsMain(int argc, char** argv) {
 		// Generate Enemy
 		for (int i = 0; i < numOfEnemy; i++) {
 			trans.pos = aiPos[i];
-			stat.modelName = "enemy";  // replace this with actual model
+			stat.modelName = "enemy";
 			stat.textureName = "red_blue_texture";
 			aiSystem.spawnEnemy(trans, stat);
 		}
@@ -321,14 +295,8 @@ int NsMain(int argc, char** argv) {
 		int prevWidth = WINDOW_WIDTH;
 		int	prevHeight = WINDOW_HEIGHT;
 
+		// Gets turn button from UI controller
 		auto turnBtn = ui.GetturnBtn();
-
-		Renderer* rendPtr = &renderer; //things seem to get copied around so referencing the actual object
-		//causes problems
-		void* emPtr = &entityManager;
-		Entity* entPtr = &entity2;
-		bool isPlayerTurn = true;
-		//void* gmPtr = &gm;
 
 		//This is for finding out if LMB was released on this frame.
 		bool lmbDownPrevFrame = false;
@@ -348,7 +316,7 @@ int NsMain(int argc, char** argv) {
 			int cWidth, cHeight;
 			glfwGetFramebufferSize(window, &cWidth, &cHeight);
 
-			// fixed Crashed when minimized the window -> cWidth == cHeight == 0;
+
 			if ((cWidth != prevWidth || cHeight != prevHeight) && !(cWidth == 0 || cHeight == 0)) {
 				renderer.updateWindowSize(window, cWidth, cHeight);
 				nsguiView->SetSize(cWidth, cHeight);
@@ -383,7 +351,7 @@ int NsMain(int argc, char** argv) {
 			glm::vec4 trueRight = movementRotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			glm::vec4 trueUp = movementRotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 
-
+			// Camera controls when pressing a key on keyboard
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 				camPos += glm::vec3(trueFwd.x, trueFwd.y, trueFwd.z) * 2.5f * deltaTime;
 			}
@@ -412,106 +380,109 @@ int NsMain(int argc, char** argv) {
 			//Audio Test
 			audioManager.setDevicePosition(camPos);
 			audioManager.setDeviceOrientation(trueFwd, trueUp);
+			if (!(cWidth <= 0 || cHeight <= 0)) {
+				//Mouse stuff, including sending to NSGUI
+				double x, y;
+				glfwGetCursorPos(window, &x, &y);
+				nsguiView->MouseMove(x, y);
+				Entity clicked;
+				GLint viewport[4];
+				glGetIntegerv(GL_VIEWPORT, viewport);
 
-			//Mouse stuff, including sending to NSGUI
-			double x, y;
-			glfwGetCursorPos(window, &x, &y);
-			nsguiView->MouseMove(x, y);
-			Entity clicked;
-			GLint viewport[4];
-			glGetIntegerv(GL_VIEWPORT, viewport);
+				//Find Grid Position of mouse
+				glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
+				cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
+				cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
 
-			//Find Grid Position of mouse
-			glm::mat4 cam = glm::translate(glm::mat4(1.0f), camPos);
-			cam = glm::rotate(cam, camRot.z, { 0.0f, 0.0f, 1.0f });
-			cam = glm::rotate(cam, camRot.x, { 1.0f, 0.0f, 0.0f });
+				glm::mat4 view = glm::inverse(cam);
 
-			glm::mat4 view = glm::inverse(cam);
+				glm::mat4 projection = glm::perspective(glm::radians(60.0f),
+					cWidth / (float)cHeight, 0.1f, 100.0f);
 
-			glm::mat4 projection = glm::perspective(glm::radians(60.0f),
-				cWidth / (float)cHeight, 0.1f, 100.0f);
+				glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
+					view,
+					projection,
+					glm::vec4(0.0f, 0.0f, cWidth, cHeight));
 
-			glm::vec3 farPlaneClickPos = glm::unProject(glm::vec3(x, cHeight - y, 1.0f),
-				view,
-				projection,
-				glm::vec4(0.0f, 0.0f, cWidth, cHeight));
+				auto v = normalize(farPlaneClickPos - camPos);
 
-			auto v = normalize(farPlaneClickPos - camPos);
+				glm::vec3 posOnPlane{ 0, 0, 0 };
+				glm::vec3 planeOrig{ 0, 0, 0 };
+				glm::vec3 planeNorm{ 0, 0, 1 };
+				float res = 0;
+				glm::intersectRayPlane(camPos, v, planeOrig,
+					planeNorm, res);
+				posOnPlane = camPos + v * res;
 
-			glm::vec3 posOnPlane{ 0, 0, 0 };
-			glm::vec3 planeOrig{ 0, 0, 0 };
-			glm::vec3 planeNorm{ 0, 0, 1 };
-			float res = 0;
-			glm::intersectRayPlane(camPos, v, planeOrig,
-				planeNorm, res);
-			posOnPlane = camPos + v * res;
+				int gridPositionX = std::round(posOnPlane.x);
+				int gridPositionY = std::round(posOnPlane.y);
 
-			int gridPositionX = std::round(posOnPlane.x);
-			int gridPositionY = std::round(posOnPlane.y);
+				//Set grid cursor position
+				entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
 
-			//Set grid cursor position
-			entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
+				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+					if (!lmbDownPrevFrame) {
+						lmbDownPrevFrame = true;
+						nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
 
-			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-				if (!lmbDownPrevFrame) {
-					lmbDownPrevFrame = true;
-					nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
+						Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
+							Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{ static_cast<float>(x), static_cast<float>(y) });
+						//If it hits UI don't click into game world
+						if (uiHitTest.visualHit == nullptr) {
+							//Select mode functionality and UI
+							if (gm->currentMode == select) {
+								gm->selectUnit(gridPositionX, gridPositionY);
+								if (gm->selected != NULL) {
+									ui.DisplayInfoPanel(gm->selected);
 
-					Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
-						Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{static_cast<float>(x), static_cast<float>(y)});
-
-					if (uiHitTest.visualHit == nullptr) {
-						if (gm->currentMode == select) {
-							gm->selectUnit(gridPositionX, gridPositionY);
-							if (gm->selected != NULL) {
-								std::cout << "\nNOT NULL";
-								
-								ui.DisplayInfoPanel(gm->selected);
-								
-								if (!gm->botSelected) {
-									if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-										ui.SetMoveIcon(true);
+									if (!gm->botSelected) {
+										if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
+											ui.SetMoveIcon(true);
+										}
+										else {
+											ui.SetMoveIcon(false);
+										}
 									}
 									else {
-										ui.SetMoveIcon(false);
+										ui.HideMoveIcon();
 									}
 								}
-								else {
-									ui.HideMoveIcon();
+							}
+							//Move mode functionality and UI
+							else if (gm->currentMode == move) {
+								bool moved = gm->moveSelected(gridPositionX, gridPositionY);
+								if (moved) {
+									ui.SetMoveIcon(true);
+									ui.HighlightSelectMode();
+									gm->currentMode = select;
 								}
 							}
-						}
-						else if (gm->currentMode == move) {
-							bool moved = gm->moveSelected(gridPositionX, gridPositionY);
-							if (moved) {
-								ui.SetMoveIcon(true);
-								ui.HighlightSelectMode();
-								gm->currentMode = select;
+							//Attack mode functionality and UI
+							else {
+								bool hit = gm->attackSelected(gridPositionX, gridPositionY);
+								if (hit) {
+									ui.SetMoveIcon(true);
+									ui.HighlightSelectMode();
+									gm->currentMode = select;
+								}
 							}
-						}
-						else {
-							bool hit = gm->attackSelected(gridPositionX, gridPositionY);
-							if (hit) {
-								ui.SetMoveIcon(true);
-								ui.HighlightSelectMode();
-								gm->currentMode = select;
+							if (gm->selected == NULL) {
+								ui.HideInfoPanel();
 							}
-						}
-						if (gm->selected == NULL) {
-							ui.HideInfoPanel();
 						}
 					}
 				}
-			}
-			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
-				if (lmbDownPrevFrame) {
-					lmbDownPrevFrame = false;
-					nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
+				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
+					if (lmbDownPrevFrame) {
+						lmbDownPrevFrame = false;
+						nsguiView->MouseButtonUp(x, y, Noesis::MouseButton_Left);
+					}
 				}
 			}
-
+			
+			
 			prevTime = time;
-
+			
 			//NSGUI rendering stuff
 			bool nsguiTreeDirty = nsguiView->GetRenderer()->UpdateRenderTree();
 			if (nsguiTreeDirty) {
@@ -528,14 +499,12 @@ int NsMain(int argc, char** argv) {
 			//Back to NSGUI. This needs to happen whether the UI actually changed or not
 			//because UI has to go on top of the scene in the otput framebuffer.
 			nsguiView->GetRenderer()->Render();
-
+			
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-
+			
 			// AI test
 			aiSystem.update();
-
-
 
 		} //End of operation loop. Everything after this is cleanup.
 

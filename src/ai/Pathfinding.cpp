@@ -23,7 +23,6 @@ struct Pathfinding::cell
     // Row and Column index of its parent
     // Note that 0 <= i <= ROW-1 & 0 <= j <= COL-1
     int parent_i, parent_j;
-    // f = g + h
     double f, g, h;
 };
 
@@ -85,8 +84,6 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest)
         row = temp_row;
         col = temp_col;
     }
-
-   // Path.push(std::make_pair(row, col));
     
     while (!Path.empty())
     {
@@ -229,7 +226,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i - 1][j].parent_i = i;
                 cellDetails[i - 1][j].parent_j = j;
-               // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -280,7 +276,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i + 1][j].parent_i = i;
                 cellDetails[i + 1][j].parent_j = j;
-               // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -329,7 +324,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i][j + 1].parent_i = i;
                 cellDetails[i][j + 1].parent_j = j;
-               // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -381,7 +375,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i][j - 1].parent_i = i;
                 cellDetails[i][j - 1].parent_j = j;
-                //printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -433,7 +426,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i - 1][j + 1].parent_i = i;
                 cellDetails[i - 1][j + 1].parent_j = j;
-               // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -485,7 +477,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i - 1][j - 1].parent_i = i;
                 cellDetails[i - 1][j - 1].parent_j = j;
-                //printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -535,7 +526,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i + 1][j + 1].parent_i = i;
                 cellDetails[i + 1][j + 1].parent_j = j;
-               // printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -587,7 +577,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
                 // Set the Parent of the destination cell
                 cellDetails[i + 1][j - 1].parent_i = i;
                 cellDetails[i + 1][j - 1].parent_j = j;
-                //printf("The destination cell is found\n");
                 tracePath(cellDetails, dest);
                 foundDest = true;
                 return;
@@ -632,9 +621,6 @@ void  Pathfinding::aStarSearch(int grid[][COL], Pair src, Pair dest)
     // list is empty, then we conclude that we failed to
     // reach the destiantion cell. This may happen when the
     // there is no way to destination cell (due to blockages)
-    if (foundDest == false)
-       // printf("Failed to find the Destination Cell\n");
-
     return;
 }
 

@@ -41,7 +41,6 @@ void AISystem::handlePathfindingState(Entity entity) {
         map[aiPosX][aiPosY] = 1;
         map[playerPosX][playerPosY] = 1; 
         path.aStarSearch(map, aiPosition, playerPosition);
-        //path.printDirVec();
         
 
         // Move
@@ -74,11 +73,8 @@ void AISystem::handleAttackState(Entity entity){
         // find attack target
         EnemyAI aiAttack(manager, *gm.audioManager);
         Entity target = aiAttack.GetClosestPlayer(entity);
-        if (target == NULL) {
-            std::cout << "NO player exited " << std::endl;
-        }
-        else {
-            aiAttack.enemyPerform(entity, target);  
+        if (target != NULL) {
+            aiAttack.enemyPerform(entity, target);
         }
     }
     hasAttackCount++;
@@ -98,7 +94,7 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
     //// create component
     AIComponent ai(AIState::Idle);
     HealthComponent hp(entityID, 5, 2, 5); // assume health starts at 5 , armor 2, Max health 5
-    AttackComponent att(3, 1, 1); // damage range and attackModifier
+    AttackComponent att(3, 1, 1); // 3 damage 1 attack range and 1 attackModifier
     MoveComponent movement(1, false);
     AudioComponent audio;
     NameComponent name("Enemy Wizard");
@@ -116,7 +112,6 @@ void AISystem::spawnEnemy(TransformComponent trans, StaticMeshComponent stat) {
 }
 
 
-// not a efficient way - if have time, improve this
 void AISystem::updateMap() {
     std::lock_guard<std::mutex> lock(mapMtx);
     for (int i = 0; i < MAX_Y; ++i) {
@@ -148,16 +143,6 @@ void AISystem::updateMap() {
         int invertedY = MAX_Y - y;
         map[x][invertedY] = 2;
     }
-
-   /* std::cout << std::endl;
-    for (int i = 0; i < MAX_Y; ++i) {
-        for (int j = 0; j < MAX_Y; ++j) {
-           
-            std::cout << map[i][j] << " ";
-        }
-        std::cout << std::endl;
-        
-    }*/
 }
 
 void AISystem::processAIEntity(Entity entity) {
