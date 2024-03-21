@@ -48,13 +48,7 @@ extern "C" {
 // UI
 #include "../headers/ui/UIController.h"
 
-/*
-	This file is just for testing, to be removed once we have our graphical engine ready.
-	The code here currently lives in main.cpp for testing purposes, I'm keeping a double of
-	this file for when we've built testing infrastructure for the engine. - Joe
-*/
-
-//NsMain is a lot like like main but Noesis-flavoured and platform-agnostic
+//NsMain is a lot like like main but Noesis-flavoured and evidently platform-agnostic
 int NsMain(int argc, char** argv) {
 	NS_UNUSED(argc, argv);
 
@@ -193,9 +187,7 @@ int NsMain(int argc, char** argv) {
 		stat.textureName = "stone";
 		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
-		stat.posOffset = { 0.0f, 0.0f, 0.0f };
-
-		//stat.materialName = "surfaceMaterial"
+		stat.posOffset = { 0.0f, 0.0f, 0.0f };\
 
 		stat.modelName = "cube";
 		bool swapTex = false;
@@ -320,7 +312,6 @@ int NsMain(int argc, char** argv) {
 		}
 		
 		UIController ui("everything.xaml", gm, entityManager);
-		//End Noesis setup (actually ending noesis happens at the very end)
 
 		auto nsguiView = ui.GetNsguiView();
 

@@ -1,7 +1,8 @@
 #include "../headers/ui/UIController.h"
 
-#define NS_LICENSE_NAME "Yunaan"
-#define NS_LICENSE_KEY "aUm+v2UEvr8OruLsSdY8RDX82J70l50/EZrDDIIoDtocqYXH"
+//Updated 21.03.2024, should be good for a month
+#define NS_LICENSE_NAME "OrbitalMechanist"
+#define NS_LICENSE_KEY "5XC+hZw9voXGlpOsSwg5rug0N3pHcioY3inXUaKrQaiKWvny"
 
 UIController::UIController(std::string xaml, GameMaster* gameMaster, EntityManager entityManager)
 {

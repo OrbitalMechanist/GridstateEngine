@@ -111,7 +111,6 @@ public:
 
 	void prepareForOperation();
 
-	//This does not work quite yet.
 	void updateWindowSize(GLFWwindow* wnd, int newX, int newY);
 
 	void setCameraRotation(const glm::vec3& rot);

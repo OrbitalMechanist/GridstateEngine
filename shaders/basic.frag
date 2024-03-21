@@ -61,7 +61,7 @@ float calcShadowFactor(int lightIndex){
             toLight = -light.direction;
         }
 
-        float shadowBias = max(0.005 * (1.0 - dot(v_norm, toLight)), 0.01);
+        float shadowBias = max(0.005 * (1.0 - dot(v_norm, toLight)), 0.001);
 
         vec4 lightSpacePos = lightSpaceMatrix * vec4(v_worldPos, 1.0);
         vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;

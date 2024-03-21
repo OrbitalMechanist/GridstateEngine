@@ -4,7 +4,7 @@
 This is an engine for turn-based tactics games and/or CRPGs with turn based combat.
 At least, it was intended to be one. There's also a test game here.
 
-Currently only works on Windows due to certain libraries being DLLs.
+Only works on Windows due to certain libraries being DLLs. Can be built with Visual Studio 2022.
 
 ## Frameworks/Libraries Used ##
 - OpenGL
@@ -62,4 +62,5 @@ especially since most work machines only have integrated graphics and our meshes
 and few in number.
 
 ### UI
-UI is handled by the NoesisGUI API running on a trial license.
+UI is handled by the NoesisGUI API running on a trial license. Everything about it, including the NSGUI
+setup process and trial key, has been moved to UIController.h.
