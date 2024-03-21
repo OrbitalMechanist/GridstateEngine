@@ -62,5 +62,6 @@ especially since most work machines only have integrated graphics and our meshes
 and few in number.
 
 ### UI
-UI is handled by the NoesisGUI API running on a trial license. Everything about it, including the NSGUI
-setup process and trial key, has been moved to UIController.h.
+UI is handled by the NoesisGUI API running on a trial license. Most of it, including the NSGUI
+setup process and trial key, has been moved to UIController.h, though passing inputs to it still happens in
+main.
