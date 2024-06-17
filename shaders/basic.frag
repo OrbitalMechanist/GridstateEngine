@@ -68,8 +68,9 @@ float calcShadowFactor(int lightIndex){
         projCoords = projCoords * 0.5 + 0.5;
         float shadowDepth = texture(shadowMaps[lightIndex], projCoords.xy).r;
 
-         float thisFragmentRelativeDepth = projCoords.z;
+        float thisFragmentRelativeDepth = projCoords.z;
 
+		/* // Shadow edge blur disabled due to severe shadow acne.
         vec2 texelSize = 1.0 / textureSize(shadowMaps[lightIndex], 0);
         for (int x = -1; x <= 1; ++x) {
             for (int y = -1; y <= 1; ++y) {
@@ -81,6 +82,13 @@ float calcShadowFactor(int lightIndex){
         shadow /= 9.0;
 
         shadow = clamp(shadow, 0.0, 1.0);
+		*/
+
+		if(thisFragmentRelativeDepth - shadowBias > shadowDepth){
+			return 0;
+		}
+
+		shadow = 1;
     }
     
 	if (light.type == 2) {
@@ -110,10 +118,6 @@ float calcShadowFactor(int lightIndex){
 }
 
 vec3 calcSpecular(float power, vec3 lightColor, vec3 toLight){
-	//This is supposed to be a Phong model, but apparently for whatever reason
-	//I get a Gouraud interpolation of the normals so it looks terrible.
-	//I can't tell why this is happening right now.
-
     vec3 viewDir = normalize(viewPos - v_worldPos);
 	vec3 halfwayDir = normalize(viewDir + toLight);
 

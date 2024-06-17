@@ -99,6 +99,12 @@ int NsMain(int argc, char** argv) {
 		renderer.loadTexture("assets/textures/bush_texture.png", "bush_texture");
 		renderer.loadTexture("assets/textures/rock_texture.jpg", "rock_texture");
 
+		renderer.loadTexture("assets/textures/stone_simple.png", "stone");
+		renderer.loadTexture("assets/textures/surface_simple.png", "surface");
+		renderer.loadTexture("assets/textures/AK74.png", "ak_texture");
+
+		renderer.loadModel("assets/models/ak74.fbx", "ak");
+
 		//Model loading
 		renderer.loadModel("assets/models/bushTree.fbx", "tree");
 		renderer.loadModel("assets/models/singleBigRock.fbx", "rock_big");
@@ -116,14 +122,27 @@ int NsMain(int argc, char** argv) {
 
 		//Initial camera position
 		glm::vec3 camRot{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 camPos{ 5.0f, 5.0f, 10.0f };
+		glm::vec3 camPos{ 0.0f, 0.0f, 10.0f };
 
-		//Ambient Light
 		renderer.setAmbientLight("basic", glm::vec3(0.15f, 0.15f, 0.15f));
 
-		//Light acting as sun
-		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+		renderer.setLightState("basic", 0, 2, { 0.0f, 5.0f, 1.0f }, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
+			{ 0.0f, 1.0f, 0.0f }, 1.0f, 0, 5.0f, 5.0f);
+
+		renderer.setLightState("basic", 1, 3, { 0.0f, 2.0f, 3.0f }, glm::vec3(0.0f, -0.45f, -1.0f),
+			{ 1.0f, 1.0f, 0.65f }, 1.0f, glm::radians(90.0f), 10.0f, 10.0f);
+
+		renderer.setLightState("basic", 5, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, -1.0f, -0.2f), { 0.3f, 0.3f, 0.7f }, 1.0f,
 			0, -1, -1);
+
+		renderer.setLightState("basic", 2, 1, { 0.0f, 0.0f, 0.0f }, glm::vec3(-0.2f, 0.0f, -0.2f), { 0.6f, 0.6f, 0.6f }, 1.0f,
+			0, -1, -1);
+
+		renderer.setLightState("basic", 3, 3, { 10.0f, 0.0f, 0.0f }, glm::vec3(0.0f, 1.0f, 0.0f), { 1.0f, 1.0f, 1.0f }, 1.0f,
+			glm::radians(20.0f), 100.0f, 11.0f);
+
+		renderer.setLightState("basic", 4, 3, { 0.0f, 0.0f, 4.0f }, glm::vec3(0.5f, 0.0f, -1.0f),
+			{ 0.0f, 0.0f, 1.0f }, 1.0f, glm::radians(45.0f), -1.0f, -1.0f);
 
 		//Game Objects Initalized and Components registered
 
@@ -149,142 +168,77 @@ int NsMain(int argc, char** argv) {
 		renderer.createMaterial("surfaceMaterial", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 		renderer.createMaterial("cursorMaterial", glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0);
 
-		// Static Mesh component for models, textures and offsets of entities
+		// Static Mesh component for models, textures and offsets of entities.
+		// It then gets copied for each actual instance.
 		StaticMeshComponent stat;
 		stat.modelName = "cursor";
 		stat.textureName = "white";
 		stat.shaderName = "basic";
-		stat.materialName = "cursorMaterial";
-		stat.posOffset = { 0.0f, 0.0f, 0.5f };
-
-		// Cursor entity
-		Entity cursorEnt = entityManager.createEntity();
-		entityManager.addComponent<TransformComponent>(cursorEnt, trans);
-		entityManager.addComponent<StaticMeshComponent>(cursorEnt, stat);
-
-		stat.shaderName = "basic";
 		stat.materialName = "surfaceMaterial";
 		stat.posOffset = { 0.0f, 0.0f, 0.0f };
 
-		stat.modelName = "cube";
-
-		//World setup
-		for (int x = 0; x <= 10; x++) {
-			for (int y = 0; y <= 10; y++) {
+		//Objects setup using the "ECS"
+		for (int x = -5; x <= 5; x++) {
+			for (int y = -5; y <= 5; y++) {
 				Entity fresh = entityManager.createEntity();
 				trans.pos = { x, y };
 				stat.modelName = "cube";
-				stat.textureName = "grass";
+				stat.textureName = "surface";
 				stat.shaderName = "basic";
 				entityManager.addComponent<TransformComponent>(fresh, trans);
 				entityManager.addComponent<StaticMeshComponent>(fresh, stat);
 			}
 		}
 
-		//Initalize all components for entities
-		PlayerComponent playComp(0);
-		MoveComponent moveComp;
-		AttackComponent atkComp;
-		HealthComponent hpComp;
-		ObstacleComponent obComp;
-		AudioComponent audio;
-		NameComponent allyNameComp;
+		Entity ppCube = entityManager.createEntity();
+		trans.pos = { 5, 5 };
+		stat.posOffset = { 0.0f, 0.0f, 1.0f };
+		stat.textureName = "stone";
+		entityManager.addComponent<TransformComponent>(ppCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(ppCube, stat);
 
-		//Array containing all the entities names 
-		std::string entityName[] = { "Player", "Player", "Rock", "Rock", "Rock", "Rock",
-							  "Rock", "Rock", "Rock", "Rock", "Rock", "Rock", "Tree",
-							  "Tree", "Tree", "Bush", "Bush", "Bush", "Bush", "Bush" };
-		//Array containing all the positions of the entities in same order as entityName
-		glm::ivec2 positions[] = { {0,3}, {2,1}, {1,4}, {2,4}, {3,4}, {5,4}, {1,6},
-								   {3,7}, {3,8}, {6,7}, {6,2}, {9,5}, {1,8}, {8,8},
-								   {9,2}, {0,4}, {3,2}, {4,9}, {6,3}, {9,7} };
-		//Array containing all the textures of the entities in same order as entityName
-		std::string tex[] = { "red_blue_texture", "red_blue_texture", "rock_texture", "rock_texture","rock_texture",
-							   "rock_texture", "rock_texture", "rock_texture", "rock_texture","rock_texture",
-							   "rock_texture", "rock_texture", "tree_texture", "tree_texture","tree_texture",
-							   "bush_texture","bush_texture","bush_texture", "bush_texture", "bush_texture",
-							   "bush_texture"};
-		//Array containing all the models of the entities in same order as entityName
-		std::string modelName[] = { "character","character","rock_big","rock_big","rock_big",
-									"rock_big","rock_big","rock_big","rock_big","rock_big",
-									"rock_big","rock_big", "tree","tree","tree","bush",
-									"bush", "bush", "bush", "bush" };
-		//Array with damage of the 2 players
-		int damage[] = { 3, 4 };
-		//Array with attack ranges of the 2 players
-		int atkRanges[] = { 3,2 };
-		//Array with the move ranges of the 2 players
-		int moveRanges[] = { 2,1 };
-		//Array holding all the health of the entities in same order as entityName
-		int health[] = { 5, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 1, 1, 1, 1, 1 };
-		//Array holding all the armor of the 2 players
-		int armor[] = { 1, 2 };
+		Entity pnCube = entityManager.createEntity();
+		trans.pos = { 5, -5 };
+		entityManager.addComponent<TransformComponent>(pnCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(pnCube, stat);
 
-		//stat.posOffset.z += 0f;
-		//Independent counting variable for player entities array specific variables
-		int playerCount = 0;
-		//Move component moved is intially false for all players
-		moveComp.moved = false;
+		Entity nnCube = entityManager.createEntity();
+		trans.pos = { -5, -5 };
+		entityManager.addComponent<TransformComponent>(nnCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(nnCube, stat);
 
-		//Ceates every entity with the arrays above in a for loop
-		for (int i = 0; i < 20; i++) {
-			Entity newEntity = entityManager.createEntity();
-			//Position of entity
-			trans.pos = positions[i];
-			//Model and texture of the entity
-			stat.modelName = modelName[i];
-			stat.textureName = tex[i];
-			//Health of the entity
-			hpComp.health = health[i];
-			hpComp.maxHealth = health[i];
+		Entity npCube = entityManager.createEntity();
+		trans.pos = { -5, 5 };
+		entityManager.addComponent<TransformComponent>(npCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(npCube, stat);
 
-			//Adds all components that are the same for player and objects into the manager
-			entityManager.addComponent<TransformComponent>(newEntity, trans);
-			entityManager.addComponent<StaticMeshComponent>(newEntity, stat);
-			entityManager.addComponent<AudioComponent>(newEntity, audio);
+		Entity ctrCube = entityManager.createEntity();
+		trans.pos = { 0, 0 };
+		entityManager.addComponent<TransformComponent>(ctrCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(ctrCube, stat);
 
-			//Adds player specific components
-			if (entityName[i] == "Player") {
-				stat.posOffset.z = 0.05f;
-				//Player damage component
-				atkComp.damage = damage[playerCount];
-				atkComp.range = atkRanges[playerCount];
-				//Player move range component
-				moveComp.moveRange = moveRanges[playerCount];
-				//Name of the player entity
-				allyNameComp.name = "Ally Wizard";
-				//Armor of the player entity
-				hpComp.armor = armor[playerCount];
-				//Adds player specific components to the entity into the manager
-				entityManager.addComponent<AttackComponent>(newEntity, atkComp);
-				entityManager.addComponent<MoveComponent>(newEntity, moveComp);
-				entityManager.addComponent<PlayerComponent>(newEntity, playComp);
-				entityManager.addComponent<NameComponent>(newEntity, allyNameComp);
-				//Increments player specific array count
-				playerCount++;
-			}
-			else {
-				//If not player its an obstacle so add obstacle component
-				entityManager.addComponent<ObstacleComponent>(newEntity, obComp);
-			}
-			//Adds hp + armour to the hpcomp if player and only hp if obstacle
-			entityManager.addComponent<HealthComponent>(newEntity, hpComp);
-			hpComp.armor = 0;
-		}
+		Entity orbitCube = entityManager.createEntity();
+		trans.pos = { 0, 5 };
+		stat.scale = { 0.5f, 0.5f, 1.0f };
+		entityManager.addComponent<TransformComponent>(orbitCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(orbitCube, stat);
 
-		// AI setup
-		MessageBus bus;
-		AISystem aiSystem(entityManager, bus, *gm);
-		glm::vec2 aiPos[] = { {1,9}, {6,8}, {10,3} };
-		const int numOfEnemy = 3;
-		// Generate Enemy
-		for (int i = 0; i < numOfEnemy; i++) {
-			trans.pos = aiPos[i];
-			stat.modelName = "enemy";
-			stat.textureName = "red_blue_texture";
-			aiSystem.spawnEnemy(trans, stat);
-		}
-		
+		Entity slideCube = entityManager.createEntity();
+		trans.pos = { 1, 4 };
+		entityManager.addComponent<TransformComponent>(slideCube, trans);
+		entityManager.addComponent<StaticMeshComponent>(slideCube, stat);
+
+		Entity ak = entityManager.createEntity();
+		trans.pos = { 0 , 0 };
+		stat.modelName = "ak";
+		stat.textureName = "ak_texture";
+		stat.scale = { 1.0f, 1.0f, 1.0f };
+		stat.rotOffset = { 0.0f, glm::radians(90.0f), 0.0f };
+		stat.posOffset = { 0.0f, 0.0f, 1.53f };
+		entityManager.addComponent<TransformComponent>(ak, trans);
+		entityManager.addComponent<StaticMeshComponent>(ak, stat);
+
+
 		UIController ui("everything.xaml", gm, entityManager);
 
 		auto nsguiView = ui.GetNsguiView();
@@ -308,11 +262,6 @@ int NsMain(int argc, char** argv) {
 
 			nsguiView->Update(time); //this should happen early so that the time value is as exact as possible
 
-
-			//The correct way to update framebuffer size is with callbacks.
-			//However, callbacks are hard because we have multiple member objects that need
-			//to be changed when that happens, so I check it like this instead.
-			//This is probably something I should fix, but performance impact seems negligible, at least.
 			int cWidth, cHeight;
 			glfwGetFramebufferSize(window, &cWidth, &cHeight);
 
@@ -377,9 +326,18 @@ int NsMain(int argc, char** argv) {
 				camPos.z += -2.5f * deltaTime;
 			}
 
+			//Object Movement Events
+			entityManager.getComponent<StaticMeshComponent>(ak).rotOffset 
+				+= glm::vec3{0.0f, 0.0f, 0.5f * deltaTime};
+			entityManager.getComponent<StaticMeshComponent>(orbitCube).posOffset 
+				= glm::vec3{ sin(time * 1.3), cos(time * 1.3), 1.0f };
+			entityManager.getComponent<StaticMeshComponent>(slideCube).posOffset 
+				= glm::vec3{ 0, sin(time * 2), 1.0f };
+
 			//Audio Test
 			audioManager.setDevicePosition(camPos);
 			audioManager.setDeviceOrientation(trueFwd, trueUp);
+
 			if (!(cWidth <= 0 || cHeight <= 0)) {
 				//Mouse stuff, including sending to NSGUI
 				double x, y;
@@ -417,59 +375,16 @@ int NsMain(int argc, char** argv) {
 				int gridPositionX = std::round(posOnPlane.x);
 				int gridPositionY = std::round(posOnPlane.y);
 
-				//Set grid cursor position
-				entityManager.getComponent<TransformComponent>(cursorEnt).pos = { gridPositionX, gridPositionY };
-
 				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
 					if (!lmbDownPrevFrame) {
 						lmbDownPrevFrame = true;
 						nsguiView->MouseButtonDown(x, y, Noesis::MouseButton_Left);
 
 						Noesis::HitTestResult uiHitTest = Noesis::VisualTreeHelper::HitTest(
-							Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{ static_cast<float>(x), static_cast<float>(y) });
+							Noesis::VisualTreeHelper::GetRoot(turnBtn), Noesis::Point{ static_cast<float>(x),
+							static_cast<float>(y) });
 						//If it hits UI don't click into game world
-						if (uiHitTest.visualHit == nullptr) {
-							//Select mode functionality and UI
-							if (gm->currentMode == select) {
-								gm->selectUnit(gridPositionX, gridPositionY);
-								if (gm->selected != NULL) {
-									ui.DisplayInfoPanel(gm->selected);
 
-									if (!gm->botSelected) {
-										if (entityManager.getComponent<MoveComponent>(gm->selected).moved) {
-											ui.SetMoveIcon(true);
-										}
-										else {
-											ui.SetMoveIcon(false);
-										}
-									}
-									else {
-										ui.HideMoveIcon();
-									}
-								}
-							}
-							//Move mode functionality and UI
-							else if (gm->currentMode == move) {
-								bool moved = gm->moveSelected(gridPositionX, gridPositionY);
-								if (moved) {
-									ui.SetMoveIcon(true);
-									ui.HighlightSelectMode();
-									gm->currentMode = select;
-								}
-							}
-							//Attack mode functionality and UI
-							else {
-								bool hit = gm->attackSelected(gridPositionX, gridPositionY);
-								if (hit) {
-									ui.SetMoveIcon(true);
-									ui.HighlightSelectMode();
-									gm->currentMode = select;
-								}
-							}
-							if (gm->selected == NULL) {
-								ui.HideInfoPanel();
-							}
-						}
 					}
 				}
 				if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
@@ -503,9 +418,6 @@ int NsMain(int argc, char** argv) {
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 			
-			// AI test
-			aiSystem.update();
-
 		} //End of operation loop. Everything after this is cleanup.
 
 		//NSGUI stuff should be manually shut down before exiting the program.

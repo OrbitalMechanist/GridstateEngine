@@ -1,8 +1,13 @@
 # Gridstate Engine #
-### COMP 8551 ###
+### Graphics Demo ###
 
-This is an engine for turn-based tactics games and/or CRPGs with turn based combat.
-At least, it was intended to be one. There's also a test game here.
+![Screenshot from the demo scene](info/Screenshot.png "Demo Scene")
+
+This project was intended to be an engine for turn-based tactics games and/or CRPGs with turn based combat.
+The **master** branch also contains a test game.
+
+This branch (**graphics-demo**) contains a test scene showcasing the rendering system, including dynamic lighting
+and shadows that work with all three standard types of lights.
 
 Only works on Windows due to certain libraries being DLLs. Can be built with Visual Studio 2022.
 
@@ -63,4 +68,4 @@ and few in number.
 
 ### UI
 UI is handled by the NoesisGUI API running on a trial license. Everything about it, including the NSGUI
-setup process and trial key, has been moved to UIController.h.
+setup process and trial key, has been moved to the UIController class.
